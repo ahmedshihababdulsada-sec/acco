@@ -1,0 +1,8 @@
+[Unit]
+Description=رفع ملفات WAL المشفرة للتخزين البعيد
+After=network-online.target postgresql.service
+[Service]
+Type=oneshot
+User=clinic
+EnvironmentFile=/etc/clinic/backup.env
+ExecStart=/usr/bin/node /opt/clinic/server/dist/cli/backup.js ship

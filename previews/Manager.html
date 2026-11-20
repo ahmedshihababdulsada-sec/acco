@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>معاينة المدير — مركز التجميل</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+input{font-family:inherit}
+.svc-heading,.svc-section-title,.svc-row,.svc-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.svc-heading{margin-bottom:20px}.svc-heading h1{margin:0;font-size:24px}.svc-heading p{margin:5px 0 0;color:#55606E}
+.svc-layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:20px;align-items:start}.svc-workspace{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:20px;align-items:start}
+.svc-panel{padding:20px;background:#FFF;border:1px solid #D9DEE5;border-radius:12px;min-width:0}.svc-panel h2{margin:0;font-size:17px}.svc-panel h3{margin:0;font-size:16px}.svc-panel h4{margin:0;font-size:14px}
+.svc-list,.svc-editor,.svc-preview{display:flex;flex-direction:column;gap:16px}.svc-list .svc-section-title{align-items:stretch;flex-direction:column}.svc-list-item{display:flex;flex-direction:column;gap:5px;width:100%;text-align:start;border:2px solid;border-radius:10px;padding:13px;cursor:pointer;font-size:15px;font-family:inherit}.svc-list-item span{font-size:12px;font-weight:400}.svc-list-note{border-top:1px solid #D9DEE5;padding-top:14px}
+.svc-label{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:13px;font-weight:600;color:#55606E}.svc-panel input:not([type=checkbox]),.svc-panel select,.svc-panel textarea{width:100%;min-height:44px;border:1px solid #AEB6C2;border-radius:8px;padding:10px 12px;box-sizing:border-box;background:#FFF;color:#17202A;font-size:15px;font-family:inherit}.svc-panel textarea{resize:vertical}.svc-panel input:focus,.svc-panel select:focus,.svc-panel textarea:focus,.svc-button:focus-visible,.svc-list-item:focus-visible{outline:3px solid #A9DAD6;outline-offset:2px;border-color:#0B6E69}
+.svc-button{min-height:44px;padding:8px 14px;font-family:inherit;font-size:13px;font-weight:600;background:#FFF;border:1px solid #AEB6C2;border-radius:8px;color:#17202A;cursor:pointer}.svc-primary{background:#0B6E69;border-color:#0B6E69;color:#FFF}.svc-danger{color:#9B1C1C;border-color:#E5BCBC}.svc-small{min-height:36px;padding:5px 10px}.svc-button:disabled{opacity:.45;cursor:default}.svc-row{justify-content:flex-start}
+.svc-badge{display:inline-block;padding:5px 9px;border-radius:6px;background:#ECEFF3;color:#3D4652;font-size:12px;line-height:1.6}.svc-section{display:flex;flex-direction:column;gap:14px;padding-top:20px;border-top:1px solid #D9DEE5}.svc-section h3{color:#0B6E69;font-size:13px}.svc-section h3 span{color:#17202A;margin-inline-start:6px;font-size:16px}.svc-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.svc-subcard{display:flex;flex-direction:column;gap:12px;padding:14px;border:1px solid #D9DEE5;border-radius:10px;background:#FAFBFC}.svc-area-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:end}
+.svc-muted{font-size:12px;color:#55606E;margin:0;line-height:1.8}.svc-empty{font-size:13px;color:#55606E;background:#F4F5F7;padding:16px;border-radius:8px;margin:0}.svc-notice{padding:14px 16px;margin-bottom:16px;border-radius:10px;font-size:13px}.svc-notice p{margin:5px 0 12px}.svc-notice ul{padding-inline-start:20px;margin:8px 0 0}.svc-warning{background:#FBEFD9;border:1px solid #E9CF9F;color:#754108}.svc-success{background:#E3F1F0;border:1px solid #ABD5CF;color:#084F4B}.svc-actions{justify-content:flex-start;border-top:1px solid #D9DEE5;padding-top:18px}.svc-actions .svc-primary{min-width:145px}
+.svc-preview{position:sticky;top:20px;background:#F9FBFB;border-color:#BFD7D4}.svc-eyebrow{color:#0B6E69;font-size:12px;font-weight:700}.svc-preview-body{display:flex;flex-direction:column;gap:14px;padding-top:16px;border-top:1px solid #D9DEE5}.svc-preview-field{display:flex;flex-direction:column;gap:6px}.svc-preview-field>.svc-label{display:flex;flex-direction:row;align-items:center;gap:6px;flex-wrap:wrap}.svc-required{font-size:10px;color:#8A4B08}.svc-preview-total{display:flex;flex-direction:column;gap:4px;border-top:1px solid #D9DEE5;padding-top:16px;font-size:12px;color:#55606E}.svc-preview-total strong{font-size:24px;color:#0B6E69}.svc-preview-material{display:flex;justify-content:space-between;gap:8px;font-size:12px}.svc-check{display:flex;align-items:center;gap:8px;font-size:13px}.svc-check input,.svc-preview-field input[type=checkbox]{width:20px;height:20px;accent-color:#0B6E69}.svc-check:has(input:disabled){opacity:.45}
+@media(max-width:1150px){.svc-workspace{grid-template-columns:minmax(0,1fr)}.svc-preview{position:static}.svc-layout{grid-template-columns:240px minmax(0,1fr)}}
+@media(max-width:700px){.svc-layout{grid-template-columns:minmax(0,1fr)}.svc-list{max-height:330px;overflow:auto}.svc-form-grid{grid-template-columns:minmax(0,1fr)}.svc-area-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.svc-area-row>.svc-button{grid-column:1/-1}.svc-heading h1{font-size:21px}.svc-panel{padding:16px}}
+
+.recon-panel{background:#FFF;border:1px solid #D9DEE5;border-radius:12px;padding:20px;min-width:0;box-sizing:border-box}.recon-panel h2,.recon-panel h3{margin:0;font-size:17px}.recon-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.recon-muted{font-size:12px;color:#55606E;line-height:1.8;margin:8px 0}.recon-table-wrap{overflow-x:auto;max-width:100%}.recon-table{width:100%;border-collapse:collapse;font-size:13px;text-align:start;min-width:390px}.recon-table th,.recon-table td{padding:10px 8px;border-bottom:1px solid #D9DEE5;text-align:start;font-variant-numeric:tabular-nums}.recon-table th{font-weight:600;color:#55606E;background:#F4F5F7}.recon-table .recon-cash{background:#F0F8F7}.recon-total{background:#E3F1F0;color:#084F4B;padding:12px;border-radius:8px;margin:12px 0;font-size:15px}.recon-entry{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid #D9DEE5}.recon-entry label,.recon-label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:#55606E;font-weight:600}.recon-entry input,.recon-label input,.recon-label textarea{min-height:44px;width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #AEB6C2;border-radius:8px;background:#FFF;color:#17202A;font-family:inherit;font-size:15px}.recon-diff{font-size:12px;margin-top:6px}.recon-refund{padding:10px 12px;border:1px solid #E9CF9F;border-radius:8px;background:#FFFAF0;font-size:12px;margin-top:8px}.recon-refund p{margin:4px 0}.recon-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.recon-button{min-height:44px;padding:8px 16px;border:1px solid #AEB6C2;border-radius:8px;background:#FFF;color:#17202A;font-family:inherit;font-size:14px;cursor:pointer}.recon-primary{background:#0B6E69;border-color:#0B6E69;color:#FFF}.recon-danger{border-color:#9B1C1C;color:#9B1C1C}.recon-button:disabled{opacity:.45;cursor:default}.recon-note{background:#FBEFD9;color:#754108;padding:10px 12px;border-radius:8px;font-size:12px;margin-top:10px}.recon-status{background:#E3F1F0;color:#084F4B;padding:10px 12px;border-radius:8px;font-size:13px;margin-top:10px}@media(max-width:600px){.recon-entry{grid-template-columns:minmax(0,1fr)}.recon-panel{padding:14px}}
+
+</style>
+</head><body><nav aria-label="معاينات الأدوار" style="padding:8px 20px;background:#E3F1F0;font:13px system-ui;display:flex;gap:20px"><a href="Manager.html">معاينة المدير</a><a href="Main.html">معاينة الكاشير</a></nav><main id="screen"></main><script type="application/json" id="screen-template">"\n\n\u003cdiv dir=\"rtl\" style=\"min-height: 100vh; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6\">\n\n  \u003cheader style=\"background: #FFFFFF; border-bottom: 1px solid #D9DEE5\">\n    \u003cdiv style=\"max-width: 1360px; margin: 0 auto; padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between\">\n      \u003cdiv style=\"display: flex; flex-direction: column; gap: 0px\">\n        \u003cstrong style=\"font-size: 18px; font-weight: 700\">المدير: [اسم المدير]\u003c/strong>\n        \u003cspan style=\"color: #55606E; font-size: 13px\">[اسم العيادة] · بيانات تجريبية للعرض\u003c/span>\n      \u003c/div>\n      \u003cnav aria-label=\"أقسام المدير\" style=\"display: flex; flex-wrap: wrap; gap: 8px\">\n        \u003ctemplate data-repeat list=\"{{tabs}}\" as=\"tb\" hint-placeholder-count=\"4\">\n          \u003cbutton type=\"button\" onClick=\"{{tb.pick}}\" aria-pressed=\"{{tb.selected}}\" style=\"min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; background: {{tb.bg}}; color: {{tb.fg}}; border: 2px solid {{tb.border}}\">{{tb.label}}\u003c/button>\n        \u003c/template>\n      \u003c/nav>\n    \u003c/div>\n  \u003c/header>\n\n  \u003cdiv style=\"max-width: 1360px; margin: 0 auto; padding: 20px; box-sizing: border-box\">\n\n    \u003ctemplate data-condition value=\"{{isTasks}}\" hint-placeholder-val=\"{{true}}\">\n      \u003cdiv style=\"display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start\">\n\n        \u003csection style=\"flex: 1 1 420px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px\">\n          \u003ch2 style=\"margin: 0; font-size: 16px; font-weight: 700\">طلبات الخصم\u003c/h2>\n          \u003ctemplate data-repeat list=\"{{discounts}}\" as=\"r\" hint-placeholder-count=\"2\">\n            \u003cdiv style=\"border: 1px solid #D9DEE5; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px\">\n              \u003cdiv style=\"display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline\">\n                \u003cspan style=\"font-size: 15px; font-weight: 700\">{{r.customer}} · {{r.code}}\u003c/span>\n                \u003cspan style=\"font-size: 14px; font-variant-numeric: tabular-nums\">الوصل: {{r.total}}\u003c/span>\n              \u003c/div>\n              \u003cspan style=\"font-size: 13px; color: #55606E\">من الكاشير: [اسم الكاشير]\u003c/span>\n              \u003ctemplate data-condition value=\"{{r.isPending}}\" hint-placeholder-val=\"{{true}}\">\n                \u003cdiv style=\"display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px\">\n                  \u003clabel style=\"display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E\">\n                    \u003cspan>مبلغ الخصم (د.ع)\u003c/span>\n                    \u003cinput type=\"number\" min=\"250\" step=\"250\" value=\"{{r.amount}}\" onChange=\"{{r.onAmount}}\" style=\"min-height: 44px; width: 140px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 16px; background: #FFFFFF; color: #17202A; box-sizing: border-box\">\n                  \u003c/label>\n                  \u003cbutton type=\"button\" onClick=\"{{r.approve}}\" disabled=\"{{r.invalid}}\" style=\"min-height: 44px; padding: 0 18px; background: {{r.approveBg}}; color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer\">موافقة\u003c/button>\n                  \u003cbutton type=\"button\" onClick=\"{{r.reject}}\" style=\"min-height: 44px; padding: 0 18px; background: #FFFFFF; color: #9B1C1C; border: 1px solid #9B1C1C; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer\">رفض\u003c/button>\n                \u003c/div>\n              \u003c/template>\n              \u003ctemplate data-condition value=\"{{r.isClosed}}\" hint-placeholder-val=\"{{false}}\">\n                \u003cspan style=\"align-self: flex-start; font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: 6px; background: {{r.chipBg}}; color: {{r.chipFg}}\">{{r.chip}}\u003c/span>\n              \u003c/template>\n            \u003c/div>\n          \u003c/template>\n        \u003c/section>\n\n        \u003csection style=\"flex: 1 1 420px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px\">\n          \u003ch2 style=\"margin: 0; font-size: 16px; font-weight: 700\">استلام الشفتات\u003c/h2>\n          \u003cp class=\"recon-muted\">طابق الكاش وكشف كل جهاز بشكل منفصل. المرتجع ينخصم من المصدر اللي رجعت منه الفلوس فعلياً.\u003c/p>\n          \u003ctemplate data-repeat list=\"{{shifts}}\" as=\"sh\" hint-placeholder-count=\"2\">\n            \u003cdiv class=\"recon-panel\" data-shift=\"{{sh.id}}\">\n              \u003ch3>{{sh.title}}\u003c/h3>\n              \u003cp class=\"recon-muted\">الفكة: {{sh.float}} · المبالغ بالدينار العراقي\u003c/p>\n              \u003cdiv class=\"recon-table-wrap\">\u003ctable class=\"recon-table\">\u003cthead>\u003ctr>\u003cth>الطريقة / الجهاز\u003c/th>\u003cth>المقبوض\u003c/th>\u003cth>المرتجع فعلياً\u003c/th>\u003cth>الصافي\u003c/th>\u003c/tr>\u003c/thead>\u003ctbody>\u003ctemplate data-repeat list=\"{{sh.rows}}\" as=\"r\">\u003ctr>\u003ctd>{{r.label}}\u003c/td>\u003ctd>{{r.paidText}}\u003c/td>\u003ctd>− {{r.refundedText}}\u003c/td>\u003ctd>{{r.netText}}\u003c/td>\u003c/tr>\u003c/template>\u003c/tbody>\u003c/table>\u003c/div>\n              \u003cdiv class=\"recon-total\">الكاش المتوقع تسليمه مع الفكة: \u003cstrong>{{sh.expected}}\u003c/strong>\u003c/div>\n              \u003ctemplate data-repeat list=\"{{sh.refunds}}\" as=\"rf\">\u003cdiv class=\"recon-refund\">\u003cstrong>استرجاع {{rf.amount}} · وصل {{rf.receipt}}\u003c/strong>\u003cp>الدفع الأصلي: {{rf.original}}\u003c/p>\u003cp>رجعنا الفلوس فعلياً: {{rf.actual}}\u003c/p>\u003ctemplate data-condition value=\"{{rf.previous}}\">\u003cp>الدفع كان بشفت سابق؛ الاسترجاع محسوب على هذا الشفت.\u003c/p>\u003c/template>\u003c/div>\u003c/template>\n              \u003ctemplate data-repeat list=\"{{sh.rows}}\" as=\"r\">\u003cdiv class=\"recon-entry\">\u003cdiv>\u003cstrong style=\"font-size:13px\">{{r.label}}\u003c/strong>\u003cp class=\"recon-muted\">المتوقع: {{r.expectedText}}\u003cbr>سجله الكاشير: {{r.countedText}}\u003c/p>\u003cdiv class=\"recon-diff\">{{r.difference}}\u003c/div>\u003c/div>\u003clabel>{{r.label}} · المبلغ المتحقق منه\u003cinput inputmode=\"numeric\" value=\"{{r.entered}}\" onChange=\"{{r.change}}\" disabled=\"{{sh.isClosed}}\">\u003c/label>\u003c/div>\u003c/template>\n              \u003clabel class=\"recon-label\" style=\"margin-top:12px\">ملاحظة المطابقة\u003cinput value=\"{{sh.note}}\" onChange=\"{{sh.onNote}}\" disabled=\"{{sh.isClosed}}\" placeholder=\"سبب النقص أو الزيادة\">\u003c/label>\n              \u003ctemplate data-condition value=\"{{sh.needsNote}}\">\u003cp class=\"recon-note\">أكو فرق؛ اكتب ملاحظتك قبل تأكيد الاستلام. فرق الجهاز يبقى منفصل عن فرق الكاش.\u003c/p>\u003c/template>\n              \u003ctemplate data-condition value=\"{{sh.isPending}}\">\u003cdiv class=\"recon-actions\">\u003cbutton class=\"recon-button recon-primary\" onClick=\"{{sh.confirm}}\" disabled=\"{{sh.confirmDisabled}}\">تأكيد الكاش ومطابقة الأجهزة\u003c/button>\u003c/div>\u003c/template>\n              \u003ctemplate data-condition value=\"{{sh.isClosed}}\">\u003cdiv class=\"recon-status\" role=\"status\">{{sh.chip}}\u003c/div>\u003c/template>\n            \u003c/div>\n          \u003c/template>\n        \u003c/section>\n\n        \u003csection style=\"flex: 1 1 420px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px\">\n          \u003cdiv style=\"display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px\">\n            \u003ch2 style=\"margin: 0; font-size: 16px; font-weight: 700\">جلسات مدفوعة ما تنفذت\u003c/h2>\n            \u003cspan style=\"font-size: 13px; color: #55606E\">للعلم. الكاشير هو اللي يتصرف بيها.\u003c/span>\n          \u003c/div>\n          \u003cdiv style=\"border: 1px solid #D9DEE5; border-radius: 10px; padding: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px\">\n            \u003cspan style=\"flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 2px\">\n              \u003cspan style=\"font-size: 15px; font-weight: 600\">هدى كريم · تنظيف بشرة\u003c/span>\n              \u003cspan style=\"font-size: 13px; color: #55606E\">اندفعت أمس · وصل \u003cbdi dir=\"ltr\">2026-00118\u003c/bdi>\u003c/span>\n            \u003c/span>\n            \u003cspan style=\"flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: #FBEFD9; color: #8A4B08\">بانتظار الكاشير\u003c/span>\n          \u003c/div>\n        \u003c/section>\n\n        \u003csection style=\"flex: 1 1 420px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px\">\n          \u003ch2 style=\"margin: 0; font-size: 16px; font-weight: 700\">تنبيهات المخزون\u003c/h2>\n          \u003ctemplate data-repeat list=\"{{alerts}}\" as=\"al\" hint-placeholder-count=\"3\">\n            \u003cdiv style=\"display: flex; align-items: center; gap: 12px; border: 1px solid #D9DEE5; border-radius: 10px; padding: 12px 14px\">\n              \u003cspan style=\"flex: 1 1 auto; min-width: 0; font-size: 14px; font-weight: 600\">{{al.text}}\u003c/span>\n              \u003cspan style=\"flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{al.bg}}; color: {{al.fg}}\">{{al.tag}}\u003c/span>\n            \u003c/div>\n          \u003c/template>\n        \u003c/section>\n\n      \u003c/div>\n    \u003c/template>\n\n    \u003ctemplate data-condition value=\"{{isStock}}\" hint-placeholder-val=\"{{false}}\">\n      \u003csection style=\"background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px\">\n        \u003cdiv style=\"display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px\">\n          \u003ch2 style=\"margin: 0; font-size: 16px; font-weight: 700\">المخزون\u003c/h2>\n          \u003cdiv style=\"display: flex; flex-wrap: wrap; gap: 8px\">\n            \u003cbutton type=\"button\" style=\"min-height: 44px; padding: 0 16px; background: #17202A; color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer\">فاتورة شراء\u003c/button>\n            \u003cbutton type=\"button\" style=\"min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer\">جرد\u003c/button>\n            \u003cbutton type=\"button\" style=\"min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer\">تسجيل تالف\u003c/button>\n            \u003cbutton type=\"button\" style=\"min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer\">مرتجع للمورد\u003c/button>\n          \u003c/div>\n        \u003c/div>\n        \u003cdiv style=\"overflow-x: auto\">\n          \u003ctable style=\"width: 100%; min-width: 720px; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums\">\n            \u003cthead>\n              \u003ctr style=\"text-align: start; color: #55606E\">\n                \u003cth scope=\"col\" style=\"text-align: start; padding: 10px 12px; border-bottom: 2px solid #D9DEE5; font-weight: 600\">المادة\u003c/th>\n                \u003cth scope=\"col\" style=\"text-align: start; padding: 10px 12px; border-bottom: 2px solid #D9DEE5; font-weight: 600\">الوحدة\u003c/th>\n                \u003cth scope=\"col\" style=\"text-align: start; padding: 10px 12px; border-bottom: 2px solid #D9DEE5; font-weight: 600\">الموجود\u003c/th>\n                \u003cth scope=\"col\" style=\"text-align: start; padding: 10px 12px; border-bottom: 2px solid #D9DEE5; font-weight: 600\">المحجوز\u003c/th>\n                \u003cth scope=\"col\" style=\"text-align: start; padding: 10px 12px; border-bottom: 2px solid #D9DEE5; font-weight: 600\">المتاح\u003c/th>\n                \u003cth scope=\"col\" style=\"text-align: start; padding: 10px 12px; border-bottom: 2px solid #D9DEE5; font-weight: 600\">أقرب صلاحية\u003c/th>\n                \u003cth scope=\"col\" style=\"text-align: start; padding: 10px 12px; border-bottom: 2px solid #D9DEE5; font-weight: 600\">الحالة\u003c/th>\n              \u003c/tr>\n            \u003c/thead>\n            \u003ctbody>\n              \u003ctemplate data-repeat list=\"{{stock}}\" as=\"m\" hint-placeholder-count=\"4\">\n                \u003ctr>\n                  \u003ctd style=\"padding: 12px; border-bottom: 1px solid #D9DEE5; font-weight: 600\">{{m.name}}\u003c/td>\n                  \u003ctd style=\"padding: 12px; border-bottom: 1px solid #D9DEE5\">{{m.unit}}\u003c/td>\n                  \u003ctd style=\"padding: 12px; border-bottom: 1px solid #D9DEE5\">{{m.onHand}}\u003c/td>\n                  \u003ctd style=\"padding: 12px; border-bottom: 1px solid #D9DEE5\">{{m.reserved}}\u003c/td>\n                  \u003ctd style=\"padding: 12px; border-bottom: 1px solid #D9DEE5; font-weight: 700\">{{m.free}}\u003c/td>\n                  \u003ctd style=\"padding: 12px; border-bottom: 1px solid #D9DEE5\">{{m.expiry}}\u003c/td>\n                  \u003ctd style=\"padding: 12px; border-bottom: 1px solid #D9DEE5\">\u003cspan style=\"font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{m.bg}}; color: {{m.fg}}\">{{m.tag}}\u003c/span>\u003c/td>\n                \u003c/tr>\n              \u003c/template>\n            \u003c/tbody>\n          \u003c/table>\n        \u003c/div>\n      \u003c/section>\n    \u003c/template>\n\n    \u003ctemplate data-condition value=\"{{isSafe}}\" hint-placeholder-val=\"{{false}}\">\n      \u003cdiv style=\"display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start\">\n\n        \u003csection style=\"flex: 1 1 380px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px\">\n          \u003cdiv style=\"display: flex; flex-direction: column; gap: 0px\">\n            \u003cspan style=\"font-size: 13px; font-weight: 600; color: #55606E\">رصيد الخزنة\u003c/span>\n            \u003cspan style=\"font-size: 32px; font-weight: 700; font-variant-numeric: tabular-nums\">{{balance}}\u003c/span>\n          \u003c/div>\n\n          \u003ch2 style=\"margin: 0; font-size: 16px; font-weight: 700\">تسجيل حركة\u003c/h2>\n          \u003cdiv style=\"display: flex; flex-wrap: wrap; gap: 8px\">\n            \u003ctemplate data-repeat list=\"{{types}}\" as=\"ty\" hint-placeholder-count=\"4\">\n              \u003cbutton type=\"button\" onClick=\"{{ty.pick}}\" aria-pressed=\"{{ty.selected}}\" style=\"min-height: 44px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{ty.bg}}; color: {{ty.fg}}; border: 2px solid {{ty.border}}\">{{ty.label}}\u003c/button>\n            \u003c/template>\n          \u003c/div>\n\n          \u003clabel style=\"display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E\">\n            \u003cspan>المبلغ (د.ع)\u003c/span>\n            \u003cinput type=\"number\" min=\"0\" step=\"250\" value=\"{{f.amount}}\" onChange=\"{{onAmount}}\" style=\"min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 16px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%\">\n          \u003c/label>\n          \u003clabel style=\"display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E\">\n            \u003cspan>{{noteLabel}}\u003c/span>\n            \u003cinput type=\"text\" value=\"{{f.note}}\" onChange=\"{{onNote}}\" style=\"min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%\">\n          \u003c/label>\n\n          \u003ctemplate data-condition value=\"{{showSource}}\" hint-placeholder-val=\"{{true}}\">\n            \u003cdiv style=\"display: flex; flex-direction: column; gap: 8px\">\n              \u003cspan style=\"font-size: 13px; font-weight: 600; color: #55606E\">طريقة الدفع\u003c/span>\n              \u003cdiv style=\"display: flex; flex-wrap: wrap; gap: 8px\">\n                \u003ctemplate data-repeat list=\"{{sources}}\" as=\"so\" hint-placeholder-count=\"2\">\n                  \u003cbutton type=\"button\" onClick=\"{{so.pick}}\" aria-pressed=\"{{so.selected}}\" style=\"min-height: 44px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{so.bg}}; color: {{so.fg}}; border: 2px solid {{so.border}}\">{{so.label}}\u003c/button>\n                \u003c/template>\n              \u003c/div>\n            \u003c/div>\n          \u003c/template>\n          \u003ctemplate data-condition value=\"{{showBank}}\" hint-placeholder-val=\"{{false}}\">\n            \u003clabel style=\"display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E\">\n              \u003cspan>اسم المصرف\u003c/span>\n              \u003cinput type=\"text\" value=\"{{f.bank}}\" onChange=\"{{onBank}}\" style=\"min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%\">\n            \u003c/label>\n          \u003c/template>\n          \u003ctemplate data-condition value=\"{{isOwnerType}}\" hint-placeholder-val=\"{{false}}\">\n            \u003cspan style=\"font-size: 13px; color: #55606E\">السحب ما ينقص من الخزنة إلا بعد ما يوافق المالك من حسابه.\u003c/span>\n          \u003c/template>\n\n          \u003cbutton type=\"button\" onClick=\"{{record}}\" disabled=\"{{recordDisabled}}\" style=\"min-height: 52px; padding: 0 20px; background: {{recordBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer\">{{recordLabel}}\u003c/button>\n        \u003c/section>\n\n        \u003csection style=\"flex: 999 1 480px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px\">\n          \u003ch2 style=\"margin: 0; font-size: 16px; font-weight: 700\">حركات الخزنة\u003c/h2>\n          \u003ctemplate data-repeat list=\"{{moves}}\" as=\"mv\" hint-placeholder-count=\"4\">\n            \u003cdiv style=\"display: flex; flex-wrap: wrap; align-items: center; gap: 12px; border: 1px solid #D9DEE5; border-radius: 10px; padding: 12px 14px\">\n              \u003cspan style=\"flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 2px\">\n                \u003cspan style=\"font-size: 15px; font-weight: 600\">{{mv.label}}\u003c/span>\n                \u003cspan style=\"font-size: 13px; color: #55606E\">{{mv.sub}}\u003c/span>\n              \u003c/span>\n              \u003ctemplate data-condition value=\"{{mv.canApprove}}\" hint-placeholder-val=\"{{false}}\">\n                \u003cbutton type=\"button\" onClick=\"{{mv.approve}}\" style=\"flex: none; min-height: 44px; padding: 0 12px; background: transparent; color: #0B6E69; border: none; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: underline\">تجربة: المالك وافق\u003c/button>\n              \u003c/template>\n              \u003cspan style=\"flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{mv.chipBg}}; color: {{mv.chipFg}}\">{{mv.chip}}\u003c/span>\n              \u003cspan style=\"flex: none; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; color: {{mv.amountFg}}\">{{mv.amount}}\u003c/span>\n            \u003c/div>\n          \u003c/template>\n        \u003c/section>\n\n      \u003c/div>\n    \u003c/template>\n\n    \u003ctemplate data-condition value=\"{{isServices}}\" hint-placeholder-val=\"{{false}}\">\n      \u003cdiv class=\"svc-heading\">\u003cdiv>\u003ch1>الخدمات والأسعار\u003c/h1>\u003cp>رتّب الخدمات وحقول الطبيب والمواد اللي تستهلكها كل جلسة.\u003c/p>\u003c/div>\u003cspan class=\"svc-badge\">نموذج تفاعلي · الحفظ للتجربة فقط\u003c/span>\u003c/div>\n      \u003ctemplate data-condition value=\"{{hasServiceMessage}}\">\u003cdiv class=\"svc-notice svc-success\" role=\"status\">{{serviceMessage}}\u003c/div>\u003c/template>\n      \u003ctemplate data-condition value=\"{{hasServicePending}}\">\u003cdiv class=\"svc-notice svc-warning\" role=\"alert\">\u003cstrong>عندك تعديلات ما انحفظت.\u003c/strong>\u003cp>تگدر تكمل تعديلك، أو تتجاهل التعديلات وتنتقل.\u003c/p>\u003cdiv class=\"svc-row\">\u003cbutton class=\"svc-button\" onClick=\"{{keepService}}\">كمل التعديل\u003c/button>\u003cbutton class=\"svc-button svc-danger\" onClick=\"{{discardService}}\">تجاهل التعديلات وانتقل\u003c/button>\u003c/div>\u003c/div>\u003c/template>\n      \u003cdiv class=\"svc-layout\">\n        \u003caside class=\"svc-panel svc-list\" aria-label=\"قائمة الخدمات\">\n          \u003cdiv class=\"svc-section-title\">\u003ch2>الخدمات\u003c/h2>\u003cbutton class=\"svc-button svc-primary\" onClick=\"{{addService}}\">+ خدمة جديدة\u003c/button>\u003c/div>\n          \u003clabel class=\"svc-label\" for=\"svc-search\">بحث عن خدمة\u003cinput id=\"svc-search\" type=\"search\" value=\"{{serviceQuery}}\" onChange=\"{{onServiceQuery}}\" placeholder=\"اسم الخدمة\">\u003c/label>\n          \u003ctemplate data-repeat list=\"{{serviceList}}\" as=\"sv\">\u003cbutton class=\"svc-list-item\" onClick=\"{{sv.pick}}\" aria-pressed=\"{{sv.selected}}\" style=\"background: {{sv.bg}}; color: {{sv.fg}}; border-color: {{sv.border}}\">\u003cstrong>{{sv.name}}\u003c/strong>\u003cspan>{{sv.description}}\u003c/span>\u003c/button>\u003c/template>\n          \u003ctemplate data-condition value=\"{{serviceListEmpty}}\">\u003cp class=\"svc-muted\">ماكو خدمة بهذا الاسم. جرّب اسم ثاني.\u003c/p>\u003c/template>\n          \u003cp class=\"svc-muted svc-list-note\">الأسعار والأسماء هنا أمثلة، وتگدر تعدلها.\u003c/p>\n        \u003c/aside>\n        \u003cdiv class=\"svc-workspace\">\n          \u003csection class=\"svc-panel svc-editor\" aria-label=\"إعدادات الخدمة\">\n            \u003cdiv class=\"svc-section-title\">\u003ch2>{{serviceTitle}}\u003c/h2>\u003cspan class=\"svc-badge\">{{serviceStatus}}\u003c/span>\u003c/div>\n            \u003clabel class=\"svc-label\" for=\"svc-name\">اسم الخدمة\u003cinput id=\"svc-name\" value=\"{{serviceName}}\" onChange=\"{{onServiceName}}\" placeholder=\"مثال: تنظيف بشرة\">\u003c/label>\n            \u003cdiv class=\"svc-section\">\u003ch3>01 \u003cspan>طريقة التسعير\u003c/span>\u003c/h3>\u003cdiv class=\"svc-row\">\u003ctemplate data-repeat list=\"{{serviceKinds}}\" as=\"k\">\u003cbutton class=\"svc-button\" onClick=\"{{k.pick}}\" aria-pressed=\"{{k.selected}}\" style=\"background: {{k.bg}}; color: {{k.fg}}; border-color: {{k.border}}\">{{k.label}}\u003c/button>\u003c/template>\u003c/div>\n              \u003ctemplate data-condition value=\"{{serviceNotAreas}}\">\u003clabel class=\"svc-label\" for=\"svc-price\">{{servicePriceLabel}}\u003cinput id=\"svc-price\" inputmode=\"numeric\" value=\"{{servicePrice}}\" onChange=\"{{onServicePrice}}\" placeholder=\"0\">\u003c/label>\u003c/template>\n              \u003ctemplate data-condition value=\"{{serviceIsQuantity}}\">\u003cdiv class=\"svc-form-grid\">\u003clabel class=\"svc-label\" for=\"svc-unit\">وحدة القياس\u003cinput id=\"svc-unit\" value=\"{{serviceUnit}}\" onChange=\"{{onServiceUnit}}\" placeholder=\"cc\">\u003c/label>\u003clabel class=\"svc-label\" for=\"svc-quantity-field\">حقل الكمية عند الطبيب\u003cselect id=\"svc-quantity-field\" onChange=\"{{onServiceQuantityField}}\">\u003coption value=\"\" selected=\"{{serviceQuantityEmpty}}\">اختار حقل رقمي مطلوب\u003c/option>\u003ctemplate data-repeat list=\"{{serviceQuantityFields}}\" as=\"qf\">\u003coption value=\"{{qf.id}}\" selected=\"{{qf.selected}}\">{{qf.label}}\u003c/option>\u003c/template>\u003c/select>\u003c/label>\u003c/div>\u003cp class=\"svc-muted\">المبلغ = سعر الوحدة × الكمية اللي يكتبها الطبيب.\u003c/p>\u003c/template>\n              \u003ctemplate data-condition value=\"{{serviceIsAreas}}\">\u003clabel class=\"svc-label\" for=\"svc-full-price\">سعر الفول بدي (د.ع)\u003cinput id=\"svc-full-price\" inputmode=\"numeric\" value=\"{{serviceFullPrice}}\" onChange=\"{{onServiceFullPrice}}\">\u003c/label>\u003cdiv class=\"svc-section-title\">\u003ch4>المناطق وأسعارها\u003c/h4>\u003cbutton class=\"svc-button\" onClick=\"{{addServiceArea}}\">+ منطقة\u003c/button>\u003c/div>\u003ctemplate data-repeat list=\"{{serviceAreas}}\" as=\"a\">\u003cdiv class=\"svc-area-row\">\u003clabel class=\"svc-label\">المنطقة\u003cinput value=\"{{a.label}}\" onChange=\"{{a.changeLabel}}\" placeholder=\"اسم المنطقة\">\u003c/label>\u003clabel class=\"svc-label\">السعر (د.ع)\u003cinput inputmode=\"numeric\" value=\"{{a.price}}\" onChange=\"{{a.changePrice}}\">\u003c/label>\u003cbutton class=\"svc-button svc-danger\" onClick=\"{{a.remove}}\" aria-label=\"إزالة المنطقة {{a.label}}\">إزالة\u003c/button>\u003c/div>\u003c/template>\u003c/template>\n            \u003c/div>\n            \u003cdiv class=\"svc-section\">\u003cdiv class=\"svc-section-title\">\u003ch3>02 \u003cspan>حقول الطبيب\u003c/span>\u003c/h3>\u003cbutton class=\"svc-button\" onClick=\"{{addServiceField}}\">+ حقل\u003c/button>\u003c/div>\u003cp class=\"svc-muted\">أضف المعلومات اللي يحتاج الطبيب يدخلها لهذه الخدمة.\u003c/p>\n              \u003ctemplate data-condition value=\"{{serviceFieldsEmpty}}\">\u003cp class=\"svc-empty\">ماكو حقول إضافية حالياً.\u003c/p>\u003c/template>\n              \u003ctemplate data-repeat list=\"{{serviceFields}}\" as=\"f\">\u003cdiv class=\"svc-subcard\">\u003cdiv class=\"svc-section-title\">\u003cstrong>الحقل {{f.order}}\u003c/strong>\u003cdiv class=\"svc-row\">\u003cbutton class=\"svc-button svc-small\" onClick=\"{{f.toggleRequired}}\" aria-pressed=\"{{f.required}}\">{{f.requiredLabel}}\u003c/button>\u003cbutton class=\"svc-button svc-danger svc-small\" onClick=\"{{f.remove}}\" aria-label=\"إزالة الحقل {{f.label}}\">إزالة\u003c/button>\u003c/div>\u003c/div>\u003cdiv class=\"svc-form-grid\">\u003clabel class=\"svc-label\">اسم الحقل\u003cinput value=\"{{f.label}}\" onChange=\"{{f.changeLabel}}\" placeholder=\"مثال: الكمية (cc)\">\u003c/label>\u003clabel class=\"svc-label\">نوع الحقل\u003cselect onChange=\"{{f.changeType}}\">\u003ctemplate data-repeat list=\"{{f.typeOptions}}\" as=\"ft\">\u003coption value=\"{{ft.id}}\" selected=\"{{ft.selected}}\">{{ft.label}}\u003c/option>\u003c/template>\u003c/select>\u003c/label>\u003c/div>\u003ctemplate data-condition value=\"{{f.isChoice}}\">\u003clabel class=\"svc-label\">الخيارات · كل خيار بسطر\u003ctextarea rows=\"3\" value=\"{{f.options}}\" onChange=\"{{f.changeOptions}}\" placeholder=\"عادية&#10;دهنية&#10;جافة\">\u003c/textarea>\u003c/label>\u003c/template>\u003c/div>\u003c/template>\n            \u003c/div>\n            \u003cdiv class=\"svc-section\">\u003cdiv class=\"svc-section-title\">\u003ch3>03 \u003cspan>المواد المستهلكة\u003c/span>\u003c/h3>\u003cbutton class=\"svc-button\" onClick=\"{{addServiceMaterial}}\">+ مادة\u003c/button>\u003c/div>\u003cp class=\"svc-muted\">كمية ثابتة للجلسة، أو كمية مرتبطة بحقل رقمي مطلوب عند الطبيب.\u003c/p>\n              \u003ctemplate data-condition value=\"{{serviceMaterialsEmpty}}\">\u003cp class=\"svc-empty\">ماكو مواد مربوطة بهذه الخدمة.\u003c/p>\u003c/template>\n              \u003ctemplate data-repeat list=\"{{serviceMaterials}}\" as=\"m\">\u003cdiv class=\"svc-subcard\">\u003cdiv class=\"svc-section-title\">\u003cstrong>مادة مستهلكة\u003c/strong>\u003cbutton class=\"svc-button svc-danger svc-small\" onClick=\"{{m.remove}}\" aria-label=\"إزالة ربط المادة\">إزالة\u003c/button>\u003c/div>\u003cdiv class=\"svc-form-grid\">\u003clabel class=\"svc-label\">المادة\u003cselect onChange=\"{{m.changeMaterial}}\">\u003coption value=\"\" selected=\"{{m.materialEmpty}}\">اختار مادة\u003c/option>\u003ctemplate data-repeat list=\"{{m.materialOptions}}\" as=\"mo\">\u003coption value=\"{{mo.id}}\" selected=\"{{mo.selected}}\">{{mo.label}} ({{mo.unit}})\u003c/option>\u003c/template>\u003c/select>\u003c/label>\u003clabel class=\"svc-label\">طريقة حساب الاستهلاك\u003cselect onChange=\"{{m.changeBasis}}\">\u003ctemplate data-repeat list=\"{{m.basisOptions}}\" as=\"mb\">\u003coption value=\"{{mb.id}}\" selected=\"{{mb.selected}}\">{{mb.label}}\u003c/option>\u003c/template>\u003c/select>\u003c/label>\u003c/div>\u003ctemplate data-condition value=\"{{m.isField}}\">\u003clabel class=\"svc-label\">حقل كمية الطبيب\u003cselect onChange=\"{{m.changeField}}\">\u003coption value=\"\" selected=\"{{m.fieldEmpty}}\">اختار حقل رقمي مطلوب\u003c/option>\u003ctemplate data-repeat list=\"{{m.fieldOptions}}\" as=\"mf\">\u003coption value=\"{{mf.id}}\" selected=\"{{mf.selected}}\">{{mf.label}}\u003c/option>\u003c/template>\u003c/select>\u003c/label>\u003c/template>\u003clabel class=\"svc-label\">{{m.quantityLabel}} ({{m.unit}})\u003cinput inputmode=\"decimal\" value=\"{{m.quantity}}\" onChange=\"{{m.changeQuantity}}\" placeholder=\"1\">\u003c/label>\u003c/div>\u003c/template>\n            \u003c/div>\n            \u003ctemplate data-condition value=\"{{serviceHasErrors}}\">\u003cdiv class=\"svc-notice svc-warning\" role=\"alert\">\u003cstrong>قبل الحفظ:\u003c/strong>\u003cul>\u003ctemplate data-repeat list=\"{{serviceErrors}}\" as=\"err\">\u003cli>{{err.text}}\u003c/li>\u003c/template>\u003c/ul>\u003c/div>\u003c/template>\n            \u003cdiv class=\"svc-actions\">\u003cbutton class=\"svc-button svc-primary\" disabled=\"{{serviceSaveDisabled}}\" onClick=\"{{saveService}}\">حفظ الخدمة\u003c/button>\u003cbutton class=\"svc-button\" disabled=\"{{serviceClean}}\" onClick=\"{{resetService}}\">إلغاء التعديلات\u003c/button>\u003c/div>\n            \u003cp class=\"svc-muted\">السعر النهائي يُحسب يوم الدفع. تعديل الخدمة ما يغيّر الوصولات السابقة.\u003c/p>\n          \u003c/section>\n          \u003caside class=\"svc-panel svc-preview\" aria-label=\"معاينة الخدمة عند الطبيب\">\u003cspan class=\"svc-eyebrow\">معاينة مباشرة\u003c/span>\u003ch2>هالشكل تظهر للطبيب\u003c/h2>\u003cp class=\"svc-muted\">جرّب الحقول وشوف السعر واستهلاك المواد.\u003c/p>\u003cdiv class=\"svc-preview-body\">\u003ch3>{{servicePreviewName}}\u003c/h3>\n            \u003ctemplate data-condition value=\"{{serviceIsAreas}}\">\u003clabel class=\"svc-check\">\u003cinput type=\"checkbox\" checked=\"{{servicePreviewFull}}\" onChange=\"{{onServicePreviewFull}}\">\u003cspan>فول بدي · {{servicePreviewFullPrice}}\u003c/span>\u003c/label>\u003ctemplate data-repeat list=\"{{servicePreviewAreas}}\" as=\"pa\">\u003clabel class=\"svc-check\">\u003cinput type=\"checkbox\" checked=\"{{pa.checked}}\" disabled=\"{{pa.disabled}}\" onChange=\"{{pa.change}}\">\u003cspan>{{pa.label}} · {{pa.price}}\u003c/span>\u003c/label>\u003c/template>\u003c/template>\n            \u003ctemplate data-repeat list=\"{{servicePreviewFields}}\" as=\"pf\">\u003cdiv class=\"svc-preview-field\">\u003clabel class=\"svc-label\" for=\"demo-{{pf.id}}\">{{pf.label}}\u003ctemplate data-condition value=\"{{pf.required}}\">\u003cspan class=\"svc-required\">مطلوب\u003c/span>\u003c/template>\u003c/label>\u003ctemplate data-condition value=\"{{pf.isNumber}}\">\u003cinput id=\"demo-{{pf.id}}\" type=\"number\" min=\"0\" step=\"any\" value=\"{{pf.value}}\" onChange=\"{{pf.change}}\">\u003c/template>\u003ctemplate data-condition value=\"{{pf.isText}}\">\u003ctextarea id=\"demo-{{pf.id}}\" rows=\"2\" value=\"{{pf.value}}\" onChange=\"{{pf.change}}\">\u003c/textarea>\u003c/template>\u003ctemplate data-condition value=\"{{pf.isChoice}}\">\u003cselect id=\"demo-{{pf.id}}\" onChange=\"{{pf.change}}\">\u003coption value=\"\">اختار\u003c/option>\u003ctemplate data-repeat list=\"{{pf.options}}\" as=\"po\">\u003coption selected=\"{{po.selected}}\">{{po.label}}\u003c/option>\u003c/template>\u003c/select>\u003c/template>\u003ctemplate data-condition value=\"{{pf.isBoolean}}\">\u003cinput id=\"demo-{{pf.id}}\" type=\"checkbox\" checked=\"{{pf.checked}}\" onChange=\"{{pf.change}}\">\u003c/template>\u003c/div>\u003c/template>\n            \u003cdiv class=\"svc-preview-total\">\u003cspan>سعر الخدمة قبل الخصم والنقاط\u003c/span>\u003cstrong>{{servicePreviewPrice}}\u003c/strong>\u003c/div>\u003ctemplate data-repeat list=\"{{servicePreviewMaterials}}\" as=\"pm\">\u003cdiv class=\"svc-preview-material\">\u003cspan>{{pm.label}}\u003c/span>\u003cstrong>{{pm.amount}}\u003c/strong>\u003c/div>\u003c/template>\u003cp class=\"svc-muted\">خصم المواد يصير عند تأكيد اكتمال الجلسة.\u003c/p>\n          \u003c/div>\u003c/aside>\n        \u003c/div>\n      \u003c/div>\n    \u003c/template>\n\n  \u003c/div>\n\u003c/div>\n"</script><script>
+
+const template = document.createElement('template');
+template.innerHTML = JSON.parse(document.getElementById('screen-template').textContent);
+const host = document.getElementById('screen');
+let component;
+function value(expression, scope) {
+  const path = expression.trim().split('.');
+  if (path[0] === 'true') return true;
+  if (path[0] === 'false') return false;
+  return path.reduce((result, key) => result == null ? undefined : result[key], scope);
+}
+function binding(raw, scope) {
+  const exact = raw.match(/^\{\{([^{}]+)\}\}$/);
+  if (exact) return value(exact[1], scope);
+  return raw.replace(/\{\{([^{}]+)\}\}/g, (_, key) => String(value(key, scope) ?? ''));
+}
+function children(parent, scope, key) {
+  const fragment = document.createDocumentFragment();
+  [...parent.childNodes].forEach((child, index) => fragment.appendChild(build(child, scope, key + ':' + index)));
+  return fragment;
+}
+function build(node, scope, key) {
+  if (node.nodeType === Node.TEXT_NODE) return document.createTextNode(binding(node.textContent, scope) ?? '');
+  if (node.nodeType !== Node.ELEMENT_NODE) return node.cloneNode(false);
+  if (node.matches('template[data-repeat]')) {
+    const fragment = document.createDocumentFragment();
+    const list = binding(node.getAttribute('list'), scope) || [];
+    list.forEach((item, index) => fragment.appendChild(children(node.content, Object.assign({}, scope, {[node.getAttribute('as')]: item}), key + ':' + index)));
+    return fragment;
+  }
+  if (node.matches('template[data-condition]')) return binding(node.getAttribute('value'), scope) ? children(node.content, scope, key) : document.createDocumentFragment();
+  const output = node.cloneNode(false);
+  for (const attr of [...node.attributes]) {
+    if (attr.name.startsWith('hint-')) { output.removeAttribute(attr.name); continue; }
+    const resolved = binding(attr.value, scope);
+    if (/^on(click|change)$/.test(attr.name)) {
+      output.removeAttribute(attr.name);
+      if (typeof resolved === 'function') {
+        const inputEvent = attr.name === 'onchange' && (node.tagName === 'TEXTAREA' || (node.tagName === 'INPUT' && !['checkbox','radio'].includes(node.type)));
+        output.addEventListener(inputEvent ? 'input' : attr.name.slice(2), (event) => resolved(event));
+      }
+    } else if (['checked', 'disabled', 'selected', 'required'].includes(attr.name)) {
+      output.removeAttribute(attr.name);
+      output[attr.name] = !!resolved;
+    } else { output.setAttribute(attr.name, resolved ?? ''); }
+  }
+  output.appendChild(children(node, scope, key));
+  if (node.hasAttribute('value') && ['INPUT', 'TEXTAREA', 'SELECT'].includes(node.tagName)) output.value = binding(node.getAttribute('value'), scope) ?? '';
+  if (['INPUT','TEXTAREA','SELECT','BUTTON'].includes(node.tagName)) output.dataset.previewKey = key;
+  return output;
+}
+function render() {
+  const focused = document.activeElement;
+  const key = focused?.dataset.previewKey;
+  let start = null, end = null;
+  try { start = focused.selectionStart; end = focused.selectionEnd; } catch {}
+  host.replaceChildren(children(template.content, component.renderVals(), 'screen'));
+  if (key) {
+    const replacement = [...host.querySelectorAll('[data-preview-key]')].find((node) => node.dataset.previewKey === key);
+    if (replacement) { replacement.focus({preventScroll:true}); if (start != null) { try { replacement.setSelectionRange(start,end); } catch {} } }
+  }
+}
+class DCLogic { setState(next) { this.state = Object.assign({}, this.state, next); render(); } }
+
+
+class Component extends DCLogic {
+  state = {
+    tab: 'tasks',
+    disc: {},
+    shift: {},
+    recorded: [],
+    f: { type: 'expense', amount: '', note: '', source: 'safe', bank: '' }
+  };
+
+  // In-memory screen prototype. Persisted clinic data is not connected yet.
+  shiftMethods() {
+    return [{ id: 'cash', label: 'كاش', isCash: true }, { id: 'qi', label: 'كي كارد · جهاز Q', isCash: false }, { id: 'switch', label: 'سويتش · جهاز S', isCash: false }];
+  }
+  shiftMoney(value, allowNegative) {
+    const text = String(value == null ? '' : value).trim().replace(/[٠-٩]/g, (c) => String(c.charCodeAt(0) - 1632)).replace(/[۰-۹]/g, (c) => String(c.charCodeAt(0) - 1776));
+    const number = Number(text);
+    return (allowNegative ? /^-?\d+$/ : /^\d+$/).test(text) && Number.isSafeInteger(number) && (allowNegative || number >= 0) ? number : null;
+  }
+  shiftBaseEvents() {
+    return [
+      { id: 'base-cash', type: 'payment', method: 'cash', amount: 390000, receipt: 'وصولات تجريبية مجمعة' },
+      { id: 'paid-a', type: 'payment', method: 'cash', amount: 30000, receipt: '2026-00125' },
+      { id: 'base-qi', type: 'payment', method: 'qi', amount: 200000, receipt: 'وصولات تجريبية مجمعة' },
+      { id: 'base-switch', type: 'payment', method: 'switch', amount: 80000, receipt: 'وصولات تجريبية مجمعة' },
+      { id: 'refund-old', type: 'refund', method: 'cash', amount: 35000, originalMethod: 'qi', receipt: '2026-00119', fromPreviousShift: true }
+    ];
+  }
+  shiftTotals(events, float) {
+    const methods = this.shiftMethods();
+    const label = (id) => (methods.find((m) => m.id === id) || { label: id }).label;
+    const rows = methods.map((m) => {
+      const paid = events.filter((e) => e.type === 'payment' && e.method === m.id).reduce((sum, e) => sum + e.amount, 0);
+      const refunded = events.filter((e) => e.type === 'refund' && e.method === m.id).reduce((sum, e) => sum + e.amount, 0);
+      return { id: m.id, label: m.label, isCash: m.isCash, paid: paid, refunded: refunded, net: paid - refunded, expected: paid - refunded + (m.isCash ? float : 0) };
+    });
+    return { rows: rows, cashExpected: rows[0].expected, refunds: events.filter((e) => e.type === 'refund').map((e) => ({ receipt: this.ltr(e.receipt), amount: this.fmt(e.amount), original: label(e.originalMethod), actual: label(e.method), previous: !!e.fromPreviousShift })) };
+  }
+  shiftDifference(actual, expected) {
+    if (actual == null) { return 'اكتب المبلغ الفعلي'; }
+    const diff = actual - expected;
+    return diff === 0 ? 'مطابق' : (diff < 0 ? 'نقص ' : 'زيادة ') + this.fmt(Math.abs(diff));
+  }
+
+  managerShift(sh) {
+    const cur = (this.state.shift || {})[sh.id] || {};
+    const totals = this.shiftTotals(sh.events, sh.float);
+    const verified = cur.verified || {};
+    const rows = totals.rows.map((row) => {
+      const entered = verified[row.id] == null ? String(sh.counted[row.id]) : verified[row.id];
+      const actual = this.shiftMoney(entered, !row.isCash);
+      return Object.assign({}, row, { paidText: this.fmt(row.paid), refundedText: this.fmt(row.refunded), netText: this.fmt(row.net), expectedText: this.fmt(row.expected), countedText: this.fmt(sh.counted[row.id]), entered: entered, actual: actual, difference: this.shiftDifference(actual, row.expected), mismatch: actual != null && actual !== row.expected, change: (e) => {
+        const latest = (this.state.shift || {})[sh.id] || {};
+        if (latest.closed) { return; }
+        this.merge('shift', sh.id, { verified: Object.assign({}, latest.verified || {}, { [row.id]: e.target.value }) });
+      } });
+    });
+    const mismatch = rows.some((r) => r.mismatch);
+    const invalid = rows.some((r) => r.actual == null) || (mismatch && !(cur.note || '').trim());
+    const cash = rows[0].actual;
+    return {
+      id: sh.id, title: sh.title, float: this.fmt(sh.float), expected: this.fmt(totals.cashExpected), rows: rows, refunds: totals.refunds,
+      note: cur.note || '', needsNote: mismatch, confirmDisabled: !!cur.closed || invalid, isPending: !cur.closed, isClosed: !!cur.closed,
+      cashReceived: cash, chip: 'تم الاستلام · دخل الخزنة ' + this.fmt(cash || 0) + (mismatch ? ' · فروقات مسجلة' : ''),
+      onNote: (e) => { if (!((this.state.shift || {})[sh.id] || {}).closed) { this.merge('shift', sh.id, { note: e.target.value }); } },
+      confirm: () => {
+        const latest = this.managerShift(sh);
+        if (latest.confirmDisabled) { return; }
+        const amounts = {}; latest.rows.forEach((r) => { amounts[r.id] = r.entered; });
+        this.merge('shift', sh.id, { closed: true, verified: amounts, note: latest.note.trim() });
+      }
+    };
+  }
+
+  serviceClone(value) { return JSON.parse(JSON.stringify(value)); }
+  serviceNumber(value) {
+    const normalized = String(value == null ? '' : value).trim()
+      .replace(/[٠-٩]/g, (c) => String(c.charCodeAt(0) - 1632))
+      .replace(/[۰-۹]/g, (c) => String(c.charCodeAt(0) - 1776)).replace(/٫/g, '.');
+    return normalized === '' ? NaN : Number(normalized);
+  }
+  serviceMoney(value) { const n = this.serviceNumber(value); return Number.isFinite(n) && n >= 0 && Number.isInteger(n); }
+  serviceKey(prefix) { return prefix + '-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8); }
+  serviceBlank() { return { id: '', name: '', kind: 'fixed', price: '', unit: 'cc', quantityField: '', fullPrice: '', fields: [], areas: [], materials: [], version: 0 }; }
+  serviceMaterials() {
+    return [{ id: 'botox', label: 'بوتكس', unit: 'cc' }, { id: 'filler', label: 'فلر', unit: 'cc' }, { id: 'gel', label: 'جل ليزر', unit: 'قطعة' }, { id: 'cream', label: 'كريم تخدير', unit: 'قطعة' }];
+  }
+  serviceSeed() {
+    const number = (id, label) => ({ id: id, label: label, type: 'number', required: true, options: '' });
+    const notes = () => ({ id: 'notes', label: 'ملاحظات العلاج', type: 'text', required: false, options: '' });
+    return [
+      Object.assign(this.serviceBlank(), { id: 'botox', name: 'بوتكس', kind: 'quantity', price: '25000', quantityField: 'cc', fields: [number('cc', 'الكمية (cc)'), notes()], materials: [{ id: 'mb', materialId: 'botox', basis: 'field', fieldId: 'cc', quantity: '1' }], version: 1 }),
+      Object.assign(this.serviceBlank(), { id: 'filler', name: 'فلر', kind: 'quantity', price: '150000', quantityField: 'cc', fields: [number('cc', 'الكمية (cc)')], materials: [{ id: 'mf', materialId: 'filler', basis: 'field', fieldId: 'cc', quantity: '1' }], version: 1 }),
+      Object.assign(this.serviceBlank(), { id: 'laser', name: 'ليزر', kind: 'areas', fullPrice: '140000', areas: [{ id: 'face', label: 'وجه', price: '25000' }, { id: 'underarms', label: 'إبط', price: '20000' }, { id: 'arms', label: 'يدين', price: '40000' }, { id: 'legs', label: 'رجلين', price: '60000' }], fields: [notes()], materials: [{ id: 'mg', materialId: 'gel', basis: 'fixed', fieldId: '', quantity: '1' }], version: 1 }),
+      Object.assign(this.serviceBlank(), { id: 'skin', name: 'تنظيف بشرة', price: '35000', fields: [{ id: 'skin-type', label: 'نوع البشرة', type: 'choice', required: true, options: 'عادية\nدهنية\nجافة\nمختلطة' }, { id: 'sensitive', label: 'بشرة حساسة', type: 'boolean', required: false, options: '' }], materials: [{ id: 'mc', materialId: 'cream', basis: 'fixed', fieldId: '', quantity: '1' }], version: 1 }),
+      Object.assign(this.serviceBlank(), { id: 'consult', name: 'كشفية', price: '15000', version: 1 })
+    ];
+  }
+  serviceContext() {
+    const list = this.state.services || this.serviceSeed();
+    const draft = this.state.serviceDraft || this.serviceClone(list[0]);
+    const original = list.find((x) => x.id === draft.id) || this.serviceBlank();
+    return { list: list, draft: draft, dirty: JSON.stringify(draft) !== JSON.stringify(original) };
+  }
+  serviceEdit(change) {
+    this.setState({ serviceDraft: Object.assign({}, this.serviceContext().draft, change), serviceMessage: '', servicePending: '' });
+  }
+  serviceRow(key, id, change) {
+    const draft = this.serviceContext().draft;
+    const next = {};
+    next[key] = draft[key].map((x) => x.id === id ? Object.assign({}, x, change) : x);
+    this.serviceEdit(next);
+  }
+  serviceRemove(key, id) {
+    const next = {}; next[key] = this.serviceContext().draft[key].filter((x) => x.id !== id); this.serviceEdit(next);
+  }
+  servicePerform(target) {
+    if (target.indexOf('tab:') === 0) { this.setState({ tab: target.slice(4), serviceDraft: null, servicePending: '', serviceMessage: '', serviceDemo: {} }); return; }
+    const context = this.serviceContext();
+    const draft = target === 'new' ? this.serviceBlank() : context.list.find((x) => x.id === target);
+    if (draft) { this.setState({ serviceDraft: this.serviceClone(draft), servicePending: '', serviceMessage: '', serviceDemo: {} }); }
+  }
+  serviceNavigate(target) {
+    if (this.state.tab === 'services' && this.serviceContext().dirty) { this.setState({ servicePending: target, serviceMessage: '' }); }
+    else { this.servicePerform(target); }
+  }
+  serviceErrors(draft, list) {
+    const errors = [];
+    const normalized = (v) => String(v || '').trim().toLocaleLowerCase();
+    const duplicate = (items, key) => new Set(items.map((x) => normalized(x[key]))).size !== items.length;
+    if (!draft.name.trim()) { errors.push('اكتب اسم الخدمة.'); }
+    if (list.some((x) => x.id !== draft.id && normalized(x.name) === normalized(draft.name))) { errors.push('اسم الخدمة مستخدم، اختار اسم ثاني.'); }
+    if (draft.kind !== 'areas' && !this.serviceMoney(draft.price)) { errors.push('اكتب سعر صحيح بالدينار بدون كسور أو مبلغ سالب.'); }
+    if (draft.kind === 'quantity' && (!draft.unit.trim() || !draft.fields.some((x) => x.id === draft.quantityField && x.type === 'number' && x.required))) { errors.push('حدد وحدة القياس وحقل كمية رقمي مطلوب للتسعير.'); }
+    if (draft.kind === 'areas' && (!this.serviceMoney(draft.fullPrice) || !draft.areas.length || draft.areas.some((x) => !x.label.trim() || !this.serviceMoney(x.price)) || duplicate(draft.areas, 'label'))) { errors.push('اكتب سعر الفول بدي، وأضف مناطق بأسماء مختلفة وأسعار صحيحة.'); }
+    if (draft.fields.some((x) => !x.label.trim()) || duplicate(draft.fields, 'label')) { errors.push('كل حقل يحتاج اسم واضح ومختلف.'); }
+    if (draft.fields.some((x) => x.type === 'choice' && !String(x.options || '').split('\n').some((v) => v.trim()))) { errors.push('أضف خيار واحد على الأقل لكل حقل اختيار.'); }
+    if (draft.materials.some((x) => !this.serviceMaterials().some((m) => m.id === x.materialId) || !(this.serviceNumber(x.quantity) > 0) || !Number.isFinite(this.serviceNumber(x.quantity)) || (x.basis === 'field' && !draft.fields.some((f) => f.id === x.fieldId && f.type === 'number' && f.required)))) { errors.push('حدد مادة وكمية أكبر من صفر؛ ربط الكمية يحتاج حقل رقمي مطلوب.'); }
+    return errors;
+  }
+  serviceSave() {
+    const context = this.serviceContext();
+    if (!context.dirty || this.serviceErrors(context.draft, context.list).length) { return; }
+    const saved = this.serviceClone(context.draft);
+    saved.id = saved.id || this.serviceKey('service');
+    saved.name = saved.name.trim();
+    saved.version += 1;
+    const previous = context.list.find((x) => x.id === saved.id);
+    const list = previous ? context.list.map((x) => x.id === saved.id ? saved : x) : context.list.concat([saved]);
+    const history = (this.state.serviceHistory || []).concat(previous ? [this.serviceClone(previous)] : []);
+    this.setState({ services: list, serviceDraft: this.serviceClone(saved), serviceHistory: history, serviceMessage: 'انحفظت «' + saved.name + '» بالنموذج التجريبي.', servicePending: '' });
+  }
+  serviceDemoEdit(key, value) {
+    const next = Object.assign({}, this.state.serviceDemo || {}); next[key] = value; this.setState({ serviceDemo: next });
+  }
+  serviceVals() {
+    const context = this.serviceContext(); const d = context.draft; const demo = this.state.serviceDemo || {};
+    const kinds = [{ id: 'fixed', label: 'سعر ثابت' }, { id: 'quantity', label: 'حسب الكمية' }, { id: 'areas', label: 'مناطق الليزر' }];
+    const types = [{ id: 'number', label: 'رقم' }, { id: 'choice', label: 'اختيار من قائمة' }, { id: 'text', label: 'نص' }, { id: 'boolean', label: 'صح / خطأ' }];
+    const numeric = d.fields.filter((x) => x.type === 'number' && x.required);
+    const select = (items, current) => items.map((x) => Object.assign({}, x, { selected: x.id === current }));
+    const pill = (selected) => ({ selected: selected, bg: selected ? '#0B6E69' : '#FFFFFF', fg: selected ? '#FFFFFF' : '#17202A', border: selected ? '#0B6E69' : '#AEB6C2' });
+    const q = (this.state.serviceQuery || '').trim().toLowerCase();
+    const errors = this.serviceErrors(d, context.list);
+    const services = context.list.filter((x) => x.name.toLowerCase().includes(q)).map((x) => Object.assign({ name: x.name, description: x.kind === 'areas' ? 'مناطق + فول بدي' : this.fmt(this.serviceNumber(x.price)) + (x.kind === 'quantity' ? ' / ' + x.unit : ' / جلسة'), pick: () => this.serviceNavigate(x.id) }, pill(x.id === d.id)));
+    const previewFields = d.fields.map((f) => {
+      const value = demo[f.id] == null ? (f.type === 'number' ? '1' : '') : demo[f.id];
+      return { id: f.id, label: f.label || 'اسم الحقل', required: f.required, isNumber: f.type === 'number', isChoice: f.type === 'choice', isText: f.type === 'text', isBoolean: f.type === 'boolean', value: value, checked: value === true, change: (e) => this.serviceDemoEdit(f.id, f.type === 'boolean' ? e.target.checked : e.target.value), options: String(f.options || '').split('\n').map((v) => v.trim()).filter(Boolean).map((v) => ({ label: v, selected: v === value })) };
+    });
+    let price = this.serviceNumber(d.price);
+    if (d.kind === 'quantity') { price *= Math.max(0, this.serviceNumber(demo[d.quantityField] == null ? '1' : demo[d.quantityField]) || 0); }
+    if (d.kind === 'areas') { price = demo.fullBody ? this.serviceNumber(d.fullPrice) : d.areas.reduce((total, a) => total + (demo['area:' + a.id] ? this.serviceNumber(a.price) : 0), 0); }
+    const materialPreview = d.materials.map((m) => {
+      const material = this.serviceMaterials().find((x) => x.id === m.materialId);
+      const entered = demo[m.fieldId] == null ? 1 : Math.max(0, this.serviceNumber(demo[m.fieldId]) || 0);
+      const amount = this.serviceNumber(m.quantity) * (m.basis === 'field' ? entered : 1);
+      return { label: material ? material.label : 'اختار مادة', amount: Number.isFinite(amount) ? Number(amount.toFixed(4)).toLocaleString('en-US') + ' ' + (material ? material.unit : '') : '—' };
+    });
+    return {
+      serviceQuery: this.state.serviceQuery || '', onServiceQuery: (e) => this.setState({ serviceQuery: e.target.value }), serviceList: services, serviceListEmpty: services.length === 0,
+      addService: () => this.serviceNavigate('new'), serviceTitle: d.id ? 'تعديل الخدمة' : 'خدمة جديدة', serviceName: d.name, onServiceName: (e) => this.serviceEdit({ name: e.target.value }),
+      serviceDirty: context.dirty, serviceStatus: context.dirty ? 'تعديلات غير محفوظة' : 'محفوظة بالنموذج', serviceMessage: this.state.serviceMessage || '', hasServiceMessage: !!this.state.serviceMessage,
+      hasServicePending: !!this.state.servicePending, discardService: () => this.servicePerform(this.state.servicePending), keepService: () => this.setState({ servicePending: '' }),
+      serviceKinds: kinds.map((k) => Object.assign({ label: k.label, pick: () => { this.serviceEdit({ kind: k.id }); this.setState({ serviceDemo: {} }); } }, pill(d.kind === k.id))),
+      serviceIsQuantity: d.kind === 'quantity', serviceIsAreas: d.kind === 'areas', serviceNotAreas: d.kind !== 'areas', servicePrice: d.price,
+      servicePriceLabel: d.kind === 'quantity' ? 'السعر لكل وحدة (د.ع)' : 'سعر الجلسة (د.ع)', onServicePrice: (e) => this.serviceEdit({ price: e.target.value }), serviceUnit: d.unit, onServiceUnit: (e) => this.serviceEdit({ unit: e.target.value }),
+      serviceQuantityEmpty: !numeric.some((x) => x.id === d.quantityField), serviceQuantityFields: select(numeric, d.quantityField), onServiceQuantityField: (e) => this.serviceEdit({ quantityField: e.target.value }),
+      serviceFullPrice: d.fullPrice, onServiceFullPrice: (e) => this.serviceEdit({ fullPrice: e.target.value }),
+      serviceAreas: d.areas.map((a) => ({ id: a.id, label: a.label, price: a.price, changeLabel: (e) => this.serviceRow('areas', a.id, { label: e.target.value }), changePrice: (e) => this.serviceRow('areas', a.id, { price: e.target.value }), remove: () => this.serviceRemove('areas', a.id) })),
+      addServiceArea: () => this.serviceEdit({ areas: d.areas.concat([{ id: this.serviceKey('area'), label: '', price: '' }]) }),
+      serviceFieldsEmpty: d.fields.length === 0,
+      serviceFields: d.fields.map((f, index) => ({ id: f.id, order: index + 1, label: f.label, type: f.type, requiredLabel: f.required ? 'مطلوب' : 'اختياري', required: f.required, options: f.options, isChoice: f.type === 'choice', typeOptions: select(types, f.type), changeLabel: (e) => this.serviceRow('fields', f.id, { label: e.target.value }), changeType: (e) => { this.serviceRow('fields', f.id, { type: e.target.value }); this.setState({ serviceDemo: {} }); }, changeOptions: (e) => this.serviceRow('fields', f.id, { options: e.target.value }), toggleRequired: () => this.serviceRow('fields', f.id, { required: !f.required }), remove: () => this.serviceRemove('fields', f.id) })),
+      addServiceField: () => this.serviceEdit({ fields: d.fields.concat([{ id: this.serviceKey('field'), label: '', type: 'number', required: true, options: '' }]) }),
+      serviceMaterialsEmpty: d.materials.length === 0,
+      serviceMaterials: d.materials.map((m) => {
+        const material = this.serviceMaterials().find((x) => x.id === m.materialId);
+        return { id: m.id, quantity: m.quantity, quantityLabel: m.basis === 'field' ? 'الاستهلاك لكل وحدة من حقل الطبيب' : 'الاستهلاك لكل جلسة', materialEmpty: !m.materialId, fieldEmpty: !numeric.some((x) => x.id === m.fieldId), unit: material ? material.unit : '', isField: m.basis === 'field', materialOptions: select(this.serviceMaterials(), m.materialId), basisOptions: select([{ id: 'fixed', label: 'كمية ثابتة لكل جلسة' }, { id: 'field', label: 'حسب حقل كمية الطبيب' }], m.basis), fieldOptions: select(numeric, m.fieldId), changeMaterial: (e) => this.serviceRow('materials', m.id, { materialId: e.target.value }), changeBasis: (e) => this.serviceRow('materials', m.id, { basis: e.target.value }), changeField: (e) => this.serviceRow('materials', m.id, { fieldId: e.target.value }), changeQuantity: (e) => this.serviceRow('materials', m.id, { quantity: e.target.value }), remove: () => this.serviceRemove('materials', m.id) };
+      }),
+      addServiceMaterial: () => this.serviceEdit({ materials: d.materials.concat([{ id: this.serviceKey('material'), materialId: '', basis: 'fixed', fieldId: '', quantity: '1' }]) }),
+      serviceErrors: errors.map((text) => ({ text: text })), serviceHasErrors: errors.length > 0, serviceClean: !context.dirty, serviceSaveDisabled: !context.dirty || errors.length > 0, saveService: () => this.serviceSave(),
+      resetService: () => this.setState({ serviceDraft: this.serviceClone(context.list.find((x) => x.id === d.id) || this.serviceBlank()), serviceDemo: {}, serviceMessage: '', servicePending: '' }),
+      servicePreviewName: d.name || 'اسم الخدمة', servicePreviewFields: previewFields, servicePreviewPrice: Number.isFinite(price) && price >= 0 ? this.fmt(Math.round(price)) : '—',
+      servicePreviewAreas: d.areas.map((a) => ({ label: a.label || 'منطقة جديدة', price: this.serviceMoney(a.price) ? this.fmt(this.serviceNumber(a.price)) : '—', checked: !!demo['area:' + a.id], disabled: !!demo.fullBody, change: (e) => this.serviceDemoEdit('area:' + a.id, e.target.checked) })),
+      servicePreviewFull: !!demo.fullBody, onServicePreviewFull: (e) => this.serviceDemoEdit('fullBody', e.target.checked), servicePreviewFullPrice: this.serviceMoney(d.fullPrice) ? this.fmt(this.serviceNumber(d.fullPrice)) : '—', servicePreviewMaterials: materialPreview
+    };
+  }
+
+  num(n) { return Number(n).toLocaleString('en-US'); }
+  fmt(n) { return this.num(n) + ' د.ع'; }
+  ltr(text) { return '⁦' + text + '⁩'; }
+  // Whole non-negative dinars only; anything else (minus sign, decimals, exponent, text) counts as 0, so it is rejected by the callers.
+  toInt(v) { const n = this.shiftMoney(v, false); return n == null ? 0 : n; }
+
+  merge(key, id, obj) {
+    const s = this.state || {};
+    const map = Object.assign({}, s[key] || {});
+    map[id] = Object.assign({}, map[id] || {}, obj);
+    const next = {};
+    next[key] = map;
+    this.setState(next);
+  }
+
+  form(obj) {
+    const s = this.state || {};
+    this.setState({ f: Object.assign({}, s.f || {}, obj) });
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const tab = s.tab || 'tasks';
+    const dark = '#17202A';
+    const pill = (selected) => ({
+      selected: selected,
+      bg: selected ? dark : '#FFFFFF',
+      fg: selected ? '#FFFFFF' : dark,
+      border: selected ? dark : '#AEB6C2'
+    });
+
+    const discData = [
+      { id: 'r1', customer: 'نور علي', code: 'C-0977', total: 62000 },
+      { id: 'r2', customer: 'زينب حسن', code: 'C-1010', total: 246000 }
+    ];
+    const dState = s.disc || {};
+    const discounts = discData.map((r) => {
+      const cur = dState[r.id] || {};
+      const amountStr = cur.amount == null ? '5000' : cur.amount;
+      const amount = this.toInt(amountStr);
+      const invalid = amount <= 0 || amount > r.total;
+      const approved = cur.status === 'approved';
+      return {
+        customer: r.customer, code: r.code, total: this.fmt(r.total),
+        amount: amountStr,
+        onAmount: (e) => this.merge('disc', r.id, { amount: e.target.value }),
+        invalid: invalid,
+        approveBg: invalid ? '#6B7480' : '#0B6E69',
+        approve: () => { if (!invalid) { this.merge('disc', r.id, { status: 'approved', amount: String(amount) }); } },
+        reject: () => this.merge('disc', r.id, { status: 'rejected' }),
+        isPending: !cur.status,
+        isClosed: !!cur.status,
+        chip: approved ? ('وافقت على خصم ' + this.fmt(amount)) : 'رفضت الطلب',
+        chipBg: approved ? '#E3F1F0' : '#ECEFF3',
+        chipFg: approved ? '#084F4B' : '#3D4652'
+      };
+    });
+
+    const shiftData = [
+      { id: 's1', title: 'شفت الصباح · [اسم الكاشير]', float: 50000, events: this.shiftBaseEvents(), counted: { cash: 435000, qi: 200000, switch: 80000 } },
+      { id: 's2', title: 'شفت المساء · [اسم الكاشير]', float: 50000, events: [
+        { type: 'payment', method: 'cash', amount: 310000 }, { type: 'payment', method: 'qi', amount: 150000 }, { type: 'payment', method: 'switch', amount: 50000 },
+        { type: 'refund', method: 'qi', amount: 10000, originalMethod: 'cash', receipt: '2026-00120', fromPreviousShift: true }
+      ], counted: { cash: 355000, qi: 135000, switch: 50000 } }
+    ];
+    const shifts = shiftData.map((sh) => this.managerShift(sh));
+    let shiftsIn = 0;
+    const shiftMoves = [];
+    shifts.forEach((sh) => {
+      if (sh.isClosed) {
+        shiftsIn += sh.cashReceived;
+        shiftMoves.push({ label: 'استلام ' + sh.title, sub: 'كاش فقط؛ الأجهزة محسوبة منفصلة', amountNum: sh.cashReceived, chip: sh.needsNote ? 'فروقات مسجلة' : 'مؤكد', chipBg: sh.needsNote ? '#FBEFD9' : '#E3F1F0', chipFg: sh.needsNote ? '#8A4B08' : '#084F4B' });
+      }
+    });
+
+    const pending = discounts.filter((d) => d.isPending).length + shifts.filter((x) => x.isPending).length;
+
+    const tabs = [
+      Object.assign({ label: pending > 0 ? ('المهام (' + pending + ')') : 'المهام', pick: () => this.serviceNavigate('tab:tasks') }, pill(tab === 'tasks')),
+      Object.assign({ label: 'المخزون', pick: () => this.serviceNavigate('tab:stock') }, pill(tab === 'stock')),
+      Object.assign({ label: 'الخزنة', pick: () => this.serviceNavigate('tab:safe') }, pill(tab === 'safe')),
+      Object.assign({ label: 'الخدمات والأسعار', pick: () => this.serviceNavigate('tab:services') }, pill(tab === 'services'))
+    ];
+
+    const amber = { bg: '#FBEFD9', fg: '#8A4B08' };
+    const red = { bg: '#FBEAEA', fg: '#7A1212' };
+    const calm = { bg: '#ECEFF3', fg: '#3D4652' };
+    const alerts = [
+      Object.assign({ text: 'بوتكس: المتاح 1 cc، والحد 5', tag: 'قليل' }, amber),
+      Object.assign({ text: 'جل ليزر: دفعة تنتهي 30/11/2026', tag: 'ينتهي قريب' }, amber),
+      Object.assign({ text: 'كريم تخدير: المخزون سالب (−2)', tag: 'يحتاج جرد' }, red)
+    ];
+    const stock = [
+      Object.assign({ name: 'بوتكس', unit: 'cc', onHand: '3', reserved: '2', free: '1', expiry: '12/2026', tag: 'قليل' }, amber),
+      Object.assign({ name: 'فلر', unit: 'cc', onHand: '5', reserved: '0', free: '5', expiry: '03/2027', tag: 'طبيعي' }, calm),
+      Object.assign({ name: 'جل ليزر', unit: 'قطعة', onHand: '14', reserved: '3', free: '11', expiry: '30/11/2026', tag: 'ينتهي قريب' }, amber),
+      Object.assign({ name: 'كريم تخدير', unit: 'قطعة', onHand: '−2', reserved: '0', free: '−2', expiry: 'بدون دفعة', tag: 'سالب' }, red)
+    ];
+
+    const f = s.f || {};
+    const typeDefs = [
+      { id: 'expense', label: 'مصروف' },
+      { id: 'supplier', label: 'تسديد مورد' },
+      { id: 'salary', label: 'راتب' },
+      { id: 'owner', label: 'سحب المالك' }
+    ];
+    const type = f.type || 'expense';
+    const typeLabel = (typeDefs.filter((t) => t.id === type)[0] || typeDefs[0]).label;
+    const isOwner = type === 'owner';
+    const source = isOwner ? 'safe' : (f.source || 'safe');
+    const amountNum = this.toInt(f.amount);
+    const noteOk = (f.note || '').trim().length > 0;
+    const bankOk = source !== 'bank' || (f.bank || '').trim().length > 0;
+    const recordDisabled = amountNum <= 0 || !noteOk || !bankOk;
+    let recordLabel = isOwner ? 'رفع السحب للمالك' : 'تسجيل';
+    if (amountNum <= 0) { recordLabel = 'اكتب المبلغ'; }
+    else if (!noteOk) { recordLabel = isOwner ? 'اكتب باسم منو' : 'اكتب الوصف'; }
+    else if (!bankOk) { recordLabel = 'اكتب اسم المصرف'; }
+
+    const recorded = s.recorded || [];
+    let out = 0;
+    const recMoves = recorded.map((r) => {
+      const waiting = r.type === 'owner' && !r.approved;
+      const fromSafe = r.source === 'safe' && !waiting;
+      if (fromSafe) { out += r.amount; }
+      let chip = 'من الخزنة';
+      let chipBg = calm.bg;
+      let chipFg = calm.fg;
+      if (r.source === 'bank') { chip = 'إلكتروني · ' + r.bank; chipBg = '#E4EDF8'; chipFg = '#1D4E89'; }
+      if (r.type === 'owner') {
+        chip = waiting ? 'بانتظار موافقة المالك' : 'وافق المالك';
+        chipBg = waiting ? amber.bg : '#E3F1F0';
+        chipFg = waiting ? amber.fg : '#084F4B';
+      }
+      return {
+        label: r.typeLabel + ': ' + r.note,
+        sub: 'اليوم',
+        amount: (fromSafe ? '− ' : '') + this.fmt(r.amount),
+        amountFg: fromSafe ? '#7A1212' : '#55606E',
+        chip: chip, chipBg: chipBg, chipFg: chipFg,
+        canApprove: waiting,
+        approve: () => this.setState({ recorded: recorded.map((x) => (x.key === r.key ? Object.assign({}, x, { approved: true }) : x)) })
+      };
+    });
+
+    const base = 2150000;
+    const staticMoves = [
+      { label: 'استلام شفت المساء', sub: 'أمس', amount: '+ ' + this.fmt(410000), amountFg: '#084F4B', chip: 'مؤكد', chipBg: '#E3F1F0', chipFg: '#084F4B', canApprove: false },
+      { label: 'مصروف: كهرباء', sub: 'أمس', amount: '− ' + this.fmt(120000), amountFg: '#7A1212', chip: 'من الخزنة', chipBg: calm.bg, chipFg: calm.fg, canApprove: false },
+      { label: 'تسديد مورد: [اسم المورد]', sub: 'قبل يومين', amount: this.fmt(800000), amountFg: '#55606E', chip: 'إلكتروني · [اسم المصرف]', chipBg: '#E4EDF8', chipFg: '#1D4E89', canApprove: false }
+    ];
+    const moves = recMoves
+      .concat(shiftMoves.map((m) => ({ label: m.label, sub: m.sub, amount: '+ ' + this.fmt(m.amountNum), amountFg: '#084F4B', chip: m.chip, chipBg: m.chipBg, chipFg: m.chipFg, canApprove: false })))
+      .concat(staticMoves);
+
+    return Object.assign({}, this.serviceVals(), {
+      isServices: tab === 'services',
+      tabs: tabs,
+      isTasks: tab === 'tasks',
+      isStock: tab === 'stock',
+      isSafe: tab === 'safe',
+      discounts: discounts,
+      shifts: shifts,
+      alerts: alerts,
+      stock: stock,
+      balance: this.fmt(base + shiftsIn - out),
+      types: typeDefs.map((t) => Object.assign({ label: t.label, pick: () => this.form({ type: t.id }) }, pill(t.id === type))),
+      f: { amount: f.amount || '', note: f.note || '', bank: f.bank || '' },
+      onAmount: (e) => this.form({ amount: e.target.value }),
+      onNote: (e) => this.form({ note: e.target.value }),
+      onBank: (e) => this.form({ bank: e.target.value }),
+      noteLabel: isOwner ? 'باسم منو' : 'الوصف',
+      showSource: !isOwner,
+      sources: [
+        Object.assign({ label: 'من الخزنة', pick: () => this.form({ source: 'safe' }) }, pill(source === 'safe')),
+        Object.assign({ label: 'إلكتروني', pick: () => this.form({ source: 'bank' }) }, pill(source === 'bank'))
+      ],
+      showBank: !isOwner && source === 'bank',
+      isOwnerType: isOwner,
+      recordDisabled: recordDisabled,
+      recordBg: recordDisabled ? '#6B7480' : '#0B6E69',
+      recordLabel: recordLabel,
+      record: () => {
+        if (recordDisabled) { return; }
+        const item = {
+          key: Date.now() + '-' + recorded.length,
+          type: type, typeLabel: typeLabel,
+          amount: amountNum, note: (f.note || '').trim(),
+          source: source, bank: (f.bank || '').trim(), approved: false
+        };
+        this.setState({ recorded: [item].concat(recorded), f: { type: type, amount: '', note: '', source: 'safe', bank: '' } });
+      },
+      moves: moves
+    });
+  }
+}
+
+component = new Component(); component.state.tab = "tasks"; render();
+</script></body></html>

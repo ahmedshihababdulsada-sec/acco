@@ -1,0 +1,8 @@
+[Unit]
+Description=رفع WAL كل دقيقة (الحماية المستمرة)
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=60s
+AccuracySec=5s
+[Install]
+WantedBy=timers.target

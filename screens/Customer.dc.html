@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تطبيق الزبون</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6">
+
+  <header style="flex: none; background: #FFFFFF; border-bottom: 1px solid #D9DEE5; padding: 14px 16px; display: flex; flex-direction: column; gap: 0px">
+    <strong style="font-size: 17px; font-weight: 700">[اسم العيادة]</strong>
+    <span style="font-size: 13px; color: #55606E">{{screenTitle}}</span>
+  </header>
+
+  <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+
+    <sc-if value="{{isHome}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+
+        <section style="background: #17202A; color: #FFFFFF; border-radius: 12px; padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+          <div style="display: flex; flex-direction: column; gap: 0px">
+            <span style="font-size: 13px; color: #D9DEE5">رمزك المميز</span>
+            <span style="font-size: 28px; font-weight: 700; letter-spacing: 1px">C-0977</span>
+          </div>
+          <span style="font-size: 13px; color: #D9DEE5; max-width: 150px">انطيه للكاشير أو الطبيب حتى يلگاك</span>
+        </section>
+
+        <sc-if value="{{showChanged}}" hint-placeholder-val="{{false}}">
+          <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">تغير موعدك. رقم تسلسلك الجديد {{seq}}.</div>
+        </sc-if>
+
+        <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 13px; font-weight: 600; color: #55606E">حجزك الجاي</span>
+          <div style="display: flex; flex-direction: column; gap: 0px">
+            <span style="font-size: 18px; font-weight: 700">ليزر: وجه + إبط</span>
+            <span style="font-size: 14px; color: #55606E">جلسة 3 من 6</span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+            <span style="font-size: 15px; font-weight: 600">{{nextDate}}</span>
+            <span style="background: #E4EDF8; color: #1D4E89; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 700">رقم تسلسلك {{seq}}</span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid #D9DEE5; padding-top: 10px">
+            <span style="font-size: 15px; font-weight: 700">32,000 د.ع</span>
+            <span style="background: #FBEFD9; color: #8A4B08; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600">عرض 20%</span>
+          </div>
+          <span style="font-size: 12px; color: #55606E">السعر النهائي يتحدد يوم الدفع عند الكاشير.</span>
+
+          <sc-if value="{{resClosed}}" hint-placeholder-val="{{true}}">
+            <button type="button" onClick="{{openRes}}" style="min-height: 48px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer">تغيير الموعد</button>
+          </sc-if>
+
+          <sc-if value="{{resOpen}}" hint-placeholder-val="{{false}}">
+            <div style="background: #F4F5F7; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 10px">
+              <strong style="font-size: 14px">اختار يوم جديد</strong>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <sc-for list="{{options}}" as="op" hint-placeholder-count="4">
+                  <button type="button" onClick="{{op.pick}}" disabled="{{op.disabled}}" aria-pressed="{{op.selected}}" style="min-height: 48px; padding: 6px 12px; text-align: start; display: flex; flex-direction: column; justify-content: center; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{op.bg}}; color: {{op.fg}}; border: 2px solid {{op.border}}">
+                    <span>{{op.label}}</span>
+                    <span style="font-size: 12px; font-weight: 400">{{op.note}}</span>
+                  </button>
+                </sc-for>
+              </div>
+
+              <sc-if value="{{hasPick}}" hint-placeholder-val="{{false}}">
+                <div style="display: flex; flex-direction: column; gap: 6px">
+                  <strong style="font-size: 14px">الجلسات اللي راح تتغير</strong>
+                  <sc-for list="{{preview}}" as="pv" hint-placeholder-count="4">
+                    <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 0px; font-size: 13px">
+                      <span style="font-weight: 700">جلسة {{pv.n}}</span>
+                      <span style="color: #55606E">من {{pv.from}}</span>
+                      <span>إلى {{pv.to}}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <div style="display: flex; gap: 8px">
+                <button type="button" onClick="{{confirmRes}}" disabled="{{confirmDisabled}}" style="flex: 1 1 auto; min-height: 48px; background: {{confirmBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer">تأكيد التغيير</button>
+                <button type="button" onClick="{{closeRes}}" style="flex: none; min-height: 48px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer">رجوع</button>
+              </div>
+            </div>
+          </sc-if>
+        </section>
+
+        <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 13px; font-weight: 600; color: #55606E">جلسات خطتك</span>
+          <sc-for list="{{sessions}}" as="se" hint-placeholder-count="6">
+            <div style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #ECEFF3">
+              <span style="flex: none; width: 28px; height: 28px; border-radius: 6px; background: #ECEFF3; color: #17202A; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">{{se.n}}</span>
+              <span style="flex: 1 1 auto; min-width: 0; font-size: 14px">{{se.date}}</span>
+              <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{se.bg}}; color: {{se.fg}}">{{se.status}}</span>
+            </div>
+          </sc-for>
+
+          <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 6px">
+            <strong style="font-size: 14px">قيّم جلستك الأخيرة (جلسة 2)</strong>
+            <sc-if value="{{notRated}}" hint-placeholder-val="{{true}}">
+              <div role="group" aria-label="التقييم بالنجوم" style="display: flex; gap: 4px">
+                <sc-for list="{{stars}}" as="sr" hint-placeholder-count="5">
+                  <button type="button" onClick="{{sr.pick}}" aria-label="{{sr.aria}}" style="width: 48px; height: 48px; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center">
+                    <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#55606E" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1L12 17.1 6.6 20l1.1-6.1-4.5-4.3 6.1-.8z"></path></svg>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{isRated}}" hint-placeholder-val="{{false}}">
+              <span style="align-self: flex-start; background: #E3F1F0; color: #084F4B; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 600">قيّمتها {{rating}} من 5. شكراً إلك.</span>
+            </sc-if>
+          </div>
+        </section>
+
+        <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 13px; font-weight: 600; color: #55606E">كشفية جديدة</span>
+
+          <sc-if value="{{consultIdle}}" hint-placeholder-val="{{true}}">
+            <button type="button" onClick="{{openConsult}}" style="min-height: 48px; background: #0B6E69; color: #FFFFFF; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer">حجز كشفية</button>
+          </sc-if>
+
+          <sc-if value="{{consultOpen}}" hint-placeholder-val="{{false}}">
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <strong style="font-size: 14px">اختار الطبيب</strong>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <sc-for list="{{doctors}}" as="dr" hint-placeholder-count="2">
+                  <button type="button" onClick="{{dr.pick}}" aria-pressed="{{dr.selected}}" style="min-height: 48px; padding: 0 12px; text-align: start; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{dr.bg}}; color: {{dr.fg}}; border: 2px solid {{dr.border}}">{{dr.label}}</button>
+                </sc-for>
+              </div>
+              <strong style="font-size: 14px">اختار اليوم (أيام دوام الطبيب)</strong>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <sc-for list="{{days}}" as="dy" hint-placeholder-count="3">
+                  <button type="button" onClick="{{dy.pick}}" aria-pressed="{{dy.selected}}" style="min-height: 48px; padding: 0 12px; text-align: start; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{dy.bg}}; color: {{dy.fg}}; border: 2px solid {{dy.border}}">{{dy.label}}</button>
+                </sc-for>
+              </div>
+              <div style="display: flex; gap: 8px">
+                <button type="button" onClick="{{bookConsult}}" disabled="{{bookDisabled}}" style="flex: 1 1 auto; min-height: 48px; background: {{bookBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer">تأكيد الحجز</button>
+                <button type="button" onClick="{{closeConsult}}" style="flex: none; min-height: 48px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer">رجوع</button>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{consultBooked}}" hint-placeholder-val="{{false}}">
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <div style="display: flex; flex-direction: column; gap: 0px">
+                <span style="font-size: 16px; font-weight: 700">كشفية · {{bookedDoctor}}</span>
+                <span style="font-size: 14px">{{bookedDay}}</span>
+              </div>
+              <span style="align-self: flex-start; background: #E4EDF8; color: #1D4E89; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 700">رقم تسلسلك {{bookedSeq}}</span>
+              <span style="font-size: 12px; color: #55606E">تدفع الكشفية عند الكاشير يوم الموعد. تگدر تلغي أو تغير الحجز قبل الدفع.</span>
+              <button type="button" onClick="{{cancelConsult}}" style="min-height: 48px; background: #FFFFFF; color: #9B1C1C; border: 1px solid #9B1C1C; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer">إلغاء الحجز</button>
+            </div>
+          </sc-if>
+        </section>
+
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isOffers}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 6px">
+          <span style="align-self: flex-start; background: #FBEFD9; color: #8A4B08; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600">عرض حالي</span>
+          <span style="font-size: 20px; font-weight: 700">خصم 20% على الليزر</span>
+          <span style="font-size: 14px; color: #55606E">من 1/11/2026 إلى 30/11/2026</span>
+          <span style="font-size: 14px">ينطبق تلقائياً عند الكاشير على أي جلسة ليزر تدفعها بهالمدة.</span>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px">
+          <label style="display: flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer">
+            <input type="checkbox" checked="{{offersNotif}}" onChange="{{toggleNotif}}" style="width: 22px; height: 22px; flex: none; accent-color: #0B6E69">
+            <span style="font-size: 15px; font-weight: 600">أريد توصلني إشعارات العروض</span>
+          </label>
+          <span style="font-size: 12px; color: #55606E">تذكير المواعيد يبقى يوصلك دائماً.</span>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isAccount}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 13px; font-weight: 600; color: #55606E">نقاطك</span>
+          <span style="font-size: 32px; font-weight: 600; line-height: 1.3">6,500</span>
+          <span style="font-size: 13px; color: #55606E">تگدر تستخدمها عند الكاشير لحد 50% من الوصل. الحد الأدنى للاستخدام 5,000 نقطة.</span>
+        </section>
+
+        <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 13px; font-weight: 600; color: #55606E">مدفوعاتك</span>
+          <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px; padding: 6px 0; border-bottom: 1px solid #ECEFF3"><span>وصل <bdi dir="ltr">2026-00126</bdi> · 14/11/2026</span><span style="font-weight: 700">32,000 د.ع</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px; padding: 6px 0"><span>وصل <bdi dir="ltr">2026-00087</bdi> · 17/10/2026</span><span style="font-weight: 700">65,000 د.ع</span></div>
+        </section>
+
+        <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 13px; font-weight: 600; color: #55606E">الإعدادات</span>
+          <div role="group" aria-label="اللغة" style="display: flex; gap: 8px">
+            <button type="button" aria-pressed="true" style="flex: 1 1 0; min-height: 44px; background: #17202A; color: #FFFFFF; border: 2px solid #17202A; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">العربية</button>
+            <button type="button" aria-pressed="false" style="flex: 1 1 0; min-height: 44px; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">English</button>
+          </div>
+          <a href="#privacy" style="min-height: 44px; display: flex; align-items: center; font-size: 15px; font-weight: 600">سياسة الخصوصية</a>
+          <button type="button" style="min-height: 48px; background: #FFFFFF; color: #9B1C1C; border: 1px solid #9B1C1C; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer">حذف الحساب</button>
+        </section>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <nav aria-label="التنقل" style="flex: none; background: #FFFFFF; border-top: 1px solid #D9DEE5; padding: 8px 12px; display: flex; gap: 8px">
+    <sc-for list="{{tabs}}" as="tb" hint-placeholder-count="3">
+      <button type="button" onClick="{{tb.pick}}" aria-pressed="{{tb.selected}}" style="flex: 1 1 0; min-height: 48px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; background: {{tb.bg}}; color: {{tb.fg}}; border: none">{{tb.label}}</button>
+    </sc-for>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  state = {
+    tab: 'home',
+    s3: '2026-12-12',
+    resOpen: false,
+    pick: '',
+    changed: false,
+    rating: 0,
+    consult: { open: false, doctor: '', day: '', booked: false },
+    offersNotif: true
+  };
+
+  toDate(iso) { return new Date(iso + 'T00:00:00Z'); }
+
+  addDays(iso, n) {
+    const d = new Date(this.toDate(iso).getTime() + n * 86400000);
+    const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const dd = String(d.getUTCDate()).padStart(2, '0');
+    return d.getUTCFullYear() + '-' + mm + '-' + dd;
+  }
+
+  label(iso) {
+    const wd = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    const d = this.toDate(iso);
+    return wd[d.getUTCDay()] + ' ' + d.getUTCDate() + '/' + (d.getUTCMonth() + 1) + '/' + d.getUTCFullYear();
+  }
+
+  seqFor(iso) { return 3 + (this.toDate(iso).getUTCDate() % 9); }
+
+  chain(iso) { return [iso, this.addDays(iso, 28), this.addDays(iso, 56), this.addDays(iso, 84)]; }
+
+  renderVals() {
+    const s = this.state || {};
+    const tab = s.tab || 'home';
+    const dark = '#17202A';
+    const s3 = s.s3 || '2026-12-12';
+    const pick = s.pick || '';
+    const minIso = '2026-12-12';
+
+    const optionIsos = ['2026-12-05', '2026-12-12', '2026-12-14', '2026-12-19', '2026-12-26'];
+    const options = optionIsos.map((iso) => {
+      const tooEarly = iso < minIso;
+      const isCurrent = iso === s3;
+      const disabled = tooEarly || isCurrent;
+      const selected = iso === pick;
+      let note = '';
+      if (tooEarly) { note = 'ما يصير: أقل من 4 أسابيع بعد جلستك السابقة'; }
+      else if (isCurrent) { note = 'موعدك الحالي'; }
+      return {
+        label: this.label(iso), note: note, disabled: disabled, selected: selected,
+        bg: selected ? dark : (disabled ? '#ECEFF3' : '#FFFFFF'),
+        fg: selected ? '#FFFFFF' : (disabled ? '#55606E' : dark),
+        border: selected ? dark : (disabled ? '#ECEFF3' : '#AEB6C2'),
+        pick: () => { if (!disabled) { this.setState({ pick: iso }); } }
+      };
+    });
+
+    const cur = this.chain(s3);
+    const next = pick ? this.chain(pick) : [];
+    const preview = next.map((iso, i) => ({ n: i + 3, from: this.label(cur[i]), to: this.label(iso) }));
+
+    const done = { bg: '#ECEFF3', fg: '#3D4652' };
+    const booked = { bg: '#E3F1F0', fg: '#084F4B' };
+    const sessions = [
+      Object.assign({ n: 1, date: this.label('2026-10-17'), status: 'مكتملة' }, done),
+      Object.assign({ n: 2, date: this.label('2026-11-14'), status: 'مكتملة' }, done)
+    ].concat(cur.map((iso, i) => Object.assign({ n: i + 3, date: this.label(iso), status: 'محجوزة' }, booked)));
+
+    const rating = s.rating || 0;
+    const stars = [1, 2, 3, 4, 5].map((n) => ({
+      aria: n + ' من 5',
+      pick: () => this.setState({ rating: n })
+    }));
+
+    const c = s.consult || {};
+    const docDefs = [
+      { id: 'd1', label: 'د. [الطبيب الأول]', days: ['2026-11-15', '2026-11-17', '2026-11-19'] },
+      { id: 'd2', label: 'د. [الطبيب الثاني]', days: ['2026-11-16', '2026-11-18'] }
+    ];
+    const doc = docDefs.filter((d) => d.id === c.doctor)[0];
+    const setConsult = (obj) => this.setState({ consult: Object.assign({}, c, obj) });
+    const choice = (selected) => ({
+      selected: selected,
+      bg: selected ? dark : '#FFFFFF',
+      fg: selected ? '#FFFFFF' : dark,
+      border: selected ? dark : '#AEB6C2'
+    });
+    const doctors = docDefs.map((d) => Object.assign({ label: d.label, pick: () => setConsult({ doctor: d.id, day: '' }) }, choice(d.id === c.doctor)));
+    const days = (doc ? doc.days : []).map((iso) => Object.assign({ label: this.label(iso), pick: () => setConsult({ day: iso }) }, choice(iso === c.day)));
+    const bookDisabled = !doc || !c.day;
+
+    const titles = { home: 'أهلاً نور', offers: 'العروض', account: 'حسابي' };
+    const tabDefs = [ { id: 'home', label: 'الرئيسية' }, { id: 'offers', label: 'العروض' }, { id: 'account', label: 'حسابي' } ];
+
+    return {
+      screenTitle: titles[tab] || '',
+      isHome: tab === 'home',
+      isOffers: tab === 'offers',
+      isAccount: tab === 'account',
+      tabs: tabDefs.map((t) => ({
+        label: t.label, selected: t.id === tab,
+        bg: t.id === tab ? '#E3F1F0' : '#FFFFFF',
+        fg: t.id === tab ? '#084F4B' : '#55606E',
+        pick: () => this.setState({ tab: t.id })
+      })),
+      nextDate: this.label(s3),
+      seq: this.seqFor(s3),
+      showChanged: !!s.changed && !s.resOpen,
+      resOpen: !!s.resOpen,
+      resClosed: !s.resOpen,
+      openRes: () => this.setState({ resOpen: true, pick: '', changed: false }),
+      closeRes: () => this.setState({ resOpen: false, pick: '' }),
+      options: options,
+      hasPick: !!pick,
+      preview: preview,
+      confirmDisabled: !pick,
+      confirmBg: pick ? '#0B6E69' : '#6B7480',
+      confirmRes: () => { if (pick) { this.setState({ s3: pick, pick: '', resOpen: false, changed: true }); } },
+      sessions: sessions,
+      notRated: rating === 0,
+      isRated: rating > 0,
+      rating: rating,
+      stars: stars,
+      consultIdle: !c.open && !c.booked,
+      consultOpen: !!c.open && !c.booked,
+      consultBooked: !!c.booked,
+      openConsult: () => setConsult({ open: true }),
+      closeConsult: () => setConsult({ open: false, doctor: '', day: '' }),
+      doctors: doctors,
+      days: days,
+      bookDisabled: bookDisabled,
+      bookBg: bookDisabled ? '#6B7480' : '#0B6E69',
+      bookConsult: () => { if (!bookDisabled) { setConsult({ booked: true, open: false }); } },
+      bookedDoctor: doc ? doc.label : '',
+      bookedDay: c.day ? this.label(c.day) : '',
+      bookedSeq: c.day ? this.seqFor(c.day) : '',
+      cancelConsult: () => setConsult({ booked: false, open: false, doctor: '', day: '' }),
+      offersNotif: !!s.offersNotif,
+      toggleNotif: () => this.setState({ offersNotif: !s.offersNotif })
+    };
+  }
+}
+</script>
+</body>
+</html>

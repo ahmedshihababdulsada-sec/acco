@@ -1,0 +1,8 @@
+[Unit]
+Description=رفع الصور الجديدة (مشفرة)
+After=network-online.target
+[Service]
+Type=oneshot
+User=clinic
+EnvironmentFile=/etc/clinic/backup.env
+ExecStart=/usr/bin/node /opt/clinic/server/dist/cli/backup.js uploads

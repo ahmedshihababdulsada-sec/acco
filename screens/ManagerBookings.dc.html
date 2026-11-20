@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>شاشة المدير · الحجوزات</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+input{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="min-height: 100vh; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6">
+
+  <header style="background: #FFFFFF; border-bottom: 1px solid #D9DEE5">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 0px">
+        <strong style="font-size: 18px; font-weight: 700">المدير: [اسم المدير]</strong>
+        <span style="color: #55606E; font-size: 13px">[اسم العيادة] · بيانات تجريبية للعرض</span>
+      </div>
+      <nav aria-label="أقسام المدير" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <a href="Manager.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الرئيسية</a>
+        <a href="ManagerStaff.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموظفين والرواتب</a>
+        <a href="ManagerSuppliers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموردين والمشتريات</a>
+        <a href="ManagerStock.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المخزون</a>
+        <a href="ManagerOffers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">العروض</a>
+        <a href="ManagerSchedule.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الدوام والعطل</a>
+        <a href="ManagerBookings.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #17202A; color: #FFFFFF; border: 2px solid #17202A">الحجوزات</a>
+        <a href="ManagerExpenses.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المصاريف</a>
+        <a href="ManagerPayMethods.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">طرق الدفع</a>
+      </nav>
+    </div>
+  </header>
+
+  <div style="max-width: 1360px; margin: 0 auto; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px">
+
+    <div role="group" aria-label="اليوم" style="display: flex; flex-wrap: wrap; gap: 8px">
+      <sc-for list="{{days}}" as="d" hint-placeholder-count="7">
+        <button type="button" onClick="{{d.pick}}" aria-pressed="{{d.selected}}" style="min-height: 48px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{d.bg}}; color: {{d.fg}}; border: 2px solid {{d.border}}">{{d.label}}</button>
+      </sc-for>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px">
+      <h1 style="margin: 0; font-size: 20px; font-weight: 700">{{dayTitle}}</h1>
+      <span style="font-size: 13px; color: #55606E">{{docsText}}</span>
+    </div>
+
+    <sc-if value="{{closed}}" hint-placeholder-val="{{false}}">
+      <div role="status" style="background: #ECEFF3; color: #3D4652; border: 1px solid #AEB6C2; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{closedText}}</div>
+    </sc-if>
+    <sc-if value="{{overLimit}}" hint-placeholder-val="{{false}}">
+      <div role="status" style="background: #FFF4DB; color: #6B4A00; border: 1px solid #A8730A; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{overText}}</div>
+    </sc-if>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 12px">
+      <div style="flex: 1 1 220px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 13px; font-weight: 600; color: #55606E">المقاعد المستخدمة</span>
+        <span style="font-size: 28px; font-weight: 600; line-height: 1.3; font-variant-numeric: tabular-nums">{{usedText}}</span>
+        <div style="height: 10px; background: #ECEFF3; border-radius: 5px; overflow: hidden"><div style="height: 10px; width: {{barW}}; background: {{barColor}}"></div></div>
+        <span style="font-size: 12px; color: #55606E">{{remainText}}</span>
+      </div>
+      <div style="flex: 3 1 460px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: flex-start">
+        <sc-for list="{{stats}}" as="st" hint-placeholder-count="6">
+          <div style="display: flex; flex-direction: column; gap: 0px; min-width: 96px">
+            <span style="font-size: 12px; font-weight: 600; color: #55606E">{{st.label}}</span>
+            <span style="font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums">{{st.value}}</span>
+          </div>
+        </sc-for>
+        <span style="flex: 1 1 100%; font-size: 12px; color: #55606E">{{seqNote}}</span>
+      </div>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end">
+        <label style="flex: 1 1 240px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+          <span>بحث بالاسم أو الرمز أو التلفون</span>
+          <input id="bk-q" type="search" value="{{q}}" onChange="{{onQ}}" placeholder="مثال: C-0977" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+        </label>
+        <div role="group" aria-label="الطبيب" style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{docFilters}}" as="df" hint-placeholder-count="4">
+            <button type="button" onClick="{{df.pick}}" aria-pressed="{{df.selected}}" style="min-height: 44px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{df.bg}}; color: {{df.fg}}; border: 2px solid {{df.border}}">{{df.label}}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div role="group" aria-label="حالة الزيارة" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <sc-for list="{{statusFilters}}" as="sf" hint-placeholder-count="5">
+          <button type="button" onClick="{{sf.pick}}" aria-pressed="{{sf.selected}}" style="min-height: 44px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{sf.bg}}; color: {{sf.fg}}; border: 2px solid {{sf.border}}">{{sf.label}}</button>
+        </sc-for>
+      </div>
+
+      <h2 style="margin: 4px 0 0; font-size: 16px; font-weight: 700">الزيارات حسب رقم التسلسل <span style="font-size: 13px; font-weight: 500; color: #55606E">({{shownCount}})</span></h2>
+      <sc-for list="{{rows}}" as="v" hint-placeholder-count="5">
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; border: 1px solid #D9DEE5; border-radius: 10px; padding: 12px 14px; background: {{v.bg}}">
+          <span style="flex: none; width: 44px; height: 44px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 22px; background: #17202A; color: #FFFFFF; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums">{{v.seq}}</span>
+          <span style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 0px">
+            <span style="font-size: 15px; font-weight: 700">{{v.name}}</span>
+            <span style="font-size: 13px; color: #3D4652"><bdi dir="ltr">{{v.code}}</bdi> · <bdi dir="ltr">{{v.phone}}</bdi></span>
+            <span style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px">
+              <span style="font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: #ECEFF3; color: #3D4652">{{v.source}}</span>
+              <sc-if value="{{v.noApp}}" hint-placeholder-val="{{false}}">
+                <span style="font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: #E4EDF8; color: #1D4E89">بدون تطبيق</span>
+              </sc-if>
+              <sc-if value="{{v.moved}}" hint-placeholder-val="{{false}}">
+                <span style="font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: #FFF4DB; color: #6B4A00">{{v.movedText}}</span>
+              </sc-if>
+            </span>
+          </span>
+          <span style="flex: 2 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+            <sc-for list="{{v.items}}" as="it" hint-placeholder-count="2">
+              <span style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px">
+                <span style="font-size: 14px; font-weight: 600">{{it.title}}</span>
+                <span style="font-size: 12px; color: #55606E">{{it.sub}}</span>
+                <span style="font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: {{it.bg}}; color: {{it.fg}}">{{it.state}}</span>
+              </span>
+            </sc-for>
+            <sc-if value="{{v.note}}" hint-placeholder-val="{{false}}">
+              <span style="font-size: 12px; color: #6B4A00; font-weight: 600">{{v.noteText}}</span>
+            </sc-if>
+          </span>
+          <span style="flex: none; font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 8px; background: {{v.chipBg}}; color: {{v.chipFg}}">{{v.status}}</span>
+        </div>
+      </sc-for>
+      <sc-if value="{{noRows}}" hint-placeholder-val="{{false}}">
+        <span style="font-size: 14px; color: #55606E">{{emptyText}}</span>
+      </sc-if>
+      <span style="font-size: 12px; color: #55606E">عرض للقراءة بس. الحجز والنقل والاسترجاع يسويهم الكاشير أو الزبون من التطبيق، والمدير يتابع.</span>
+    </div>
+
+    <sc-if value="{{hasFollow}}" hint-placeholder-val="{{false}}">
+      <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">مدفوعة وما تنفذت (للعلم)</h2>
+        <span style="font-size: 13px; color: #55606E">جلسات اندفعت بهاليوم وانتهى الدوام بدون ما يضغط الممرض «اكتملت». ما تنحسب غياب. الكاشير يحجزلها يوم جديد بنفس الوصل أو يسترجع فلوسها.</span>
+        <sc-for list="{{follow}}" as="fu" hint-placeholder-count="1">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; border: 1px solid #A8730A; background: #FFF4DB; border-radius: 10px; padding: 12px 14px">
+            <span style="flex: 1 1 220px; font-size: 14px; font-weight: 700">{{fu.name}}</span>
+            <span style="flex: 2 1 260px; font-size: 14px">{{fu.what}}</span>
+            <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: #FFFFFF; color: #6B4A00; border: 1px solid #A8730A">بانتظار الكاشير</span>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1500}}'>
+class Component extends DCLogic {
+  state = { day: '2026-11-14', q: '', doc: 'all', status: 'all' };
+
+  today() { return '2026-11-14'; }
+  limit() { return 30; }
+  num(n) { return Number(n).toLocaleString('en-US'); }
+  ltr(text) { return '\u2066' + text + '\u2069'; }
+  digits(v) { return String(v == null ? '' : v).trim().replace(/[٠-٩]/g, (c) => String(c.charCodeAt(0) - 1632)).replace(/[۰-۹]/g, (c) => String(c.charCodeAt(0) - 1776)); }
+  dateText(iso) { const p = String(iso).split('-'); return p.length === 3 ? Number(p[2]) + '/' + Number(p[1]) + '/' + p[0] : ''; }
+  shortDate(iso) { const p = String(iso).split('-'); return Number(p[2]) + '/' + Number(p[1]); }
+  pill(selected) { return { selected: selected, bg: selected ? '#17202A' : '#FFFFFF', fg: selected ? '#FFFFFF' : '#17202A', border: selected ? '#17202A' : '#AEB6C2' }; }
+  dayId(iso) { return ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][new Date(iso + 'T00:00:00Z').getUTCDay()]; }
+  dayName(iso) { return { sat: 'السبت', sun: 'الأحد', mon: 'الاثنين', tue: 'الثلاثاء', wed: 'الأربعاء', thu: 'الخميس', fri: 'الجمعة' }[this.dayId(iso)]; }
+
+  // نفس إعدادات صفحة الدوام والعطل (أيام العيادة، دوام الطبيبين، إجازة د. الأول 20–22/11)
+  openDays() { return { sat: true, sun: true, mon: true, tue: true, wed: true, thu: true, fri: false }; }
+  doctors() { return { d1: { label: 'د. [الطبيب الأول]', days: ['sat', 'sun', 'mon', 'tue', 'wed'] }, d2: { label: 'د. [الطبيب الثاني]', days: ['sun', 'tue', 'thu'] } }; }
+  doctorOff(id, iso) { return id === 'd1' && iso >= '2026-11-20' && iso <= '2026-11-22'; }
+  workingDoctors(iso) { const d = this.doctors(); const w = this.dayId(iso); return Object.keys(d).filter((k) => d[k].days.indexOf(w) >= 0 && !this.doctorOff(k, iso)); }
+
+  dayKeys() { return ['2026-11-12', '2026-11-13', '2026-11-14', '2026-11-15', '2026-11-16', '2026-11-17', '2026-11-22']; }
+  C(kind, doc, status) { return { type: 'consult', kind: kind, doc: doc, status: status }; }
+  S(title, sub, status) { return { type: 'session', title: title, sub: sub, status: status }; }
+  V(seq, name, code, phone, app, source, status, items, extra) { return Object.assign({ seq: seq, name: name, code: code, phone: phone, app: app, source: source, status: status, items: items }, extra || {}); }
+  visits(iso) {
+    const C = this.C.bind(this); const S = this.S.bind(this); const V = this.V.bind(this);
+    const all = {
+      '2026-11-12': [
+        V(1, 'رنا حيدر', 'C-0850', '07701110001', true, 'app', 'arrived', [C('new', 'd2', 'finished')]),
+        V(2, 'ليلى سامي', 'C-0790', '07701110002', false, 'cashier', 'arrived', [S('ليزر: إبط', 'جلسة 3 من 6', 'completed')]),
+        V(3, 'دعاء فاضل', 'C-0912', '07701110003', true, 'app', 'arrived', [S('تنظيف بشرة', 'جلسة 2 من 4', 'paid')]),
+        V(4, 'أسيل رعد', 'C-1001', '07701110004', true, 'app', 'missed', [S('ليزر: ساقين', 'جلسة 1 من 6', 'awaiting_booking')], { note: 'فات. الجلسة رجعت تنتظر حجز، والجلسات اللي بعدها تحررت.' }),
+        V(5, 'سجى كاظم', 'C-0733', '07701110005', true, 'app', 'cancelled', [C('new', 'd2', 'cancelled')], { note: 'ألغاها الزبون قبل الدفع، والمقعد رجع.' }),
+        V(6, 'هبة ناصر', 'C-0620', '07701110006', true, 'app', 'arrived', [C('free', 'd2', 'finished')])
+      ],
+      '2026-11-13': [],
+      '2026-11-14': [
+        V(1, 'هدى كريم', 'C-0931', '07701110007', true, 'app', 'arrived', [S('تنظيف بشرة', 'جلسة 1 من 3', 'paid')]),
+        V(2, 'مريم جاسم', 'C-1004', '07701110008', true, 'app', 'arrived', [C('free', 'd1', 'paid')]),
+        V(3, 'سارة محمد', 'C-1042', '07701110009', true, 'app', 'arrived', [C('new', 'd1', 'with_doctor')]),
+        V(4, 'نور علي', 'C-0977', '07701110010', true, 'app', 'booked', [S('ليزر: وجه + إبط', 'جلسة 2 من 6', 'booked'), S('تنظيف بشرة', 'جلسة 1 من 1', 'booked')]),
+        V(5, 'زينب حسن', 'C-1010', '07701110011', true, 'app', 'booked', [S('بوتكس', this.ltr('2 cc'), 'booked'), S('ليزر: فول بدي', 'جلسة 1 من 6', 'booked')]),
+        V(6, 'منى عدنان', 'C-0555', '07701110012', false, 'cashier', 'booked', [C('new', 'd1', 'awaiting_payment')]),
+        V(7, 'ريم أحمد', 'C-1020', '07701110013', true, 'app', 'booked', [C('new', 'd1', 'awaiting_payment')]),
+        V(8, 'شهد علي', 'C-0874', '07701110014', true, 'app', 'cancelled', [C('new', 'd1', 'cancelled')], { note: 'ألغاها الزبون قبل الدفع، والمقعد رجع.' })
+      ],
+      '2026-11-15': [
+        V(1, 'غدير سلمان', 'C-0701', '07701110015', true, 'app', 'booked', [C('new', 'd1', 'awaiting_payment')], { movedFrom: '2026-11-08', movedWhy: 'غياب الطبيب' }),
+        V(2, 'إيمان جواد', 'C-0645', '07701110016', false, 'cashier', 'booked', [C('new', 'd2', 'awaiting_payment')], { movedFrom: '2026-11-08', movedWhy: 'غياب الطبيب', note: 'ما عنده تطبيق: الكاشير يتصل بيه ويبلغه بالموعد الجديد.' }),
+        V(3, 'نور الهدى', 'C-0988', '07701110017', true, 'app', 'booked', [S('بوتكس', this.ltr('3 cc'), 'booked')]),
+        V(4, 'آية محمود', 'C-1033', '07701110018', true, 'app', 'booked', [C('free', 'd2', 'awaiting_payment')]),
+        V(5, 'فاطمة زيد', 'C-0577', '07701110019', true, 'app', 'booked', [S('ميزوثيرابي للوجه', 'جلسة 2 من 4', 'booked')])
+      ],
+      '2026-11-16': [
+        V(1, 'تبارك عماد', 'C-0866', '07701110020', true, 'app', 'booked', [C('new', 'd1', 'awaiting_payment')]),
+        V(2, 'ضحى ياسر', 'C-0815', '07701110021', true, 'app', 'booked', [S('ليزر: يدين', 'جلسة 4 من 6', 'booked')]),
+        V(3, 'روان باسم', 'C-0902', '07701110022', false, 'cashier', 'booked', [S('تنظيف بشرة', 'جلسة 3 من 4', 'booked')])
+      ],
+      '2026-11-17': [
+        V(1, 'لمى خالد', 'C-0744', '07701110023', true, 'app', 'booked', [C('new', 'd2', 'awaiting_payment')]),
+        V(2, 'بتول رضا', 'C-0698', '07701110024', true, 'app', 'booked', [C('new', 'd1', 'awaiting_payment')]),
+        V(3, 'جنى مصطفى', 'C-0921', '07701110025', true, 'app', 'booked', [S('ليزر: وجه', 'جلسة 5 من 6', 'booked')]),
+        V(4, 'سمر حسين', 'C-0560', '07701110026', true, 'app', 'booked', [C('free', 'd1', 'awaiting_payment')])
+      ],
+      '2026-11-22': [
+        V(1, 'زهراء كريم', 'C-0833', '07701110027', true, 'app', 'booked', [C('new', 'd2', 'awaiting_payment')]),
+        V(2, 'يسرى فؤاد', 'C-0760', '07701110028', true, 'app', 'booked', [S('بوتكس', this.ltr('2 cc'), 'booked')]),
+        V(3, 'علا سعد', 'C-0689', '07701110029', false, 'cashier', 'booked', [C('new', 'd2', 'awaiting_payment')])
+      ]
+    };
+    return all[iso] || [];
+  }
+
+  statusDefs() { return { booked: { t: 'محجوزة', bg: '#E4EDF8', fg: '#1D4E89' }, arrived: { t: 'حضرت', bg: '#E3F1F0', fg: '#084F4B' }, missed: { t: 'فاتت', bg: '#FFF4DB', fg: '#6B4A00' }, cancelled: { t: 'ملغاة', bg: '#ECEFF3', fg: '#3D4652' } }; }
+  consultState(s) { return { awaiting_payment: { t: 'تنتظر الدفع', bg: '#ECEFF3', fg: '#3D4652' }, paid: { t: 'مدفوعة · تنتظر الطبيب', bg: '#E3F1F0', fg: '#084F4B' }, with_doctor: { t: 'عند الطبيب', bg: '#E4EDF8', fg: '#1D4E89' }, finished: { t: 'منتهية', bg: '#E3F1F0', fg: '#084F4B' }, cancelled: { t: 'ملغاة', bg: '#ECEFF3', fg: '#3D4652' } }[s]; }
+  sessionState(s) { return { booked: { t: 'محجوزة', bg: '#E4EDF8', fg: '#1D4E89' }, paid: { t: 'مدفوعة · تنتظر الممرض', bg: '#E3F1F0', fg: '#084F4B' }, completed: { t: 'مكتملة', bg: '#E3F1F0', fg: '#084F4B' }, awaiting_booking: { t: 'تنتظر حجز', bg: '#FFF4DB', fg: '#6B4A00' } }[s]; }
+
+  visitDoctor(v) { const c = v.items.find((x) => x.type === 'consult'); return c ? c.doc : ''; }
+  active(v) { return v.status === 'booked' || v.status === 'arrived'; }
+
+  renderVals() {
+    const s = this.state;
+    const iso = s.day;
+    const defs = this.statusDefs();
+    const dayVisits = this.visits(iso);
+    const act = dayVisits.filter((v) => this.active(v));
+    const used = act.length;
+    const limit = this.limit();
+    const isClosed = !this.openDays()[this.dayId(iso)];
+    const working = this.workingDoctors(iso);
+    const docs = this.doctors();
+    const consults = act.reduce((t, v) => t + v.items.filter((x) => x.type === 'consult' && x.kind === 'new').length, 0);
+    const frees = act.reduce((t, v) => t + v.items.filter((x) => x.type === 'consult' && x.kind === 'free').length, 0);
+    const sessions = act.reduce((t, v) => t + v.items.filter((x) => x.type === 'session').length, 0);
+    const count = (st) => dayVisits.filter((v) => v.status === st).length;
+    const q = this.digits(s.q).toLowerCase();
+    const shown = dayVisits.filter((v) => {
+      if (s.status !== 'all' && v.status !== s.status) { return false; }
+      const d = this.visitDoctor(v);
+      if (s.doc === 'sessions' && d) { return false; }
+      if (s.doc !== 'all' && s.doc !== 'sessions' && d !== s.doc) { return false; }
+      if (q && (v.name + ' ' + v.code + ' ' + v.phone).toLowerCase().indexOf(q) < 0) { return false; }
+      return true;
+    });
+    const lastSeq = dayVisits.reduce((m, v) => Math.max(m, v.seq), 0);
+    const pastDay = iso < this.today();
+    const follow = pastDay ? dayVisits.reduce((out, v) => out.concat(v.items.filter((x) => x.type === 'session' && x.status === 'paid').map((x) => ({ name: v.name + ' · ' + v.code, what: x.title + ' · ' + x.sub + ' · مدفوعة وما اكتملت' }))), []) : [];
+    const free = Math.max(0, limit - used);
+    const pct = Math.min(100, Math.round(used / limit * 100));
+    const statusKeys = ['all', 'booked', 'arrived', 'missed', 'cancelled'];
+    const statusLabels = { all: 'كل الزيارات (' + dayVisits.length + ')', booked: 'محجوزة (' + count('booked') + ')', arrived: 'حضرت (' + count('arrived') + ')', missed: 'فاتت (' + count('missed') + ')', cancelled: 'ملغاة (' + count('cancelled') + ')' };
+    const docKeys = ['all', 'd1', 'd2', 'sessions'];
+    const docLabels = { all: 'كل الأطباء', d1: docs.d1.label, d2: docs.d2.label, sessions: 'جلسات بدون كشفية' };
+    return {
+      days: this.dayKeys().map((k) => Object.assign({ label: this.dayName(k) + ' ' + this.shortDate(k) + (k === this.today() ? ' · اليوم' : '') + (!this.openDays()[this.dayId(k)] ? ' · مسكرة' : ' · ' + this.visits(k).filter((v) => this.active(v)).length), pick: () => this.setState({ day: k, status: 'all', doc: 'all', q: '' }) }, this.pill(k === iso))),
+      dayTitle: this.dayName(iso) + ' ' + this.dateText(iso) + (iso === this.today() ? ' (اليوم)' : ''),
+      docsText: isClosed ? 'العيادة مسكرة' : (working.length ? 'دوام الأطباء: ' + working.map((k) => docs[k].label).join(' و') : 'ماكو طبيب بالدوام') + (Object.keys(docs).filter((k) => this.doctorOff(k, iso)).length ? ' · ' + Object.keys(docs).filter((k) => this.doctorOff(k, iso)).map((k) => docs[k].label + ' بإجازة').join(' و') : ''),
+      closed: isClosed, closedText: 'العيادة مسكرة هذا اليوم (' + this.dayName(iso) + ' مو من أيام الدوام). ما أكو حجوزات.',
+      overLimit: used > limit, overText: 'الحجوزات ' + used + ' أكثر من الحد ' + limit + '. نزل الحد بعد ما انحجزت، والحجوزات الموجودة تبقى وما تنقبل حجوزات جديدة.',
+      usedText: used + ' من ' + limit, barW: pct + '%', barColor: used > limit ? '#9B1C1C' : (pct >= 90 ? '#A8730A' : '#0B6E69'),
+      remainText: used > limit ? 'تجاوز الحد بـ ' + (used - limit) : (free === 0 ? 'اليوم ممتلئ. أي حجز جديد ينعرض عليه أقرب يوم بيه مكان.' : 'باقي ' + free + ' مقعد'),
+      stats: [
+        { label: 'كشفيات', value: String(consults) }, { label: 'مراجعات مجانية', value: String(frees) }, { label: 'جلسات', value: String(sessions) },
+        { label: 'حضرت', value: String(count('arrived')) }, { label: 'فاتت', value: String(count('missed')) }, { label: 'ملغاة', value: String(count('cancelled')) }
+      ],
+      seqNote: lastSeq ? 'آخر رقم تسلسل انعطى: ' + lastSeq + '. الزيارة الوحدة = مقعد واحد ورقم واحد حتى لو بيها كشفية وجلسات. الرقم الملغى ما ينعاد.' : 'ما أكو أرقام تسلسل بهاليوم.',
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
+      docFilters: docKeys.map((k) => Object.assign({ label: docLabels[k], pick: () => this.setState({ doc: k }) }, this.pill(s.doc === k))),
+      statusFilters: statusKeys.map((k) => Object.assign({ label: statusLabels[k], pick: () => this.setState({ status: k }) }, this.pill(s.status === k))),
+      shownCount: shown.length + ' من ' + dayVisits.length,
+      rows: shown.map((v) => {
+        const st = defs[v.status];
+        return {
+          seq: String(v.seq), name: v.name, code: v.code, phone: v.phone, noApp: !v.app, source: v.source === 'app' ? 'حجز من التطبيق' : 'حجز من الكاشير',
+          moved: !!v.movedFrom, movedText: v.movedFrom ? 'منقولة من ' + this.shortDate(v.movedFrom) + ' · ' + v.movedWhy : '',
+          items: v.items.map((x) => {
+            if (x.type === 'consult') {
+              const cs = this.consultState(x.status);
+              return { title: x.kind === 'free' ? 'مراجعة مجانية' : 'كشفية', sub: this.doctors()[x.doc].label, state: cs.t, bg: cs.bg, fg: cs.fg };
+            }
+            const ss = this.sessionState(x.status);
+            return { title: x.title, sub: x.sub, state: ss.t, bg: ss.bg, fg: ss.fg };
+          }),
+          note: !!v.note, noteText: v.note || '',
+          status: st.t, chipBg: st.bg, chipFg: st.fg, bg: v.status === 'cancelled' || v.status === 'missed' ? '#F4F5F7' : '#FFFFFF'
+        };
+      }),
+      noRows: shown.length === 0, emptyText: isClosed ? 'العيادة مسكرة.' : (dayVisits.length ? 'ماكو زيارات تطابق الفلتر.' : 'ما أكو حجوزات بهاليوم.'),
+      hasFollow: follow.length > 0, follow: follow
+    };
+  }
+}
+</script>
+</body>
+</html>

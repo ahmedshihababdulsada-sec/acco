@@ -1,0 +1,11 @@
+[Unit]
+Description=نسخة يومية: كاملة + تفريغ منطقي + الصور + تنظيف القديم
+After=network-online.target postgresql.service
+[Service]
+Type=oneshot
+User=clinic
+EnvironmentFile=/etc/clinic/backup.env
+ExecStart=/usr/bin/node /opt/clinic/server/dist/cli/backup.js daily
+TimeoutStartSec=3h
+Nice=10
+IOSchedulingClass=idle

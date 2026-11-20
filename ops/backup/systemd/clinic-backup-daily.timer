@@ -1,0 +1,8 @@
+[Unit]
+Description=النسخة اليومية الساعة 3 الفجر (العيادة مسكرة)
+[Timer]
+OnCalendar=*-*-* 03:00:00 Asia/Baghdad
+Persistent=true
+RandomizedDelaySec=300
+[Install]
+WantedBy=timers.target

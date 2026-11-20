@@ -1,0 +1,22 @@
+# ملفات الجهاز
+.DS_Store
+
+# قاعدة بيانات التطوير المحلية (بيانات تجربة، 147MB)
+database/.pgdata/
+
+# أسرار ونسخ احتياطية: ما تنرفع أبداً
+.env
+.env.*
+!.env.example
+*.env
+!*.env.example
+ops/backup/backup.env
+*.pem
+*.key
+*.sql.gz
+*.dump
+*.backup
+
+# أرقام وملفات مؤقتة
+*.log
+node_modules/

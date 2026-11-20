@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>شاشة المدير · الموردين والمشتريات</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+input{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="min-height: 100vh; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6">
+
+  <header style="background: #FFFFFF; border-bottom: 1px solid #D9DEE5">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 0px">
+        <strong style="font-size: 18px; font-weight: 700">المدير: [اسم المدير]</strong>
+        <span style="color: #55606E; font-size: 13px">[اسم العيادة] · بيانات تجريبية للعرض</span>
+      </div>
+      <nav aria-label="أقسام المدير" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <a href="Manager.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الرئيسية</a>
+        <a href="ManagerStaff.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموظفين والرواتب</a>
+        <a href="ManagerSuppliers.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #17202A; color: #FFFFFF; border: 2px solid #17202A">الموردين والمشتريات</a>
+        <a href="ManagerStock.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المخزون</a>
+        <a href="ManagerOffers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">العروض</a>
+        <a href="ManagerSchedule.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الدوام والعطل</a>
+        <a href="ManagerBookings.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الحجوزات</a>
+        <a href="ManagerExpenses.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المصاريف</a>
+        <a href="ManagerPayMethods.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">طرق الدفع</a>
+      </nav>
+    </div>
+  </header>
+
+  <div style="max-width: 1360px; margin: 0 auto; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px">
+
+    <div role="group" aria-label="أقسام الصفحة" style="display: flex; flex-wrap: wrap; gap: 8px">
+      <sc-for list="{{tabs}}" as="tb" hint-placeholder-count="2">
+        <button type="button" onClick="{{tb.pick}}" aria-pressed="{{tb.selected}}" style="min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; background: {{tb.bg}}; color: {{tb.fg}}; border: 2px solid {{tb.border}}">{{tb.label}}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{isSuppliers}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+        <aside style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+          <sc-for list="{{supplierList}}" as="s" hint-placeholder-count="2">
+            <button type="button" onClick="{{s.pick}}" aria-pressed="{{s.selected}}" style="width: 100%; text-align: start; display: flex; flex-direction: column; gap: 6px; padding: 12px; background: {{s.bg}}; border: 2px solid {{s.border}}; border-radius: 10px; cursor: pointer; color: #17202A">
+              <span style="font-size: 15px; font-weight: 700">{{s.name}}</span>
+              <span style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+                <span style="font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{s.chipBg}}; color: {{s.chipFg}}">{{s.chip}}</span>
+                <span style="font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums">{{s.amount}}</span>
+              </span>
+            </button>
+          </sc-for>
+          <a href="ManagerSupplierAdd.dc.html" style="display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 16px; border-radius: 10px; font-size: 15px; font-weight: 700; text-decoration: none; background: #FFFFFF; color: #0B6E69; border: 2px dashed #0B6E69">+ مورد جديد أو تعديل مورد</a>
+          <p style="margin: 0; font-size: 12px; color: #55606E">المبلغ هو الباقي علينا للمورد: فواتير آجلة ناقص التسديدات والمرتجعات.</p>
+        </aside>
+
+        <section style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+
+          <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+            <div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px">
+              <div style="display: flex; flex-direction: column; gap: 0px">
+                <h2 style="margin: 0; font-size: 18px; font-weight: 700">{{sel.name}}</h2>
+                <span style="font-size: 13px; color: #55606E">{{sel.phone}}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0px; align-items: flex-start">
+                <span style="font-size: 13px; font-weight: 600; color: #55606E">{{sel.balanceLabel}}</span>
+                <span style="font-size: 28px; font-weight: 600; line-height: 1.3; font-variant-numeric: tabular-nums">{{sel.balance}}</span>
+              </div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px">
+              <button type="button" onClick="{{openPay}}" disabled="{{payBlocked}}" style="min-height: 44px; padding: 0 18px; background: {{payBtnBg}}; color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer">تسديد للمورد</button>
+              <button type="button" onClick="{{openReturn}}" disabled="{{returnBlocked}}" style="min-height: 44px; padding: 0 18px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">مرتجع للمورد</button>
+              <button type="button" onClick="{{goInvoice}}" style="min-height: 44px; padding: 0 18px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">فاتورة شراء جديدة</button>
+            </div>
+
+            <sc-if value="{{payOpen}}" hint-placeholder-val="{{false}}">
+              <div style="background: #F4F5F7; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+                <strong style="font-size: 14px">تسديد للمورد</strong>
+                <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                  <span>المبلغ (د.ع)</span>
+                  <input type="text" inputmode="numeric" value="{{pay.amount}}" onChange="{{onPayAmount}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+                </label>
+                <div role="group" aria-label="طريقة التسديد" style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <sc-for list="{{paySources}}" as="so" hint-placeholder-count="2">
+                    <button type="button" onClick="{{so.pick}}" aria-pressed="{{so.selected}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{so.bg}}; color: {{so.fg}}; border: 2px solid {{so.border}}">{{so.label}}</button>
+                  </sc-for>
+                </div>
+                <sc-if value="{{payShowBank}}" hint-placeholder-val="{{false}}">
+                  <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                    <span>اسم المصرف</span>
+                    <input type="text" value="{{pay.bank}}" onChange="{{onPayBank}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+                  </label>
+                </sc-if>
+                <sc-if value="{{payProblem}}" hint-placeholder-val="{{false}}">
+                  <span role="alert" style="font-size: 13px; font-weight: 600; color: #7A1212">{{payProblemText}}</span>
+                </sc-if>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px">
+                  <button type="button" onClick="{{confirmPay}}" disabled="{{payDisabled}}" style="min-height: 44px; padding: 0 18px; background: {{payBg}}; color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer">تأكيد التسديد</button>
+                  <button type="button" onClick="{{closeAction}}" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">رجوع</button>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{returnOpen}}" hint-placeholder-val="{{false}}">
+              <div style="background: #F4F5F7; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+                <strong style="font-size: 14px">مرتجع للمورد</strong>
+                <span style="font-size: 13px; color: #55606E">اختار الدفعة اللي تريد ترجعها. المرتجع ينقص المخزون وينقص اللي علينا للمورد.</span>
+                <div role="group" aria-label="الدفعة" style="display: flex; flex-direction: column; gap: 6px">
+                  <sc-for list="{{batches}}" as="b" hint-placeholder-count="2">
+                    <button type="button" onClick="{{b.pick}}" aria-pressed="{{b.selected}}" style="text-align: start; min-height: 48px; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{b.bg}}; color: {{b.fg}}; border: 2px solid {{b.border}}">{{b.label}}</button>
+                  </sc-for>
+                </div>
+                <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                  <span>الكمية المرتجعة</span>
+                  <input type="text" inputmode="decimal" value="{{ret.qty}}" onChange="{{onRetQty}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                  <span>السبب</span>
+                  <input type="text" value="{{ret.reason}}" onChange="{{onRetReason}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+                </label>
+                <span style="font-size: 14px; font-weight: 600">{{retAmountText}}</span>
+                <sc-if value="{{retProblem}}" hint-placeholder-val="{{false}}">
+                  <span role="alert" style="font-size: 13px; font-weight: 600; color: #7A1212">{{retProblemText}}</span>
+                </sc-if>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px">
+                  <button type="button" onClick="{{confirmReturn}}" disabled="{{retDisabled}}" style="min-height: 44px; padding: 0 18px; background: {{retBg}}; color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer">تأكيد المرتجع</button>
+                  <button type="button" onClick="{{closeAction}}" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">رجوع</button>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{hasMsg}}" hint-placeholder-val="{{false}}">
+              <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{msg}}</div>
+            </sc-if>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 4px">
+            <h2 style="margin: 0 0 6px; font-size: 16px; font-weight: 700">كشف الحساب</h2>
+            <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) 120px 130px; gap: 8px; padding: 6px 0; border-top: 1px solid #17202A; border-bottom: 2px solid #17202A; font-size: 13px; font-weight: 700">
+              <span>التاريخ</span><span>البيان</span><span style="text-align: right">المبلغ</span><span style="text-align: right">الباقي علينا</span>
+            </div>
+            <sc-for list="{{statement}}" as="e" hint-placeholder-count="4">
+              <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) 120px 130px; gap: 8px; align-items: start; padding: 8px 0; border-bottom: 1px solid #B8BEC8; font-size: 14px">
+                <bdi dir="ltr" style="text-align: start">{{e.date}}</bdi>
+                <span style="display: flex; flex-direction: column; gap: 0px; min-width: 0">
+                  <strong style="font-size: 14px; font-weight: 600">{{e.title}}</strong>
+                  <span style="font-size: 13px; color: #3D4652">{{e.sub}}</span>
+                </span>
+                <span style="direction: ltr; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; color: {{e.amountFg}}">{{e.amount}}</span>
+                <span style="direction: ltr; text-align: right; font-variant-numeric: tabular-nums">{{e.balance}}</span>
+              </div>
+            </sc-for>
+          </div>
+
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isInvoice}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+        <section style="flex: 999 1 600px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">فاتورة شراء جديدة</h2>
+
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <span style="font-size: 13px; font-weight: 600; color: #55606E">المورد</span>
+            <div role="group" aria-label="المورد" style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-for list="{{invSuppliers}}" as="s" hint-placeholder-count="2">
+                <button type="button" onClick="{{s.pick}}" aria-pressed="{{s.selected}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{s.bg}}; color: {{s.fg}}; border: 2px solid {{s.border}}">{{s.name}}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 12px">
+            <label style="flex: 1 1 200px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+              <span>رقم فاتورة المورد</span>
+              <input type="text" value="{{inv.number}}" onChange="{{onNumber}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+            </label>
+            <label style="flex: 1 1 200px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+              <span>تاريخ الفاتورة</span>
+              <input type="date" value="{{inv.date}}" onChange="{{onDate}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+            </label>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <strong style="font-size: 14px">المواد</strong>
+            <sc-for list="{{lines}}" as="l" hint-placeholder-count="1">
+              <div style="border: 1px solid #D9DEE5; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+                  <strong style="font-size: 14px">البند {{l.n}}</strong>
+                  <sc-if value="{{l.canRemove}}" hint-placeholder-val="{{false}}">
+                    <button type="button" onClick="{{l.remove}}" style="min-height: 44px; padding: 0 14px; background: #FFFFFF; color: #9B1C1C; border: 1px solid #9B1C1C; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer">إزالة</button>
+                  </sc-if>
+                </div>
+                <div role="group" aria-label="المادة" style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <sc-for list="{{l.materials}}" as="m" hint-placeholder-count="4">
+                    <button type="button" onClick="{{m.pick}}" aria-pressed="{{m.selected}}" style="min-height: 44px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{m.bg}}; color: {{m.fg}}; border: 2px solid {{m.border}}">{{m.label}}</button>
+                  </sc-for>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 12px">
+                  <label style="flex: 1 1 140px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                    <span>الكمية ({{l.unitName}})</span>
+                    <input type="text" inputmode="decimal" value="{{l.qty}}" onChange="{{l.onQty}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+                  </label>
+                  <label style="flex: 1 1 160px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                    <span>سعر ال{{l.unitName}} (د.ع)</span>
+                    <input type="text" inputmode="numeric" value="{{l.cost}}" onChange="{{l.onCost}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+                  </label>
+                  <label style="flex: 1 1 160px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                    <span>تاريخ الصلاحية</span>
+                    <input type="date" value="{{l.expiry}}" onChange="{{l.onExpiry}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+                  </label>
+                </div>
+                <span style="font-size: 13px; color: #3D4652">{{l.summary}}</span>
+              </div>
+            </sc-for>
+            <button type="button" onClick="{{addLine}}" style="align-self: flex-start; min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">+ مادة ثانية</button>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 13px; font-weight: 600; color: #55606E">صورة وصل الشراء</span>
+            <sc-if value="{{proofMissing}}" hint-placeholder-val="{{true}}">
+              <button type="button" onClick="{{attach}}" style="align-self: flex-start; min-height: 48px; padding: 0 18px; background: #FFFFFF; color: #17202A; border: 1px dashed #5B6573; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer">إرفاق صورة الوصل</button>
+            </sc-if>
+            <sc-if value="{{proofAttached}}" hint-placeholder-val="{{false}}">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+                <span style="font-size: 13px; font-weight: 600; padding: 8px 12px; border-radius: 8px; background: #E3F1F0; color: #084F4B">[وصل-الشراء.jpg] · مرفقة</span>
+                <button type="button" onClick="{{detach}}" style="min-height: 44px; padding: 0 14px; background: #FFFFFF; color: #9B1C1C; border: 1px solid #9B1C1C; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer">إزالة الصورة</button>
+              </div>
+            </sc-if>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 13px; font-weight: 600; color: #55606E">الدفع</span>
+            <div role="group" aria-label="طريقة الدفع للمورد" style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-for list="{{payModes}}" as="pm" hint-placeholder-count="3">
+                <button type="button" onClick="{{pm.pick}}" aria-pressed="{{pm.selected}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{pm.bg}}; color: {{pm.fg}}; border: 2px solid {{pm.border}}">{{pm.label}}</button>
+              </sc-for>
+            </div>
+            <sc-if value="{{showPartial}}" hint-placeholder-val="{{false}}">
+              <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                <span>المبلغ المدفوع الآن (د.ع)</span>
+                <input type="text" inputmode="numeric" value="{{inv.partial}}" onChange="{{onPartial}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+              </label>
+            </sc-if>
+            <sc-if value="{{showSource}}" hint-placeholder-val="{{false}}">
+              <div role="group" aria-label="مصدر الدفع" style="display: flex; flex-wrap: wrap; gap: 8px">
+                <sc-for list="{{invSources}}" as="so" hint-placeholder-count="2">
+                  <button type="button" onClick="{{so.pick}}" aria-pressed="{{so.selected}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{so.bg}}; color: {{so.fg}}; border: 2px solid {{so.border}}">{{so.label}}</button>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{showInvBank}}" hint-placeholder-val="{{false}}">
+              <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                <span>اسم المصرف</span>
+                <input type="text" value="{{inv.bank}}" onChange="{{onInvBank}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+              </label>
+            </sc-if>
+          </div>
+
+          <sc-if value="{{hasErrors}}" hint-placeholder-val="{{false}}">
+            <div role="alert" style="background: #FBEAEA; color: #7A1212; border: 1px solid #9B1C1C; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+              <sc-for list="{{errors}}" as="er" hint-placeholder-count="1">
+                <span>{{er.text}}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{hasInvMsg}}" hint-placeholder-val="{{false}}">
+            <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+              <sc-for list="{{invMsgLines}}" as="ml" hint-placeholder-count="2">
+                <span>{{ml.text}}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <button type="button" onClick="{{saveInvoice}}" disabled="{{saveDisabled}}" style="align-self: flex-start; min-height: 52px; padding: 0 28px; background: {{saveBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer">حفظ الفاتورة</button>
+        </section>
+
+        <aside style="flex: 1 1 300px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px; font-variant-numeric: tabular-nums">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">ملخص الفاتورة</h2>
+          <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px"><span>الإجمالي</span><span>{{sum.total}}</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px"><span>مدفوع الآن</span><span>{{sum.paid}}</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 16px; font-weight: 700; border-top: 2px solid #17202A; padding-top: 8px"><span>آجل على العيادة</span><span>{{sum.owed}}</span></div>
+          <p style="margin: 0; font-size: 12px; color: #55606E">كل مادة تنضاف للمخزون كدفعة بتاريخ صلاحيتها، والاستهلاك ياخذ الأقرب انتهاءً أول. رصيد الخزنة الحالي {{sum.safe}}.</p>
+        </aside>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1500}}'>
+class Component extends DCLogic {
+  state = {
+    tab: 'suppliers', supId: 'p1', entries: null, batchList: null, safe: 2505000, action: '', msg: '',
+    pay: { amount: '', source: 'safe', bank: '' }, ret: { batch: '', qty: '', reason: '' },
+    inv: null, invMsg: [], seq: 2
+  };
+
+  today() { return '2026-11-14'; }
+  num(n) { return Number(n).toLocaleString('en-US'); }
+  fmt(n) { return this.num(n) + ' د.ع'; }
+  digits(value) {
+    return String(value == null ? '' : value).trim().replace(/[٠-٩]/g, (c) => String(c.charCodeAt(0) - 1632)).replace(/[۰-۹]/g, (c) => String(c.charCodeAt(0) - 1776)).replace(/٫/g, '.');
+  }
+  money(value) { const t = this.digits(value); return /^\d+$/.test(t) && Number.isSafeInteger(Number(t)) ? Number(t) : null; }
+  qty(value) { const t = this.digits(value); return /^\d+(\.\d{1,2})?$/.test(t) ? Number(t) : null; }
+  dateText(iso) { const p = String(iso).split('-'); return p.length === 3 ? Number(p[2]) + '/' + Number(p[1]) + '/' + p[0] : ''; }
+  pill(selected) { return { selected: selected, bg: selected ? '#17202A' : '#FFFFFF', fg: selected ? '#FFFFFF' : '#17202A', border: selected ? '#17202A' : '#AEB6C2' }; }
+
+  suppliers() { return [{ id: 'p1', name: '[اسم المورد الأول]', phone: '[رقم الهاتف]' }, { id: 'p2', name: '[اسم المورد الثاني]', phone: '[رقم الهاتف]' }]; }
+  materials() {
+    return [
+      { id: 'botox', name: 'بوتكس', unitName: 'كرتون', per: 10, stock: 'cc' },
+      { id: 'filler', name: 'فلر', unitName: 'كرتون', per: 5, stock: 'cc' },
+      { id: 'gel', name: 'جل ليزر', unitName: 'كرتون', per: 12, stock: 'قطعة' },
+      { id: 'cream', name: 'كريم تخدير', unitName: 'كرتون', per: 20, stock: 'قطعة' }
+    ];
+  }
+  seedEntries() {
+    return [
+      { id: 'e1', sup: 'p1', date: '2026-10-05', type: 'invoice', ref: 'F-1042', total: 1200000, paid: 0 },
+      { id: 'e2', sup: 'p1', date: '2026-10-12', type: 'payment', amount: 500000, source: 'safe', bank: '' },
+      { id: 'e3', sup: 'p1', date: '2026-10-28', type: 'invoice', ref: 'F-1051', total: 800000, paid: 300000 },
+      { id: 'e4', sup: 'p1', date: '2026-11-02', type: 'return', amount: 100000, ref: 'F-1042', reason: 'عبوة تالفة' },
+      { id: 'e5', sup: 'p2', date: '2026-11-01', type: 'invoice', ref: 'F-77', total: 650000, paid: 650000 }
+    ];
+  }
+  seedBatches() {
+    return [
+      { id: 'rb1', sup: 'p1', label: 'بوتكس · فاتورة F-1042 · تنتهي 12/2026', remaining: 6, unit: 'cc', cost: 60000 },
+      { id: 'rb2', sup: 'p1', label: 'فلر · فاتورة F-1051 · تنتهي 03/2027', remaining: 3, unit: 'cc', cost: 80000 }
+    ];
+  }
+  entryList() { return this.state.entries || this.seedEntries(); }
+  batches() { return this.state.batchList || this.seedBatches(); }
+  effect(e) { return e.type === 'invoice' ? e.total - e.paid : -e.amount; }
+  balance(supId) { return this.entryList().filter((e) => e.sup === supId).reduce((t, e) => t + this.effect(e), 0); }
+  blankInvoice(sup) {
+    return { sup: sup, number: '', date: this.today(), lines: [{ id: 'l1', material: 'botox', qty: '', cost: '', expiry: '' }], proof: false, mode: 'full', partial: '', source: 'safe', bank: '' };
+  }
+  invoice() { return this.state.inv || this.blankInvoice(this.state.supId); }
+  setInv(change) { this.setState({ inv: Object.assign({}, this.invoice(), change), invMsg: [] }); }
+  setLine(id, change) { const inv = this.invoice(); this.setInv({ lines: inv.lines.map((l) => l.id === id ? Object.assign({}, l, change) : l) }); }
+
+  invoiceStatus(inv) {
+    const mats = this.materials();
+    const errors = [];
+    let total = 0;
+    const lines = inv.lines.map((l, i) => {
+      const m = mats.find((x) => x.id === l.material);
+      const q = this.qty(l.qty);
+      const c = this.money(l.cost);
+      const ok = q !== null && q > 0 && c !== null && c > 0;
+      const lineTotal = ok ? Math.round(q * c) : 0;
+      total += lineTotal;
+      if (q === null || q <= 0) { errors.push('البند ' + (i + 1) + ': اكتب كمية أكبر من صفر.'); }
+      if (c === null || c <= 0) { errors.push('البند ' + (i + 1) + ': اكتب سعر ال' + m.unitName + ' بالدينار، رقم صحيح أكبر من صفر.'); }
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(l.expiry) || l.expiry <= this.today()) { errors.push('البند ' + (i + 1) + ': تاريخ الصلاحية لازم يكون بعد اليوم.'); }
+      return { m: m, q: q, c: c, lineTotal: lineTotal, stockQty: q !== null ? Math.round(q * m.per * 100) / 100 : null };
+    });
+    if (!inv.number.trim()) { errors.push('اكتب رقم فاتورة المورد.'); }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(inv.date) || inv.date > this.today()) { errors.push('تاريخ الفاتورة لازم يكون اليوم أو قبله.'); }
+    if (!inv.proof) { errors.push('ارفق صورة وصل الشراء.'); }
+    let paid = 0;
+    if (inv.mode === 'full') { paid = total; }
+    if (inv.mode === 'partial') {
+      const p = this.money(inv.partial);
+      if (p === null || p < 1 || p >= total) { errors.push('المبلغ المدفوع لازم يكون بين 1 وأقل من إجمالي الفاتورة.'); } else { paid = p; }
+    }
+    if (paid > 0 && inv.source === 'bank' && !inv.bank.trim()) { errors.push('اكتب اسم المصرف.'); }
+    if (paid > 0 && inv.source === 'safe' && paid > this.state.safe) { errors.push('رصيد الخزنة ' + this.fmt(this.state.safe) + ' ما يكفي لدفع ' + this.fmt(paid) + '. اختار إلكتروني أو خلي الباقي آجل.'); }
+    return { lines: lines, total: total, paid: paid, owed: total - paid, errors: Array.from(new Set(errors)) };
+  }
+
+  saveInvoice() {
+    const inv = this.invoice();
+    const st = this.invoiceStatus(inv);
+    if (st.errors.length) { return; }
+    const id = 'e' + (this.state.seq + 1);
+    const entry = { id: id, sup: inv.sup, date: inv.date, type: 'invoice', ref: inv.number.trim(), total: st.total, paid: st.paid, source: inv.source, bank: inv.bank.trim() };
+    const added = st.lines.map((x, i) => 'انضاف للمخزون: ' + this.num(x.stockQty) + ' ' + x.m.stock + ' ' + x.m.name + ' · تنتهي ' + this.dateText(inv.lines[i].expiry));
+    const batchList = this.batches().concat(st.lines.map((x, i) => ({ id: 'rb' + id + i, sup: inv.sup, label: x.m.name + ' · فاتورة ' + inv.number.trim() + ' · تنتهي ' + this.dateText(inv.lines[i].expiry), remaining: x.stockQty, unit: x.m.stock, cost: Math.round(x.lineTotal / x.stockQty) })));
+    const safe = st.paid > 0 && inv.source === 'safe' ? this.state.safe - st.paid : this.state.safe;
+    const head = 'انحفظت الفاتورة ' + inv.number.trim() + ': الإجمالي ' + this.fmt(st.total) + (st.owed > 0 ? '، آجل ' + this.fmt(st.owed) + ' انضاف على حساب المورد.' : '، مدفوعة كاملة.');
+    this.setState({ entries: this.entryList().concat([entry]), batchList: batchList, safe: safe, seq: this.state.seq + 1, inv: Object.assign(this.blankInvoice(inv.sup), { lines: [{ id: 'l' + (this.state.seq + 1), material: 'botox', qty: '', cost: '', expiry: '' }] }), invMsg: [head].concat(added) });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const tab = s.tab;
+    const sups = this.suppliers();
+    const supId = s.supId;
+    const sup = sups.find((x) => x.id === supId);
+    const all = this.entryList();
+    const bal = this.balance(supId);
+    const owedState = (b) => b > 0 ? { chip: 'علينا للمورد', bg: '#FBEFD9', fg: '#8A4B08' } : (b < 0 ? { chip: 'رصيد للعيادة', bg: '#E4EDF8', fg: '#1D4E89' } : { chip: 'مسدد', bg: '#E3F1F0', fg: '#084F4B' });
+    const flag = owedState(bal);
+
+    const supplierList = sups.map((p) => {
+      const b = this.balance(p.id);
+      const st = owedState(b);
+      const selected = p.id === supId;
+      return { name: p.name, chip: st.chip, chipBg: st.bg, chipFg: st.fg, amount: this.fmt(Math.abs(b)), selected: selected, bg: selected ? '#E3F1F0' : '#FFFFFF', border: selected ? '#0B6E69' : '#D9DEE5', pick: () => this.setState({ supId: p.id, action: '', msg: '' }) };
+    });
+
+    let running = 0;
+    const statement = all.filter((e) => e.sup === supId).sort((a, b) => a.date < b.date ? -1 : (a.date > b.date ? 1 : 0)).map((e) => {
+      running += this.effect(e);
+      let title; let sub; let amount; let fg = '#17202A';
+      if (e.type === 'invoice') { title = 'فاتورة ' + e.ref; sub = 'الإجمالي ' + this.fmt(e.total) + ' · مدفوع ' + this.fmt(e.paid) + (e.total - e.paid > 0 ? ' · آجل ' + this.fmt(e.total - e.paid) : ''); amount = '+ ' + this.num(e.total - e.paid); }
+      else if (e.type === 'payment') { title = 'تسديد'; sub = e.source === 'safe' ? 'من الخزنة' : 'إلكتروني · ' + e.bank; amount = '− ' + this.num(e.amount); fg = '#084F4B'; }
+      else { title = 'مرتجع'; sub = (e.ref ? 'فاتورة ' + e.ref + ' · ' : '') + e.reason; amount = '− ' + this.num(e.amount); fg = '#084F4B'; }
+      return { date: this.dateText(e.date), title: title, sub: sub, amount: amount, amountFg: fg, balance: this.num(running) };
+    });
+
+    const action = s.action;
+    const returnable = this.batches().filter((b) => b.sup === supId && b.remaining > 0);
+    const pay = s.pay;
+    const payAmount = this.money(pay.amount);
+    let payProblemText = '';
+    if (action === 'pay') {
+      if (payAmount === null || payAmount < 1) { payProblemText = 'اكتب مبلغ صحيح بالدينار (رقم صحيح أكبر من صفر).'; }
+      else if (payAmount > bal) { payProblemText = 'المبلغ أكبر من اللي علينا للمورد (' + this.fmt(bal) + ').'; }
+      else if (pay.source === 'safe' && payAmount > s.safe) { payProblemText = 'رصيد الخزنة ' + this.fmt(s.safe) + ' ما يكفي.'; }
+      else if (pay.source === 'bank' && !pay.bank.trim()) { payProblemText = 'اكتب اسم المصرف.'; }
+    }
+    const ret = s.ret;
+    const chosen = returnable.find((b) => b.id === ret.batch) || null;
+    const retQty = this.qty(ret.qty);
+    let retProblemText = '';
+    if (action === 'return') {
+      if (!chosen) { retProblemText = 'اختار الدفعة.'; }
+      else if (retQty === null || retQty <= 0) { retProblemText = 'اكتب كمية أكبر من صفر (لحد خانتين عشريتين).'; }
+      else if (retQty > chosen.remaining) { retProblemText = 'الكمية أكبر من المتبقي بالدفعة (' + chosen.remaining + ' ' + chosen.unit + ').'; }
+      else if (!ret.reason.trim()) { retProblemText = 'اكتب سبب المرتجع.'; }
+    }
+    const retAmount = chosen && retQty !== null && retQty > 0 ? Math.round(retQty * chosen.cost) : 0;
+
+    const inv = this.invoice();
+    const st = this.invoiceStatus(inv);
+    const mats = this.materials();
+    const lines = inv.lines.map((l, i) => {
+      const m = mats.find((x) => x.id === l.material);
+      const calc = st.lines[i];
+      return {
+        n: i + 1, canRemove: inv.lines.length > 1, qty: l.qty, cost: l.cost, expiry: l.expiry, unitName: m.unitName,
+        materials: mats.map((x) => Object.assign({ label: x.name, pick: () => this.setLine(l.id, { material: x.id }) }, this.pill(x.id === l.material))),
+        summary: calc.q !== null && calc.c !== null && calc.q > 0 && calc.c > 0 ? 'الإجمالي ' + this.fmt(calc.lineTotal) + ' · ينضاف للمخزون ' + this.num(calc.stockQty) + ' ' + m.stock : (calc.q !== null && calc.q > 0 ? 'ينضاف للمخزون ' + this.num(calc.stockQty) + ' ' + m.stock : 'الكرتون الواحد = ' + m.per + ' ' + m.stock),
+        onQty: (e) => this.setLine(l.id, { qty: e.target.value }), onCost: (e) => this.setLine(l.id, { cost: e.target.value }), onExpiry: (e) => this.setLine(l.id, { expiry: e.target.value }),
+        remove: () => { const cur = this.invoice(); if (cur.lines.length > 1) { this.setInv({ lines: cur.lines.filter((x) => x.id !== l.id) }); } }
+      };
+    });
+    const mode = inv.mode;
+    const modes = [{ id: 'full', label: 'دفع كامل' }, { id: 'credit', label: 'آجل كله' }, { id: 'partial', label: 'دفع جزء' }].map((x) => Object.assign({ label: x.label, pick: () => this.setInv({ mode: x.id }) }, this.pill(mode === x.id)));
+    const showSource = st.paid > 0 || (mode === 'partial');
+    const touched = inv.number.trim() !== '' || inv.lines.some((l) => l.qty !== '' || l.cost !== '' || l.expiry !== '') || inv.proof || mode !== 'full';
+
+    return {
+      tabs: [Object.assign({ label: 'الموردين', pick: () => this.setState({ tab: 'suppliers', action: '', msg: '' }) }, this.pill(tab === 'suppliers')), Object.assign({ label: 'فاتورة شراء جديدة', pick: () => this.setState({ tab: 'invoice', msg: '' }) }, this.pill(tab === 'invoice'))],
+      isSuppliers: tab === 'suppliers', isInvoice: tab === 'invoice',
+      supplierList: supplierList, sel: { name: sup.name, phone: sup.phone, balanceLabel: flag.chip, balance: this.fmt(Math.abs(bal)) },
+      statement: statement,
+      payBlocked: bal <= 0, payBtnBg: bal <= 0 ? '#6B7480' : '#0B6E69', returnBlocked: returnable.length === 0,
+      openPay: () => this.setState({ action: 'pay', pay: { amount: '', source: 'safe', bank: '' }, msg: '' }),
+      openReturn: () => this.setState({ action: 'return', ret: { batch: '', qty: '', reason: '' }, msg: '' }),
+      goInvoice: () => this.setState({ tab: 'invoice', inv: Object.assign({}, this.invoice(), { sup: supId }), msg: '' }),
+      closeAction: () => this.setState({ action: '' }),
+      payOpen: action === 'pay', returnOpen: action === 'return', hasMsg: !!s.msg, msg: s.msg,
+      pay: { amount: pay.amount, bank: pay.bank },
+      onPayAmount: (e) => this.setState({ pay: Object.assign({}, this.state.pay, { amount: e.target.value }) }),
+      onPayBank: (e) => this.setState({ pay: Object.assign({}, this.state.pay, { bank: e.target.value }) }),
+      paySources: [Object.assign({ label: 'من الخزنة', pick: () => this.setState({ pay: Object.assign({}, this.state.pay, { source: 'safe' }) }) }, this.pill(pay.source === 'safe')), Object.assign({ label: 'إلكتروني', pick: () => this.setState({ pay: Object.assign({}, this.state.pay, { source: 'bank' }) }) }, this.pill(pay.source === 'bank'))],
+      payShowBank: pay.source === 'bank', payProblem: !!payProblemText, payProblemText: payProblemText,
+      payDisabled: !!payProblemText, payBg: payProblemText ? '#6B7480' : '#0B6E69',
+      confirmPay: () => {
+        const cur = this.state.pay; const a = this.money(cur.amount);
+        const owed = this.balance(this.state.supId);
+        if (a === null || a < 1 || a > owed) { return; }
+        if (cur.source === 'safe' && a > this.state.safe) { return; }
+        if (cur.source === 'bank' && !cur.bank.trim()) { return; }
+        const id = 'e' + (this.state.seq + 1);
+        this.setState({ entries: this.entryList().concat([{ id: id, sup: this.state.supId, date: this.today(), type: 'payment', amount: a, source: cur.source, bank: cur.bank.trim() }]), safe: cur.source === 'safe' ? this.state.safe - a : this.state.safe, seq: this.state.seq + 1, action: '', msg: 'انسجل تسديد ' + this.fmt(a) + (cur.source === 'safe' ? ' من الخزنة.' : ' إلكتروني.') });
+      },
+      batches: returnable.map((b) => Object.assign({ label: b.label + ' · المتبقي ' + b.remaining + ' ' + b.unit, pick: () => this.setState({ ret: Object.assign({}, this.state.ret, { batch: b.id }) }) }, this.pill(b.id === ret.batch))),
+      ret: { qty: ret.qty, reason: ret.reason },
+      onRetQty: (e) => this.setState({ ret: Object.assign({}, this.state.ret, { qty: e.target.value }) }),
+      onRetReason: (e) => this.setState({ ret: Object.assign({}, this.state.ret, { reason: e.target.value }) }),
+      retAmountText: retAmount > 0 ? 'قيمة المرتجع ' + this.fmt(retAmount) + ' تنزل من اللي علينا للمورد.' : '',
+      retProblem: !!retProblemText, retProblemText: retProblemText, retDisabled: !!retProblemText, retBg: retProblemText ? '#6B7480' : '#0B6E69',
+      confirmReturn: () => {
+        const cur = this.state.ret;
+        const b = this.batches().find((x) => x.id === cur.batch && x.sup === this.state.supId);
+        const q = this.qty(cur.qty);
+        if (!b || q === null || q <= 0 || q > b.remaining || !cur.reason.trim()) { return; }
+        const amount = Math.round(q * b.cost);
+        const id = 'e' + (this.state.seq + 1);
+        const refMatch = b.label.match(/فاتورة (\S+)/);
+        this.setState({ entries: this.entryList().concat([{ id: id, sup: this.state.supId, date: this.today(), type: 'return', amount: amount, ref: refMatch ? refMatch[1] : '', reason: cur.reason.trim() }]), batchList: this.batches().map((x) => x.id === b.id ? Object.assign({}, x, { remaining: Math.round((x.remaining - q) * 100) / 100 }) : x), seq: this.state.seq + 1, action: '', msg: 'انسجل مرتجع ' + q + ' ' + b.unit + ' بقيمة ' + this.fmt(amount) + '. نقص من المخزون ومن حساب المورد.' });
+      },
+      invSuppliers: sups.map((p) => Object.assign({ name: p.name, pick: () => this.setInv({ sup: p.id }) }, this.pill(p.id === inv.sup))),
+      inv: { number: inv.number, date: inv.date, partial: inv.partial, bank: inv.bank },
+      onNumber: (e) => this.setInv({ number: e.target.value }), onDate: (e) => this.setInv({ date: e.target.value }),
+      onPartial: (e) => this.setInv({ partial: e.target.value }), onInvBank: (e) => this.setInv({ bank: e.target.value }),
+      lines: lines,
+      addLine: () => { const cur = this.invoice(); this.setInv({ lines: cur.lines.concat([{ id: 'l' + Date.now(), material: 'botox', qty: '', cost: '', expiry: '' }]) }); },
+      proofMissing: !inv.proof, proofAttached: inv.proof, attach: () => this.setInv({ proof: true }), detach: () => this.setInv({ proof: false }),
+      payModes: modes, showPartial: mode === 'partial', showSource: showSource, showInvBank: showSource && inv.source === 'bank',
+      invSources: [Object.assign({ label: 'من الخزنة', pick: () => this.setInv({ source: 'safe' }) }, this.pill(inv.source === 'safe')), Object.assign({ label: 'إلكتروني', pick: () => this.setInv({ source: 'bank' }) }, this.pill(inv.source === 'bank'))],
+      hasErrors: touched && st.errors.length > 0, errors: st.errors.map((t) => ({ text: t })),
+      hasInvMsg: s.invMsg.length > 0 && !touched, invMsgLines: s.invMsg.map((t) => ({ text: t })),
+      saveInvoice: () => this.saveInvoice(), saveDisabled: st.errors.length > 0, saveBg: st.errors.length > 0 ? '#6B7480' : '#0B6E69',
+      sum: { total: this.fmt(st.total), paid: this.fmt(st.paid), owed: this.fmt(st.owed), safe: this.fmt(s.safe) }
+    };
+  }
+}
+</script>
+</body>
+</html>

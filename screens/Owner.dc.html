@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>شاشة المالك</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+input{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="min-height: 100vh; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6">
+
+  <header style="background: #FFFFFF; border-bottom: 1px solid #D9DEE5">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 0px">
+        <strong style="font-size: 18px; font-weight: 700">المالك: [اسم المالك]</strong>
+        <span style="color: #55606E; font-size: 13px">[اسم العيادة] · أرقام تجريبية للعرض</span>
+      </div>
+      <div role="group" aria-label="الفترة" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <sc-for list="{{periods}}" as="pd" hint-placeholder-count="2">
+          <button type="button" onClick="{{pd.pick}}" aria-pressed="{{pd.selected}}" style="min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; background: {{pd.bg}}; color: {{pd.fg}}; border: 2px solid {{pd.border}}">{{pd.label}}</button>
+        </sc-for>
+      </div>
+    </div>
+  </header>
+
+  <div style="max-width: 1360px; margin: 0 auto; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
+
+    <sc-if value="{{hasAlerts}}" hint-placeholder-val="{{true}}">
+      <section aria-label="تنبيهات" style="background: #FBEFD9; border: 1px solid #C98A2B; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+        <strong style="font-size: 14px; color: #6B3A06">تنبيهات ({{alertCount}})</strong>
+        <sc-for list="{{alerts}}" as="al" hint-placeholder-count="2">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px">
+            <span style="flex: 1 1 260px; min-width: 0; font-size: 14px; font-weight: 600; color: #17202A">{{al.text}}</span>
+            <a href="{{al.href}}" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2">{{al.label}}</a>
+          </div>
+        </sc-for>
+      </section>
+    </sc-if>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+
+      <section style="flex: 1 1 380px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; flex-direction: column; gap: 0px">
+          <span style="font-size: 14px; font-weight: 600; color: #55606E">ربح الإدارة · {{periodLabel}}</span>
+          <span style="font-size: 52px; font-weight: 600; line-height: 1.25">{{profit}}</span>
+          <span style="font-size: 14px; color: #55606E">دينار عراقي</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-variant-numeric: tabular-nums; border-top: 1px solid #D9DEE5; padding-top: 12px">
+          <sc-for list="{{statement}}" as="ln" hint-placeholder-count="5">
+            <div style="display: flex; justify-content: space-between; gap: 12px"><span>{{ln.label}}</span><span>{{ln.value}}</span></div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="flex: 999 1 520px; min-width: 0; display: flex; flex-wrap: wrap; gap: 12px; align-content: flex-start">
+        <sc-for list="{{tiles}}" as="tl" hint-placeholder-count="4">
+          <div style="flex: 1 1 220px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 14px; font-weight: 600; color: #55606E">{{tl.label}}</span>
+            <span style="font-size: 28px; font-weight: 600; line-height: 1.3">{{tl.value}}</span>
+            <span style="font-size: 13px; color: #55606E">{{tl.note}}</span>
+          </div>
+        </sc-for>
+      </section>
+
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+      <section style="flex: 999 1 520px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; flex-direction: column; gap: 0px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">إيراد كل خدمة</h2>
+          <span style="font-size: 13px; color: #55606E">الخدمات المنفذة · {{periodLabel}} · بالدينار</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <sc-for list="{{bars}}" as="b" hint-placeholder-count="5">
+            <div title="{{b.tip}}" style="display: flex; align-items: center; gap: 12px">
+              <span style="flex: 0 0 96px; font-size: 14px; font-weight: 600">{{b.label}}</span>
+              <div style="flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 8px; border-inline-start: 1px solid #D9DEE5">
+                <div style="width: {{b.w}}; height: 20px; background: #0B6E69; border-radius: 4px 0 0 4px"></div>
+                <span style="flex: none; font-size: 13px; color: #17202A; font-variant-numeric: tabular-nums">{{b.value}}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section id="withdrawals" style="flex: 1 1 380px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">سحوبات بانتظار موافقتك</h2>
+        <sc-if value="{{noWithdrawals}}" hint-placeholder-val="{{false}}">
+          <span style="font-size: 14px; color: #55606E">ما أكو سحوبات بانتظار الموافقة.</span>
+        </sc-if>
+        <sc-for list="{{withdrawals}}" as="wd" hint-placeholder-count="1">
+          <div style="border: 1px solid #D9DEE5; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline">
+              <span style="font-size: 15px; font-weight: 700">سحب باسم {{wd.name}}</span>
+              <span style="font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums">{{wd.amount}}</span>
+            </div>
+            <span style="font-size: 13px; color: #55606E">سجله المدير [اسم المدير] · {{wd.date}}</span>
+            <sc-if value="{{wd.isPending}}" hint-placeholder-val="{{true}}">
+              <div style="display: flex; flex-wrap: wrap; gap: 10px">
+                <button type="button" onClick="{{wd.approve}}" style="min-height: 44px; padding: 0 18px; background: #0B6E69; color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer">موافق، أني سحبته</button>
+                <button type="button" onClick="{{wd.reject}}" style="min-height: 44px; padding: 0 18px; background: #FFFFFF; color: #9B1C1C; border: 1px solid #9B1C1C; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">ما سحبته</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{wd.isClosed}}" hint-placeholder-val="{{false}}">
+              <span style="align-self: flex-start; font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: 6px; background: {{wd.chipBg}}; color: {{wd.chipFg}}">{{wd.chip}}</span>
+            </sc-if>
+          </div>
+        </sc-for>
+      </section>
+
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+      <section id="doctor-pay" style="flex: 1 1 400px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">رواتب الأطباء والمدير</h2>
+          <span style="font-size: 13px; color: #55606E">انت وحدك تحدد راتب الطبيب ونسبته على كشفياته، وراتب المدير.</span>
+        </div>
+        <sc-for list="{{staff}}" as="p" hint-placeholder-count="3">
+          <div style="border: 1px solid {{p.border}}; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+              <span style="flex: 1 1 180px; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 15px; font-weight: 700">{{p.name}}</span>
+                <span style="font-size: 13px; color: #3D4652">{{p.detail}}</span>
+              </span>
+              <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{p.chipBg}}; color: {{p.chipFg}}">{{p.chip}}</span>
+              <button type="button" onClick="{{p.open}}" style="flex: none; min-height: 44px; padding: 0 16px; background: {{p.btnBg}}; color: {{p.btnFg}}; border: 1px solid {{p.btnBorder}}; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">{{p.btnLabel}}</button>
+            </div>
+            <sc-if value="{{p.isOpen}}" hint-placeholder-val="{{false}}">
+              <div style="background: #F4F5F7; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 10px">
+                <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                  <span>الراتب الشهري (د.ع)</span>
+                  <input type="text" inputmode="numeric" value="{{pf.salary}}" onChange="{{onPaySalary}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+                </label>
+                <sc-if value="{{p.isDoctor}}" hint-placeholder-val="{{true}}">
+                  <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                    <span>نسبة الكشفيات % (0 = بدون نسبة)</span>
+                    <input type="text" inputmode="numeric" value="{{pf.pct}}" onChange="{{onPayPct}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+                  </label>
+                </sc-if>
+                <sc-if value="{{payProblem}}" hint-placeholder-val="{{false}}">
+                  <span role="alert" style="font-size: 13px; font-weight: 600; color: #7A1212">{{payProblemText}}</span>
+                </sc-if>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px">
+                  <button type="button" onClick="{{savePay}}" disabled="{{paySaveDisabled}}" style="min-height: 44px; padding: 0 18px; background: {{paySaveBg}}; color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer">حفظ</button>
+                  <button type="button" onClick="{{closePay}}" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">رجوع</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <sc-if value="{{hasPayMsg}}" hint-placeholder-val="{{false}}">
+          <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{payMsg}}</div>
+        </sc-if>
+      </section>
+
+      <section id="expenses" style="flex: 999 1 520px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">المصاريف · {{periodLabel}}</h2>
+          <span style="font-size: 13px; color: #55606E">المدير يسجلها وما يگدر يعدلها بعد الحفظ. انت وحدك تعدلها، والتعديل يحتاج سبب وينسجل بسجل الحركات.</span>
+        </div>
+        <sc-for list="{{expenses}}" as="x" hint-placeholder-count="3">
+          <div style="border: 1px solid #D9DEE5; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+              <bdi dir="ltr" style="flex: none; font-size: 13px; color: #55606E; min-width: 78px">{{x.date}}</bdi>
+              <span style="flex: 1 1 180px; min-width: 0; display: flex; flex-direction: column; gap: 0px">
+                <span style="font-size: 15px; font-weight: 700">{{x.cat}}</span>
+                <span style="font-size: 13px; color: #3D4652">{{x.notes}}</span>
+              </span>
+              <sc-if value="{{x.edited}}" hint-placeholder-val="{{false}}">
+                <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: #FBEFD9; color: #8A4B08">عُدّل · كان {{x.was}}</span>
+              </sc-if>
+              <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{x.chipBg}}; color: {{x.chipFg}}">{{x.chip}}</span>
+              <span style="flex: none; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 100px; text-align: right">{{x.amount}}</span>
+              <button type="button" onClick="{{x.open}}" style="flex: none; min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">تعديل</button>
+            </div>
+            <sc-if value="{{x.isOpen}}" hint-placeholder-val="{{false}}">
+              <div style="background: #F4F5F7; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 10px">
+                <div role="group" aria-label="نوع المصروف" style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <sc-for list="{{expCats}}" as="c" hint-placeholder-count="8">
+                    <button type="button" onClick="{{c.pick}}" aria-pressed="{{c.selected}}" style="min-height: 44px; padding: 0 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; background: {{c.bg}}; color: {{c.fg}}; border: 2px solid {{c.border}}">{{c.label}}</button>
+                  </sc-for>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 12px">
+                  <label style="flex: 1 1 150px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                    <span>المبلغ (د.ع)</span>
+                    <input type="text" inputmode="numeric" value="{{ef.amount}}" onChange="{{onExpAmount}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+                  </label>
+                  <label style="flex: 1 1 150px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                    <span>التاريخ</span>
+                    <input type="date" value="{{ef.date}}" onChange="{{onExpDate}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+                  </label>
+                </div>
+                <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                  <span>الملاحظة</span>
+                  <input type="text" value="{{ef.notes}}" onChange="{{onExpNotes}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                  <span>سبب التعديل (إلزامي)</span>
+                  <input type="text" value="{{ef.reason}}" onChange="{{onExpReason}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+                </label>
+                <span style="font-size: 12px; color: #55606E">طريقة الدفع وصورة الإثبات ما تتغير. {{x.safeNote}}</span>
+                <sc-if value="{{expProblem}}" hint-placeholder-val="{{false}}">
+                  <span role="alert" style="font-size: 13px; font-weight: 600; color: #7A1212">{{expProblemText}}</span>
+                </sc-if>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px">
+                  <button type="button" onClick="{{saveExp}}" disabled="{{expSaveDisabled}}" style="min-height: 44px; padding: 0 18px; background: {{expSaveBg}}; color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer">حفظ التعديل</button>
+                  <button type="button" onClick="{{closeExp}}" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">رجوع</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <sc-if value="{{noExpenses}}" hint-placeholder-val="{{false}}">
+          <span style="font-size: 14px; color: #55606E">ما أكو مصاريف بهالفترة.</span>
+        </sc-if>
+        <sc-if value="{{hasExpMsg}}" hint-placeholder-val="{{false}}">
+          <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{expMsg}}</div>
+        </sc-if>
+      </section>
+
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+      <section style="flex: 1 1 380px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">تقييمات الزبائن</h2>
+        <div style="overflow-x: auto">
+          <table style="width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums">
+            <thead>
+              <tr style="color: #55606E">
+                <th scope="col" style="text-align: start; padding: 8px 8px; border-bottom: 2px solid #D9DEE5; font-weight: 600">الخدمة</th>
+                <th scope="col" style="text-align: start; padding: 8px 8px; border-bottom: 2px solid #D9DEE5; font-weight: 600">المعدل من 5</th>
+                <th scope="col" style="text-align: start; padding: 8px 8px; border-bottom: 2px solid #D9DEE5; font-weight: 600">عدد التقييمات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ratings}}" as="rt" hint-placeholder-count="3">
+                <tr>
+                  <td style="padding: 10px 8px; border-bottom: 1px solid #D9DEE5; font-weight: 600">{{rt.label}}</td>
+                  <td style="padding: 10px 8px; border-bottom: 1px solid #D9DEE5">{{rt.avg}}</td>
+                  <td style="padding: 10px 8px; border-bottom: 1px solid #D9DEE5">{{rt.count}}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section style="flex: 999 1 520px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">سجل الحركات</h2>
+        <sc-for list="{{audit}}" as="au" hint-placeholder-count="4">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; border: 1px solid #D9DEE5; border-radius: 10px; padding: 12px 14px">
+            <span style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+              <span style="font-size: 15px; font-weight: 600">{{au.what}}</span>
+              <span style="font-size: 13px; color: #55606E">{{au.who}} · {{au.when}}</span>
+            </span>
+            <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{au.bg}}; color: {{au.fg}}">{{au.tag}}</span>
+          </div>
+        </sc-for>
+      </section>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":2300}}'>
+class Component extends DCLogic {
+  state = { period: 'this', wd: {}, staff: null, payEdit: '', pf: { salary: '', pct: '' }, payMsg: '', exp: null, expEdit: '', ef: null, expMsg: '', safeAdj: 0, audit: [] };
+
+  today() { return '2026-11-14'; }
+  num(n) { return Number(n).toLocaleString('en-US'); }
+  fmt(n) { return this.num(n) + ' د.ع'; }
+  ltr(text) { return '\u2066' + text + '\u2069'; }
+  digits(v) { return String(v == null ? '' : v).trim().replace(/[٠-٩]/g, (c) => String(c.charCodeAt(0) - 1632)).replace(/[۰-۹]/g, (c) => String(c.charCodeAt(0) - 1776)); }
+  whole(v) { const t = this.digits(v); return /^\d+$/.test(t) && Number.isSafeInteger(Number(t)) ? Number(t) : null; }
+  isDate(v) { return /^\d{4}-\d{2}-\d{2}$/.test(v); }
+  dateText(iso) { const p = String(iso).split('-'); return p.length === 3 ? Number(p[2]) + '/' + Number(p[1]) + '/' + p[0] : ''; }
+  pill(selected) { return { selected: selected, bg: selected ? '#17202A' : '#FFFFFF', fg: selected ? '#FFFFFF' : '#17202A', border: selected ? '#17202A' : '#AEB6C2' }; }
+  compact(n) {
+    if (n >= 1000000) { return (Math.round(n / 10000) / 100) + ' مليون'; }
+    if (n >= 1000) { return (Math.round(n / 100) / 10) + ' ألف'; }
+    return String(n);
+  }
+
+  cats() { return ['إيجار', 'كهرباء', 'ماء', 'وقود المولدة', 'صيانة', 'مستلزمات العيادة', 'إعلان ودعاية', 'أخرى']; }
+  staffSeed() {
+    return [
+      { id: 'd1', name: 'د. [الطبيب الأول]', role: 'doctor', salary: 3000000, pct: 10, base: 3000000 },
+      { id: 'd2', name: 'د. [الطبيب الثاني]', role: 'doctor', salary: null, pct: 0, base: 0 },
+      { id: 'mgr', name: '[اسم المدير]', role: 'manager', salary: 1000000, pct: 0, base: 1000000 }
+    ];
+  }
+  expSeed() {
+    return [
+      { id: 'x1', date: '2026-11-10', cat: 'كهرباء', amount: 120000, notes: 'فاتورة تشرين الأول', source: 'safe', bank: '', was: null },
+      { id: 'x2', date: '2026-11-05', cat: 'إيجار', amount: 1500000, notes: 'إيجار تشرين الثاني', source: 'bank', bank: '[اسم المصرف]', was: null },
+      { id: 'x3', date: '2026-11-03', cat: 'وقود المولدة', amount: 200000, notes: '', source: 'safe', bank: '', was: null },
+      { id: 'x4', date: '2026-10-28', cat: 'صيانة', amount: 85000, notes: 'صيانة جهاز التبريد', source: 'safe', bank: '', was: null },
+      { id: 'x5', date: '2026-10-01', cat: 'إيجار', amount: 1500000, notes: 'إيجار تشرين الأول', source: 'bank', bank: '[اسم المصرف]', was: null }
+    ];
+  }
+  staffList() { return this.state.staff || this.staffSeed(); }
+  expList() { return this.state.exp || this.expSeed(); }
+  periodSets() {
+    return {
+      this: { label: 'هذا الشهر', month: '2026-11', materials: 4200000, salaries: 5500000, waste: 150000, unexecuted: 96000, safe: 2150000, collected: 18450000, services: [['ليزر', 7600000], ['بوتكس', 5400000], ['فلر', 2800000], ['تنظيف بشرة', 1300000], ['كشفيات', 800000]] },
+      last: { label: 'الشهر الماضي', month: '2026-10', materials: 3900000, salaries: 5500000, waste: 90000, unexecuted: 0, safe: 1740000, collected: 16200000, services: [['ليزر', 6900000], ['بوتكس', 4950000], ['فلر', 2400000], ['تنظيف بشرة', 1100000], ['كشفيات', 700000]] }
+    };
+  }
+  salaryDelta() { return this.staffList().reduce((t, p) => t + (p.salary || 0) - p.base, 0); }
+  approvedWithdrawal() { return this.state.wd.w1 === 'approved' ? 1000000 : 0; }
+  safeNow() { return this.periodSets().this.safe - this.approvedWithdrawal() + this.state.safeAdj; }
+  addAudit(what, tag, bg, fg) { return [{ what: what, who: 'المالك [اسم المالك]', when: 'اليوم', tag: tag, bg: bg, fg: fg }].concat(this.state.audit); }
+
+  payErrors() {
+    const pf = this.state.pf; const cur = this.staffList().find((x) => x.id === this.state.payEdit);
+    const out = [];
+    const sal = this.whole(pf.salary);
+    if (sal === null || sal < 1) { out.push('اكتب راتب صحيح بالدينار: رقم صحيح أكبر من صفر.'); }
+    if (cur && cur.role === 'doctor') { const p = this.whole(pf.pct); if (p === null || p > 100) { out.push('نسبة الكشفيات رقم صحيح من 0 إلى 100.'); } }
+    return out;
+  }
+  expErrors() {
+    const ef = this.state.ef; const cur = this.expList().find((x) => x.id === this.state.expEdit);
+    const out = [];
+    if (!ef || !cur) { return ['—']; }
+    const a = this.whole(ef.amount);
+    if (!this.cats().includes(ef.cat)) { out.push('اختار نوع المصروف.'); }
+    if (a === null || a < 1) { out.push('اكتب مبلغ صحيح بالدينار: رقم صحيح أكبر من صفر.'); }
+    if (!this.isDate(ef.date) || ef.date > this.today()) { out.push('التاريخ لازم يكون اليوم أو قبله.'); }
+    if (!ef.reason.trim()) { out.push('اكتب سبب التعديل.'); }
+    if (a !== null && cur.source === 'safe' && a - cur.amount > this.safeNow()) { out.push('رصيد الخزنة ' + this.fmt(this.safeNow()) + ' ما يكفي للفرق.'); }
+    if (out.length === 0 && a === cur.amount && ef.cat === cur.cat && ef.date === cur.date && ef.notes.trim() === cur.notes) { out.push('ما تغير شي. غير حقل واحد على الأقل.'); }
+    return out;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const period = s.period === 'last' ? 'last' : 'this';
+    const sets = this.periodSets();
+    const d = sets[period];
+    const exps = this.expList();
+    const expShown = exps.filter((x) => x.date.slice(0, 7) === d.month).sort((a, b) => a.date < b.date ? 1 : -1);
+    const expenseSum = expShown.reduce((t, x) => t + x.amount, 0);
+    const salaries = d.salaries + (period === 'this' ? this.salaryDelta() : 0);
+    let revenue = 0;
+    d.services.forEach((x) => { revenue += x[1]; });
+    const profit = revenue - d.materials - salaries - expenseSum - d.waste;
+    const max = Math.max.apply(null, d.services.map((x) => x[1]));
+    const amber = { bg: '#FBEFD9', fg: '#8A4B08' };
+    const red = { bg: '#FBEAEA', fg: '#7A1212' };
+    const calm = { bg: '#ECEFF3', fg: '#3D4652' };
+
+    const wdState = s.wd;
+    const wdData = [{ id: 'w1', name: '[اسم المستلم]', amount: 1000000, date: 'اليوم' }];
+    const withdrawals = wdData.map((w) => {
+      const cur = wdState[w.id];
+      const ok = cur === 'approved';
+      return {
+        name: w.name, amount: this.num(w.amount) + ' د.ع', date: w.date, isPending: !cur, isClosed: !!cur,
+        chip: ok ? 'وافقت · انخصم من الخزنة' : 'رفضت · يرجع للمدير', chipBg: ok ? '#E3F1F0' : '#FBEAEA', chipFg: ok ? '#084F4B' : '#7A1212',
+        approve: () => this.setState({ wd: Object.assign({}, this.state.wd, { w1: 'approved' }) }),
+        reject: () => this.setState({ wd: Object.assign({}, this.state.wd, { w1: 'rejected' }) })
+      };
+    });
+    const safe = period === 'this' ? this.safeNow() : d.safe;
+
+    const staffRaw = this.staffList();
+    const missing = staffRaw.filter((p) => p.role === 'doctor' && p.salary == null);
+    const alerts = missing.map((p) => ({ text: p.name + ' بدون راتب محدد، وما يتسدد راتبه لحد ما تحدده.', href: '#doctor-pay', label: 'حدد الراتب' }));
+    if (!s.wd.w1) { alerts.push({ text: 'سحب بانتظار موافقتك: ' + this.fmt(1000000), href: '#withdrawals', label: 'راجعه' }); }
+
+    const labels = { doctor: 'طبيب', manager: 'مدير' };
+    const pf = s.pf;
+    const payErrs = this.payErrors();
+    const staff = staffRaw.slice().sort((a, b) => (a.salary == null ? 0 : 1) - (b.salary == null ? 0 : 1)).map((p) => {
+      const unset = p.salary == null;
+      let detail = labels[p.role] + ' · الراتب ' + (unset ? 'ما انحدد' : this.fmt(p.salary));
+      if (p.role === 'doctor' && !unset) { detail += ' · نسبة الكشفيات ' + (p.pct ? p.pct + '%' : 'بدون'); }
+      const open = s.payEdit === p.id;
+      return {
+        name: p.name, detail: detail, isDoctor: p.role === 'doctor', isOpen: open,
+        border: unset ? '#C98A2B' : '#D9DEE5', chip: unset ? 'الراتب ما انحدد' : 'محدد', chipBg: unset ? amber.bg : '#E3F1F0', chipFg: unset ? amber.fg : '#084F4B',
+        btnLabel: unset ? 'تحديد الراتب' : 'تعديل', btnBg: unset ? '#0B6E69' : '#FFFFFF', btnFg: unset ? '#FFFFFF' : '#17202A', btnBorder: unset ? '#0B6E69' : '#AEB6C2',
+        open: () => this.setState({ payEdit: p.id, pf: { salary: p.salary == null ? '' : String(p.salary), pct: String(p.pct || 0) }, payMsg: '' })
+      };
+    });
+
+    const curExp = exps.find((x) => x.id === s.expEdit);
+    const ef = s.ef || { cat: '', amount: '', date: '', notes: '', reason: '' };
+    const expErrs = this.expErrors();
+    const expProblemText = s.expEdit && ef.reason !== '' ? expErrs[0] || '' : (s.expEdit && expErrs.length && expErrs[0] !== 'اكتب سبب التعديل.' ? expErrs[0] : '');
+    const expenses = expShown.map((x) => {
+      const open = s.expEdit === x.id;
+      return {
+        date: this.dateText(x.date), cat: x.cat, notes: x.notes || 'بدون ملاحظة', amount: this.num(x.amount), edited: x.was !== null, was: x.was !== null ? this.num(x.was) : '', isOpen: open,
+        chip: x.source === 'safe' ? 'من الخزنة' : 'إلكتروني · ' + x.bank, chipBg: x.source === 'safe' ? '#ECEFF3' : '#E4EDF8', chipFg: x.source === 'safe' ? '#3D4652' : '#1D4E89',
+        safeNote: x.source === 'safe' ? 'فرق المبلغ ينعكس على رصيد الخزنة.' : 'مصروف إلكتروني، ما يمس الخزنة.',
+        open: () => this.setState({ expEdit: x.id, ef: { cat: x.cat, amount: String(x.amount), date: x.date, notes: x.notes, reason: '' }, expMsg: '' })
+      };
+    });
+
+    const auditStatic = [
+      Object.assign({ what: 'نقص 5,000 د.ع باستلام شفت المساء', who: 'المدير [اسم المدير]', when: 'اليوم', tag: 'نقص' }, red),
+      Object.assign({ what: 'خصم 5,000 د.ع على وصل ' + this.ltr('2026-00126'), who: 'وافق المدير، طلبه الكاشير', when: 'اليوم', tag: 'خصم' }, amber),
+      Object.assign({ what: 'استرجاع وصل ' + this.ltr('2026-00119') + ' كاش', who: 'الكاشير [اسم الكاشير]', when: 'أمس', tag: 'استرجاع' }, amber),
+      Object.assign({ what: 'تغيير سعر ليزر الوجه من 25,000 إلى 30,000', who: 'المدير [اسم المدير]', when: 'قبل 3 أيام', tag: 'سعر' }, calm)
+    ];
+
+    return {
+      periods: [
+        Object.assign({ label: 'هذا الشهر', pick: () => this.setState({ period: 'this', payEdit: '', expEdit: '' }) }, this.pill(period === 'this')),
+        Object.assign({ label: 'الشهر الماضي', pick: () => this.setState({ period: 'last', payEdit: '', expEdit: '' }) }, this.pill(period === 'last'))
+      ],
+      periodLabel: d.label,
+      hasAlerts: alerts.length > 0, alertCount: alerts.length, alerts: alerts,
+      profit: this.compact(profit),
+      statement: [
+        { label: 'إيراد الخدمات المنفذة', value: this.num(revenue) },
+        { label: 'كلفة المواد', value: '− ' + this.num(d.materials) },
+        { label: 'الرواتب ونسب الأطباء', value: '− ' + this.num(salaries) },
+        { label: 'المصاريف', value: '− ' + this.num(expenseSum) },
+        { label: 'التالف', value: '− ' + this.num(d.waste) }
+      ],
+      tiles: [
+        { label: 'التحصيل', value: this.compact(d.collected), note: 'كل اللي استلمناه من الزبائن' },
+        { label: 'إيراد الخدمات المنفذة', value: this.compact(revenue), note: 'كشفيات وجلسات اكتملت' },
+        { label: 'مدفوع وما تنفذ', value: this.compact(d.unexecuted), note: 'جلسات اندفعت وبعدها ما اكتملت' },
+        { label: 'رصيد الخزنة', value: this.compact(safe), note: 'الكاش الموجود هسه' }
+      ],
+      bars: d.services.map((x) => ({ label: x[0], w: Math.max(2, Math.round(x[1] / max * 76)) + '%', value: this.compact(x[1]), tip: x[0] + ': ' + this.num(x[1]) + ' د.ع، ' + Math.round(x[1] / revenue * 100) + '% من الإيراد' })),
+      withdrawals: withdrawals, noWithdrawals: withdrawals.length === 0,
+      staff: staff, pf: { salary: pf.salary, pct: pf.pct },
+      onPaySalary: (e) => this.setState({ pf: Object.assign({}, this.state.pf, { salary: e.target.value }), payMsg: '' }),
+      onPayPct: (e) => this.setState({ pf: Object.assign({}, this.state.pf, { pct: e.target.value }), payMsg: '' }),
+      payProblem: payErrs.length > 0, payProblemText: payErrs[0] || '', paySaveDisabled: payErrs.length > 0, paySaveBg: payErrs.length > 0 ? '#6B7480' : '#0B6E69',
+      closePay: () => this.setState({ payEdit: '' }),
+      savePay: () => {
+        if (this.payErrors().length) { return; }
+        const st = this.state; const list = this.staffList(); const cur = list.find((x) => x.id === st.payEdit);
+        const sal = this.whole(st.pf.salary); const pct = cur.role === 'doctor' ? this.whole(st.pf.pct) : 0;
+        const verb = cur.salary == null ? 'تحديد' : 'تعديل';
+        const what = verb + ' راتب ' + cur.name + ': ' + this.fmt(sal) + (cur.role === 'doctor' ? ' · نسبة الكشفيات ' + (pct ? pct + '%' : 'بدون') : '');
+        this.setState({ staff: list.map((x) => x.id === cur.id ? Object.assign({}, x, { salary: sal, pct: pct }) : x), payEdit: '', payMsg: 'انحفظ. ' + (cur.salary == null && cur.role === 'doctor' ? 'هسه المدير يگدر يسدد راتبه.' : 'ينطبق على رواتب هذا الشهر.'), audit: this.addAudit(what, 'راتب', '#E4EDF8', '#1D4E89') });
+      },
+      hasPayMsg: !!s.payMsg && !s.payEdit, payMsg: s.payMsg,
+      expenses: expenses, noExpenses: expenses.length === 0,
+      expCats: this.cats().map((c) => Object.assign({ label: c, pick: () => this.setState({ ef: Object.assign({}, this.state.ef, { cat: c }), expMsg: '' }) }, this.pill(ef.cat === c))),
+      ef: { amount: ef.amount, date: ef.date, notes: ef.notes, reason: ef.reason },
+      onExpAmount: (e) => this.setState({ ef: Object.assign({}, this.state.ef, { amount: e.target.value }), expMsg: '' }),
+      onExpDate: (e) => this.setState({ ef: Object.assign({}, this.state.ef, { date: e.target.value }), expMsg: '' }),
+      onExpNotes: (e) => this.setState({ ef: Object.assign({}, this.state.ef, { notes: e.target.value }), expMsg: '' }),
+      onExpReason: (e) => this.setState({ ef: Object.assign({}, this.state.ef, { reason: e.target.value }), expMsg: '' }),
+      expProblem: !!expProblemText, expProblemText: expProblemText, expSaveDisabled: !!(s.expEdit && expErrs.length), expSaveBg: s.expEdit && expErrs.length ? '#6B7480' : '#0B6E69',
+      closeExp: () => this.setState({ expEdit: '' }),
+      saveExp: () => {
+        if (this.expErrors().length) { return; }
+        const st = this.state; const list = this.expList(); const cur = list.find((x) => x.id === st.expEdit);
+        const a = this.whole(st.ef.amount);
+        const changes = [];
+        if (a !== cur.amount) { changes.push('المبلغ من ' + this.num(cur.amount) + ' إلى ' + this.num(a)); }
+        if (st.ef.cat !== cur.cat) { changes.push('النوع من ' + cur.cat + ' إلى ' + st.ef.cat); }
+        if (st.ef.date !== cur.date) { changes.push('التاريخ من ' + this.dateText(cur.date) + ' إلى ' + this.dateText(st.ef.date)); }
+        if (st.ef.notes.trim() !== cur.notes) { changes.push('الملاحظة'); }
+        const what = 'تعديل مصروف ' + cur.cat + ': ' + changes.join('، ') + ' · السبب: ' + st.ef.reason.trim();
+        const updated = Object.assign({}, cur, { amount: a, cat: st.ef.cat, date: st.ef.date, notes: st.ef.notes.trim(), was: cur.was !== null ? cur.was : cur.amount });
+        this.setState({ exp: list.map((x) => x.id === cur.id ? updated : x), expEdit: '', safeAdj: st.safeAdj + (cur.source === 'safe' ? cur.amount - a : 0), expMsg: 'انحفظ التعديل وانسجل بسجل الحركات.' + (cur.source === 'safe' && a !== cur.amount ? ' رصيد الخزنة انعدل بالفرق.' : ''), audit: this.addAudit(what, 'تعديل مصروف', '#FBEFD9', '#8A4B08') });
+      },
+      hasExpMsg: !!s.expMsg && !s.expEdit, expMsg: s.expMsg,
+      ratings: [
+        { label: 'تنظيف بشرة', avg: '4.8', count: '19' },
+        { label: 'ليزر', avg: '4.7', count: '41' },
+        { label: 'بوتكس', avg: '4.5', count: '28' }
+      ],
+      audit: s.audit.concat(auditStatic).slice(0, 8)
+    };
+  }
+}
+</script>
+</body>
+</html>

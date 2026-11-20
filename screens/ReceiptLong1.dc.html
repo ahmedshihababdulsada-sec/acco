@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>وصل دفع A5 · طويل · صفحة 1</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div dir="rtl" style="width: 559px; height: 794px; box-sizing: border-box; padding: 40px; background: #FFFFFF; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 14px; line-height: 1.5; display: flex; flex-direction: column; gap: 12px">
+
+  <header style="display: flex; align-items: center; gap: 14px; padding-bottom: 12px; border-bottom: 2px solid #17202A">
+    <div style="flex: none; width: 56px; height: 56px; box-sizing: border-box; border: 1px dashed #5B6573; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #3D4652; text-align: center">[الشعار]</div>
+    <div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 0px">
+      <strong style="font-size: 22px; font-weight: 700; line-height: 1.3">[اسم العيادة]</strong>
+      <span style="font-size: 13px; color: #3D4652">[العنوان] · <bdi dir="ltr">[رقم الهاتف]</bdi></span>
+    </div>
+    <div style="flex: none; display: flex; flex-direction: column; gap: 0px; align-items: flex-start">
+      <span style="font-size: 13px; font-weight: 600">وصل دفع</span>
+      <bdi dir="ltr" style="font-size: 22px; font-weight: 700; line-height: 1.3; letter-spacing: 0.5px">{{r.number}}</bdi>
+    </div>
+  </header>
+
+  <section style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 24px; font-size: 14px">
+    <div><span style="color: #3D4652">التاريخ والوقت: </span><bdi dir="ltr">{{r.when}}</bdi></div>
+    <div><span style="color: #3D4652">الكاشير: </span>{{r.cashier}}</div>
+    <div><span style="color: #3D4652">الزبون: </span><strong style="font-weight: 700">{{r.customer}}</strong></div>
+    <div><span style="color: #3D4652">الرمز المميز: </span><bdi dir="ltr"><strong style="font-weight: 700">{{r.code}}</strong></bdi></div>
+  </section>
+
+  <section style="display: flex; flex-direction: column">
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 96px 128px; gap: 8px; padding: 6px 0; border-top: 1px solid #17202A; border-bottom: 2px solid #17202A; font-size: 13px; font-weight: 700">
+      <span>الخدمة</span>
+      <span>موعد الجلسة</span>
+      <span style="text-align: right">السعر (د.ع)</span>
+    </div>
+    <sc-for list="{{items}}" as="it" hint-placeholder-count="4">
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) 96px 128px; gap: 8px; align-items: start; padding: 8px 0; border-bottom: 1px solid #B8BEC8">
+        <span style="display: flex; flex-direction: column; gap: 0px; min-width: 0">
+          <strong style="font-size: 15px; font-weight: 600">{{it.title}}</strong>
+          <span style="font-size: 13px; color: #3D4652">{{it.sub}}</span>
+        </span>
+        <bdi dir="ltr" style="font-size: 14px">{{it.date}}</bdi>
+        <span style="direction: ltr; text-align: right; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">{{it.price}}</span>
+      </div>
+    </sc-for>
+    <div style="padding: 8px 0; border-bottom: 1px dashed #5B6573; font-size: 13px; font-weight: 600">يتبع في الصفحة 2: المجاميع وطريقة الدفع</div>
+  </section>
+
+  <footer style="margin-top: auto; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-top: 8px; border-top: 1px solid #17202A">
+    <strong style="font-size: 14px; font-weight: 700">شكراً لزيارتكم</strong>
+    <span style="font-size: 13px; font-weight: 600">صفحة 1 من 2</span>
+    <span style="font-size: 12px; color: #3D4652">[ملاحظة اختيارية من العيادة]</span>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":559,"height":794}}'>
+class Component extends DCLogic {
+  num(n) { return Number(n).toLocaleString('en-US'); }
+  ltr(text) { return '\u2066' + text + '\u2069'; }
+
+  renderVals() {
+    const items = [
+      { title: 'ليزر: وجه + إبط + يدين + رجلين', sub: 'جلسة 2 من 6 · عرض ' + this.ltr('20%'), date: '14/11/2026', price: 140000 },
+      { title: 'بوتكس', sub: this.ltr('2.5 cc × 75,000'), date: '14/11/2026', price: 187500 },
+      { title: 'فلر', sub: this.ltr('1 cc × 200,000'), date: '14/11/2026', price: 200000 },
+      { title: 'تنظيف بشرة', sub: 'جلسة 1 من 1', date: '14/11/2026', price: 30000 }
+    ];
+    return {
+      r: { number: '2026-00133', when: '14/11/2026 · 17:20', cashier: '[اسم الكاشير]', customer: 'زينب حسن', code: 'C-1010' },
+      items: items.map((it) => ({ title: it.title, sub: it.sub, date: it.date, price: this.num(it.price) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

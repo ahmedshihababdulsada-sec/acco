@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>شاشة الممرض</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="min-height: 100vh; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6">
+
+  <header style="background: #FFFFFF; border-bottom: 1px solid #D9DEE5">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 0px">
+        <strong style="font-size: 18px; font-weight: 700">الممرض: [اسم الممرض]</strong>
+        <span style="color: #55606E; font-size: 13px">[اسم العيادة] · جلسات اليوم</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <span style="background: #FBEFD9; color: #8A4B08; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600">بانتظار التنفيذ: {{waitingCount}}</span>
+        <span style="background: #E3F1F0; color: #084F4B; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600">مكتملة اليوم: {{doneCount}}</span>
+      </div>
+    </div>
+  </header>
+
+  <div style="max-width: 1360px; margin: 0 auto; padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; box-sizing: border-box">
+
+    <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+      <h1 style="margin: 0; font-size: 18px; font-weight: 700">جلسات مدفوعة بانتظار التنفيذ</h1>
+
+      <sc-if value="{{noWaiting}}" hint-placeholder-val="{{false}}">
+        <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; font-size: 15px; color: #55606E">ما باقي جلسات. كل الجلسات المدفوعة اليوم اكتملت.</div>
+      </sc-if>
+
+      <sc-for list="{{waiting}}" as="w" hint-placeholder-count="3">
+        <article style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+            <span style="flex: none; width: 44px; height: 44px; border-radius: 8px; background: #17202A; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700">{{w.seq}}</span>
+            <span style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 0px">
+              <span style="font-size: 16px; font-weight: 700">{{w.name}}</span>
+              <span style="font-size: 13px; color: #55606E">الرمز المميز {{w.code}}</span>
+            </span>
+            <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: #E3F1F0; color: #084F4B">مدفوع · وصل {{w.receipt}}</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 20px; font-weight: 700">{{w.title}}</span>
+            <span style="font-size: 14px; color: #55606E">{{w.detail}}</span>
+          </div>
+
+          <sc-if value="{{w.hasAlert}}" hint-placeholder-val="{{false}}">
+            <div role="alert" style="display: flex; align-items: center; gap: 10px; background: #FBEAEA; color: #7A1212; border: 1px solid #9B1C1C; border-radius: 10px; padding: 12px 14px; font-size: 15px; font-weight: 700">
+              <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7A1212" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none"><path d="M12 3.5l9.5 16.5h-19z"></path><path d="M12 10v4.5"></path><path d="M12 17.2v.3"></path></svg>
+              <span>تنبيه صحي: {{w.alert}}</span>
+            </div>
+          </sc-if>
+
+          <span style="font-size: 14px; color: #55606E">ينخصم من المخزون عند التأكيد: {{w.materials}}</span>
+
+          <sc-if value="{{w.isIdle}}" hint-placeholder-val="{{true}}">
+            <div style="display: flex; flex-wrap: wrap; gap: 10px">
+              <button type="button" onClick="{{w.ask}}" style="min-height: 52px; padding: 0 24px; background: #0B6E69; color: #FFFFFF; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer">اكتملت الجلسة</button>
+              <button type="button" style="min-height: 52px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer">رفع صورة قبل</button>
+              <button type="button" style="min-height: 52px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer">رفع صورة بعد</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{w.isConfirming}}" hint-placeholder-val="{{false}}">
+            <div style="background: #F4F5F7; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+              <span style="font-size: 15px; font-weight: 600">الجلسة تنفذت فعلاً؟ بعد التأكيد تنخصم المواد، وما تنسترجع فلوسها.</span>
+              <div style="display: flex; flex-wrap: wrap; gap: 10px">
+                <button type="button" onClick="{{w.confirm}}" style="min-height: 52px; padding: 0 24px; background: #0B6E69; color: #FFFFFF; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer">نعم، اكتملت</button>
+                <button type="button" onClick="{{w.cancel}}" style="min-height: 52px; padding: 0 20px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer">رجوع</button>
+              </div>
+            </div>
+          </sc-if>
+        </article>
+      </sc-for>
+    </main>
+
+    <aside style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 700">مكتملة اليوم</h2>
+
+      <sc-if value="{{noDone}}" hint-placeholder-val="{{true}}">
+        <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; font-size: 14px; color: #55606E">ما اكتملت جلسات بعد.</div>
+      </sc-if>
+
+      <sc-for list="{{done}}" as="dn" hint-placeholder-count="1">
+        <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 4px">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px">
+            <span style="font-size: 15px; font-weight: 700">{{dn.name}}</span>
+            <span style="font-size: 13px; color: #55606E; font-variant-numeric: tabular-nums">{{dn.time}}</span>
+          </div>
+          <span style="font-size: 14px">{{dn.title}} · {{dn.detail}}</span>
+          <span style="font-size: 13px; color: #55606E">انخصم من المخزون: {{dn.materials}}</span>
+        </div>
+      </sc-for>
+
+      <p style="margin: 0; font-size: 13px; color: #55606E">ضغطت «اكتملت» بالغلط؟ بلّغ المدير، هو اللي يگدر يتراجع عن التأكيد.</p>
+    </aside>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1100}}'>
+class Component extends DCLogic {
+  state = { st: {} };
+
+  sessions() {
+    return [
+      { id: 'n1', seq: 1, name: 'هدى كريم', code: 'C-0931', title: 'تنظيف بشرة', detail: 'جلسة 1 من 3', receipt: '2026-00125', materials: 'بدون مواد', alert: '' },
+      { id: 'n2', seq: 4, name: 'نور علي', code: 'C-0977', title: 'ليزر: وجه + إبط', detail: 'جلسة 2 من 6', receipt: '2026-00126', materials: 'جل ليزر، 1 قطعة', alert: '' },
+      { id: 'n3', seq: 5, name: 'زينب حسن', code: 'C-1010', title: 'بوتكس', detail: '2 cc', receipt: '2026-00127', materials: 'بوتكس، 2 cc', alert: 'حساسية من دواء [اسم الدواء]' },
+      { id: 'n4', seq: 5, name: 'زينب حسن', code: 'C-1010', title: 'ليزر: فول بدي', detail: 'جلسة 1 من 6', receipt: '2026-00127', materials: 'جل ليزر، 2 قطعة', alert: 'حساسية من دواء [اسم الدواء]' }
+    ];
+  }
+
+  ltr(text) { return '⁦' + text + '⁩'; }
+
+  set(id, obj) {
+    const s = this.state || {};
+    const st = Object.assign({}, s.st || {});
+    st[id] = Object.assign({}, st[id] || {}, obj);
+    this.setState({ st: st });
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const st = s.st || {};
+    const all = this.sessions();
+
+    const waiting = all.filter((x) => !(st[x.id] && st[x.id].done)).map((x) => {
+      const cur = st[x.id] || {};
+      return {
+        seq: x.seq, name: x.name, code: x.code, title: x.title, detail: x.detail,
+        receipt: this.ltr(x.receipt), materials: x.materials,
+        alert: x.alert, hasAlert: !!x.alert,
+        isIdle: !cur.confirming,
+        isConfirming: !!cur.confirming,
+        ask: () => this.set(x.id, { confirming: true }),
+        cancel: () => this.set(x.id, { confirming: false }),
+        confirm: () => {
+          const now = new Date();
+          const hh = String(now.getHours()).padStart(2, '0');
+          const mm = String(now.getMinutes()).padStart(2, '0');
+          this.set(x.id, { done: true, confirming: false, time: hh + ':' + mm });
+        }
+      };
+    });
+
+    const done = all.filter((x) => st[x.id] && st[x.id].done).map((x) => ({
+      name: x.name, title: x.title, detail: x.detail, materials: x.materials, time: st[x.id].time || ''
+    }));
+
+    return {
+      waiting: waiting,
+      done: done,
+      waitingCount: waiting.length,
+      doneCount: done.length,
+      noWaiting: waiting.length === 0,
+      noDone: done.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

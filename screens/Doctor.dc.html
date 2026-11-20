@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>شاشة الطبيب</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+input{font-family:inherit}
+textarea{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="min-height: 100vh; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6">
+
+  <header style="background: #FFFFFF; border-bottom: 1px solid #D9DEE5">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 0px">
+        <strong style="font-size: 18px; font-weight: 700">د. [اسم الطبيب]</strong>
+        <span style="color: #55606E; font-size: 13px">[اسم العيادة] · كشفيات اليوم</span>
+      </div>
+      <span style="background: #ECEFF3; color: #3D4652; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600">الأسماء والأسعار بيانات تجريبية للعرض</span>
+    </div>
+  </header>
+
+  <div style="max-width: 1360px; margin: 0 auto; padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; box-sizing: border-box">
+
+    <aside style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 15px; font-weight: 700">قائمة اليوم (دفعوا الكشفية)</h2>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <sc-for list="{{queue}}" as="c" hint-placeholder-count="3">
+          <button type="button" onClick="{{c.pick}}" aria-pressed="{{c.selected}}" style="width: 100%; text-align: start; display: flex; align-items: center; gap: 12px; padding: 10px 12px; min-height: 64px; background: {{c.bg}}; border: 2px solid {{c.border}}; border-radius: 10px; cursor: pointer; color: #17202A">
+            <span style="flex: none; width: 40px; height: 40px; border-radius: 8px; background: #17202A; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700">{{c.seq}}</span>
+            <span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+              <span style="font-size: 15px; font-weight: 600">{{c.name}}</span>
+              <span style="font-size: 13px; color: #55606E">{{c.code}} · {{c.kind}}</span>
+            </span>
+            <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{c.statusBg}}; color: {{c.statusFg}}">{{c.status}}</span>
+          </button>
+        </sc-for>
+      </div>
+    </aside>
+
+    <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+
+      <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 2px">
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">{{sel.name}}</h1>
+        <span style="color: #55606E; font-size: 14px">الرمز المميز {{sel.code}} · رقم التسلسل {{sel.seq}} · {{sel.kind}}</span>
+      </section>
+
+      <sc-if value="{{isDone}}" hint-placeholder-val="{{false}}">
+        <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 14px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; justify-content: space-between">
+          <span style="font-size: 15px; font-weight: 600">انتهت الكشفية. الخطة ظهرت عند الكاشير، والجلسات انحجزت تلقائياً للزبون.</span>
+          <button type="button" onClick="{{reopen}}" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">تعديل الخطة</button>
+        </div>
+      </sc-if>
+
+      <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; justify-content: space-between">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">المعلومات الصحية</h2>
+          <span style="font-size: 13px; color: #55606E">تظهر كتنبيه للممرض قبل تنفيذ الجلسة</span>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{health}}" as="h" hint-placeholder-count="3">
+            <label style="display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border: 1px solid {{h.border}}; background: {{h.bg}}; border-radius: 8px; cursor: pointer">
+              <input type="checkbox" checked="{{h.on}}" onChange="{{h.toggle}}" style="width: 20px; height: 20px; flex: none; accent-color: #9B1C1C">
+              <span style="font-size: 14px; font-weight: 600">{{h.label}}</span>
+            </label>
+          </sc-for>
+        </div>
+        <label for="hnotes" style="font-size: 13px; font-weight: 600; color: #55606E">التفاصيل</label>
+        <input id="hnotes" type="text" value="{{healthNotes}}" onChange="{{onHealthNotes}}" placeholder="مثال: حساسية من دواء معين" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+      </section>
+
+      <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">تاريخ الجلسات والصور</h2>
+        <sc-if value="{{noHistory}}" hint-placeholder-val="{{false}}">
+          <span style="font-size: 14px; color: #55606E">زبون جديد، ما عنده جلسات سابقة.</span>
+        </sc-if>
+        <sc-for list="{{history}}" as="hs" hint-placeholder-count="1">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #D9DEE5; border-radius: 10px">
+            <span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+              <span style="font-size: 15px; font-weight: 600">{{hs.title}}</span>
+              <span style="font-size: 13px; color: #55606E">{{hs.sub}}</span>
+            </span>
+            <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: #ECEFF3; color: #3D4652">مكتملة</span>
+          </div>
+        </sc-for>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+          <div style="width: 120px; height: 90px; border: 1px dashed #AEB6C2; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #55606E; background: #F4F5F7">[صورة قبل]</div>
+          <div style="width: 120px; height: 90px; border: 1px dashed #AEB6C2; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #55606E; background: #F4F5F7">[صورة بعد]</div>
+          <button type="button" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">رفع صورة</button>
+        </div>
+      </section>
+
+      <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">إضافة خدمة</h2>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{services}}" as="sv" hint-placeholder-count="4">
+            <button type="button" onClick="{{sv.pick}}" aria-pressed="{{sv.selected}}" style="min-height: 48px; min-width: 120px; padding: 0 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; background: {{sv.bg}}; color: {{sv.fg}}; border: 2px solid {{sv.border}}">{{sv.label}}</button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{showCc}}" hint-placeholder-val="{{true}}">
+          <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+            <div style="display: flex; flex-direction: column; gap: 4px">
+              <label for="cc" style="font-size: 13px; font-weight: 600; color: #55606E">الكمية لكل جلسة (cc)</label>
+              <input id="cc" type="number" min="0.5" step="0.5" value="{{cc}}" onChange="{{onCc}}" style="min-height: 44px; width: 140px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 16px; background: #FFFFFF; color: #17202A; box-sizing: border-box">
+            </div>
+            <span style="font-size: 14px; color: #55606E; padding-bottom: 10px">سعر الـ cc: {{unitPrice}}</span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{showLaser}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-for list="{{modes}}" as="md" hint-placeholder-count="2">
+                <button type="button" onClick="{{md.pick}}" aria-pressed="{{md.selected}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{md.bg}}; color: {{md.fg}}; border: 2px solid {{md.border}}">{{md.label}}</button>
+              </sc-for>
+            </div>
+            <sc-if value="{{showAreas}}" hint-placeholder-val="{{true}}">
+              <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                <sc-for list="{{areas}}" as="ar" hint-placeholder-count="5">
+                  <label style="display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border: 1px solid {{ar.border}}; background: {{ar.bg}}; border-radius: 8px; cursor: pointer">
+                    <input type="checkbox" checked="{{ar.on}}" onChange="{{ar.toggle}}" style="width: 20px; height: 20px; flex: none; accent-color: #0B6E69">
+                    <span style="font-size: 14px; font-weight: 600">{{ar.label}}</span>
+                    <span style="font-size: 13px; color: #55606E; font-variant-numeric: tabular-nums">{{ar.price}}</span>
+                  </label>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{showFixed}}" hint-placeholder-val="{{false}}">
+          <span style="font-size: 14px; color: #55606E">خدمة بسعر ثابت للجلسة.</span>
+        </sc-if>
+
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <label for="sessions" style="font-size: 13px; font-weight: 600; color: #55606E">عدد الجلسات</label>
+            <input id="sessions" type="number" min="1" max="12" step="1" value="{{sessions}}" onChange="{{onSessions}}" style="min-height: 44px; width: 110px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 16px; background: #FFFFFF; color: #17202A; box-sizing: border-box">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <label for="gap" style="font-size: 13px; font-weight: 600; color: #55606E">الفرق بين جلسة وجلسة</label>
+            <div style="display: flex; gap: 8px">
+              <input id="gap" type="number" min="1" max="52" step="1" value="{{gap}}" onChange="{{onGap}}" style="min-height: 44px; width: 90px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 16px; background: #FFFFFF; color: #17202A; box-sizing: border-box">
+              <sc-for list="{{units}}" as="u" hint-placeholder-count="2">
+                <button type="button" onClick="{{u.pick}}" aria-pressed="{{u.selected}}" style="min-height: 44px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{u.bg}}; color: {{u.fg}}; border: 2px solid {{u.border}}">{{u.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <label for="first" style="font-size: 13px; font-weight: 600; color: #55606E">تاريخ أول جلسة</label>
+            <input id="first" type="date" value="{{first}}" onChange="{{onFirst}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box">
+          </div>
+        </div>
+
+        <div style="background: #F4F5F7; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: baseline">
+            <strong style="font-size: 14px">تواريخ الجلسات</strong>
+            <span style="font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums">سعر الجلسة: {{pricePer}}</span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px">
+            <sc-for list="{{dates}}" as="dt" hint-placeholder-count="3">
+              <span style="display: flex; align-items: center; gap: 8px; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 8px; padding: 6px 10px; font-size: 14px; font-variant-numeric: tabular-nums">
+                <span style="font-weight: 700; color: #0B6E69">{{dt.n}}</span>
+                <span>{{dt.label}}</span>
+              </span>
+            </sc-for>
+          </div>
+          <span style="font-size: 13px; color: #55606E">الجمعة عطلة بالتجربة، فالجلسة تنتقل للسبت. الطبيب يگدر يعدل أي تاريخ بعد الإضافة.</span>
+        </div>
+
+        <sc-if value="{{showStock}}" hint-placeholder-val="{{false}}">
+          <div role="status" style="background: #FBEFD9; color: #6B3A06; border: 1px solid #C98A2B; border-radius: 10px; padding: 12px 16px; font-size: 14px; font-weight: 600">{{stockMsg}}</div>
+        </sc-if>
+
+        <button type="button" onClick="{{add}}" disabled="{{addDisabled}}" style="min-height: 48px; padding: 0 20px; background: {{addBg}}; color: #FFFFFF; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; align-self: flex-start">{{addLabel}}</button>
+      </section>
+
+      <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">خطة الزبون</h2>
+        <sc-if value="{{noPlan}}" hint-placeholder-val="{{true}}">
+          <span style="font-size: 14px; color: #55606E">ما انضافت خدمات بعد. الطبيب يگدر ينهي الكشفية بدون علاج.</span>
+        </sc-if>
+        <sc-for list="{{plan}}" as="p" hint-placeholder-count="1">
+          <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; padding: 12px; border: 1px solid #D9DEE5; border-radius: 10px">
+            <span style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+              <span style="font-size: 15px; font-weight: 600">{{p.title}}</span>
+              <span style="font-size: 13px; color: #55606E">{{p.detail}} · {{p.schedule}}</span>
+              <span style="font-size: 13px; color: #55606E; font-variant-numeric: tabular-nums">{{p.dates}}</span>
+            </span>
+            <span style="flex: none; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums">{{p.price}} للجلسة</span>
+            <button type="button" onClick="{{p.remove}}" style="flex: none; min-height: 44px; padding: 0 14px; background: #FFFFFF; color: #9B1C1C; border: 1px solid #9B1C1C; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">حذف</button>
+          </div>
+        </sc-for>
+
+        <label for="rx" style="font-size: 13px; font-weight: 600; color: #55606E; margin-top: 4px">العلاجات (يكتبها الطبيب)</label>
+        <textarea id="rx" rows="3" value="{{rx}}" onChange="{{onRx}}" placeholder="اكتب العلاجات والملاحظات هنا" style="padding: 10px 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; line-height: 1.6; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; resize: vertical"></textarea>
+
+        <sc-if value="{{isOpen}}" hint-placeholder-val="{{true}}">
+          <button type="button" onClick="{{finish}}" style="min-height: 56px; padding: 0 20px; background: #0B6E69; color: #FFFFFF; border: none; border-radius: 10px; font-size: 17px; font-weight: 700; cursor: pointer">إنهاء الكشفية</button>
+        </sc-if>
+      </section>
+
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1560}}'>
+class Component extends DCLogic {
+  state = {
+    sel: 'c',
+    d: { service: 'botox', cc: '2', mode: 'areas', areas: { face: true }, sessions: '1', gap: '4', unit: 'w', first: '2026-11-14' },
+    cust: {
+      b: { health: { allergy: true }, healthNotes: 'حساسية من دواء [اسم الدواء]' }
+    }
+  };
+
+  people() {
+    return [
+      { id: 'b', seq: 2, name: 'مريم جاسم', code: 'C-1004', kind: 'مراجعة مجانية',
+        history: [ { title: 'ليزر: وجه', sub: 'جلسة 1 من 6 · 7/11/2026 · د. [اسم الطبيب]' } ] },
+      { id: 'c', seq: 3, name: 'سارة محمد', code: 'C-1042', kind: 'كشفية', history: [] },
+      { id: 'f', seq: 6, name: 'رنا عبد الله', code: 'C-0990', kind: 'كشفية', history: [] }
+    ];
+  }
+
+  svc() {
+    return [
+      { id: 'botox', label: 'بوتكس', type: 'cc', unit: 75000, stock: 3 },
+      { id: 'filler', label: 'فلر', type: 'cc', unit: 200000, stock: 5 },
+      { id: 'laser', label: 'ليزر', type: 'laser' },
+      { id: 'facial', label: 'تنظيف بشرة', type: 'fixed', price: 30000 }
+    ];
+  }
+
+  zones() {
+    return [
+      { id: 'face', label: 'وجه', price: 25000 },
+      { id: 'armpit', label: 'إبط', price: 15000 },
+      { id: 'arms', label: 'يدين', price: 30000 },
+      { id: 'legs', label: 'رجلين', price: 45000 },
+      { id: 'back', label: 'ظهر', price: 40000 }
+    ];
+  }
+
+  num(n) { return Number(n).toLocaleString('en-US'); }
+  fmt(n) { return this.num(n) + ' د.ع'; }
+
+  cs(id) {
+    const s = this.state || {};
+    return (s.cust && s.cust[id]) || {};
+  }
+
+  patch(id, obj) {
+    const s = this.state || {};
+    const cust = Object.assign({}, s.cust || {});
+    cust[id] = Object.assign({}, cust[id] || {}, obj);
+    this.setState({ cust: cust });
+  }
+
+  draft(obj) {
+    const s = this.state || {};
+    this.setState({ d: Object.assign({}, s.d || {}, obj) });
+  }
+
+  clamp(v, lo, hi, dflt) {
+    const n = parseInt(v, 10);
+    if (isNaN(n)) { return dflt; }
+    return Math.max(lo, Math.min(hi, n));
+  }
+
+  makeDates(first, n, gap, unit) {
+    const wd = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    const day = 86400000;
+    let cur = new Date(first + 'T00:00:00Z');
+    if (isNaN(cur.getTime())) { return []; }
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      if (i > 0) { cur = new Date(cur.getTime() + gap * (unit === 'w' ? 7 : 1) * day); }
+      if (cur.getUTCDay() === 5) { cur = new Date(cur.getTime() + day); }
+      out.push(wd[cur.getUTCDay()] + ' ' + cur.getUTCDate() + '/' + (cur.getUTCMonth() + 1) + '/' + cur.getUTCFullYear());
+    }
+    return out;
+  }
+
+  renderVals() {
+    const s = this.state || {};
+    const d = s.d || {};
+    const all = this.people();
+    const selId = s.sel || 'c';
+    const c = all.filter((x) => x.id === selId)[0] || all[0];
+    const st = this.cs(c.id);
+    const on = '#17202A';
+
+    const queue = all.map((p) => {
+      const ps = this.cs(p.id);
+      const selected = p.id === selId;
+      let status = 'بانتظار الدخول';
+      let fg = '#8A4B08';
+      let bg = '#FBEFD9';
+      if (ps.done) { status = 'انتهت'; fg = '#3D4652'; bg = '#ECEFF3'; }
+      else if (selected || ps.opened) { status = 'عند الطبيب'; fg = '#084F4B'; bg = '#E3F1F0'; }
+      return {
+        seq: p.seq, name: p.name, code: p.code, kind: p.kind,
+        status: status, statusFg: fg, statusBg: bg, selected: selected,
+        bg: selected ? '#E3F1F0' : '#FFFFFF',
+        border: selected ? '#0B6E69' : '#D9DEE5',
+        pick: () => {
+          const cust = Object.assign({}, s.cust || {});
+          cust[p.id] = Object.assign({}, cust[p.id] || {}, { opened: true });
+          this.setState({ sel: p.id, cust: cust });
+        }
+      };
+    });
+
+    const hv = st.health || {};
+    const health = [
+      { id: 'allergy', label: 'حساسية' },
+      { id: 'pregnant', label: 'حمل' },
+      { id: 'chronic', label: 'أمراض مزمنة أو أدوية' }
+    ].map((h) => {
+      const isOn = !!hv[h.id];
+      return {
+        label: h.label, on: isOn,
+        bg: isOn ? '#FBEAEA' : '#FFFFFF',
+        border: isOn ? '#9B1C1C' : '#AEB6C2',
+        toggle: () => {
+          const next = Object.assign({}, hv);
+          next[h.id] = !isOn;
+          this.patch(c.id, { health: next });
+        }
+      };
+    });
+
+    const defs = this.svc();
+    const sv = defs.filter((x) => x.id === d.service)[0] || defs[0];
+    const pill = (selected) => ({
+      selected: selected,
+      bg: selected ? on : '#FFFFFF',
+      fg: selected ? '#FFFFFF' : on,
+      border: selected ? on : '#AEB6C2'
+    });
+
+    const services = defs.map((x) => Object.assign({ label: x.label, pick: () => this.draft({ service: x.id }) }, pill(x.id === sv.id)));
+
+    const zones = this.zones();
+    const picked = d.areas || {};
+    const isFull = d.mode === 'full';
+    const modes = [
+      Object.assign({ label: 'مناطق محددة', pick: () => this.draft({ mode: 'areas' }) }, pill(!isFull)),
+      Object.assign({ label: 'فول بدي', pick: () => this.draft({ mode: 'full' }) }, pill(isFull))
+    ];
+    const areas = zones.map((z) => {
+      const isOn = !!picked[z.id];
+      return {
+        label: z.label, price: this.fmt(z.price), on: isOn,
+        bg: isOn ? '#F4FAF9' : '#FFFFFF',
+        border: isOn ? '#0B6E69' : '#AEB6C2',
+        toggle: () => {
+          const next = Object.assign({}, picked);
+          next[z.id] = !isOn;
+          this.draft({ areas: next });
+        }
+      };
+    });
+
+    const ccNum = Math.max(0, parseFloat(d.cc) || 0);
+    const chosen = zones.filter((z) => picked[z.id]);
+    let price = 0;
+    let detail = '';
+    let title = sv.label;
+    let addDisabled = false;
+    if (sv.type === 'cc') {
+      price = Math.round(ccNum * sv.unit);
+      detail = ccNum + ' cc × ' + this.num(sv.unit);
+      addDisabled = ccNum <= 0;
+    } else if (sv.type === 'laser') {
+      if (isFull) {
+        price = 120000;
+        title = 'ليزر: فول بدي';
+        detail = 'كل الجسم';
+      } else {
+        chosen.forEach((z) => { price += z.price; });
+        title = 'ليزر: ' + (chosen.map((z) => z.label).join(' + ') || 'بدون مناطق');
+        detail = chosen.length + ' مناطق';
+        addDisabled = chosen.length === 0;
+      }
+    } else {
+      price = sv.price;
+      detail = 'سعر ثابت';
+    }
+
+    const n = this.clamp(d.sessions, 1, 12, 1);
+    const gap = this.clamp(d.gap, 1, 52, 1);
+    const unit = d.unit === 'd' ? 'd' : 'w';
+    const dateList = this.makeDates(d.first || '', n, gap, unit);
+    if (dateList.length === 0) { addDisabled = true; }
+    const schedule = n === 1 ? 'جلسة وحدة' : (n + ' جلسات، كل ' + gap + (unit === 'w' ? ' أسابيع' : ' أيام'));
+
+    const units = [
+      Object.assign({ label: 'أيام', pick: () => this.draft({ unit: 'd' }) }, pill(unit === 'd')),
+      Object.assign({ label: 'أسابيع', pick: () => this.draft({ unit: 'w' }) }, pill(unit === 'w'))
+    ];
+
+    const showStock = sv.type === 'cc' && ccNum > sv.stock;
+    const planList = st.plan || [];
+
+    let addLabel = 'إضافة للخطة';
+    if (addDisabled) {
+      addLabel = dateList.length === 0 ? 'حدد تاريخ أول جلسة' : (sv.type === 'laser' ? 'اختار منطقة وحدة على الأقل' : 'اكتب الكمية');
+    }
+
+    return {
+      queue: queue,
+      sel: { name: c.name, code: c.code, seq: c.seq, kind: c.kind },
+      isDone: !!st.done,
+      isOpen: !st.done,
+      reopen: () => this.patch(c.id, { done: false }),
+      finish: () => this.patch(c.id, { done: true, opened: true }),
+      health: health,
+      healthNotes: st.healthNotes || '',
+      onHealthNotes: (e) => this.patch(c.id, { healthNotes: e.target.value }),
+      history: c.history,
+      noHistory: c.history.length === 0,
+      services: services,
+      showCc: sv.type === 'cc',
+      cc: d.cc,
+      onCc: (e) => this.draft({ cc: e.target.value }),
+      unitPrice: sv.unit ? this.fmt(sv.unit) : '',
+      showLaser: sv.type === 'laser',
+      modes: modes,
+      showAreas: !isFull,
+      areas: areas,
+      showFixed: sv.type === 'fixed',
+      sessions: d.sessions,
+      onSessions: (e) => this.draft({ sessions: e.target.value }),
+      gap: d.gap,
+      onGap: (e) => this.draft({ gap: e.target.value }),
+      units: units,
+      first: d.first || '',
+      onFirst: (e) => this.draft({ first: e.target.value }),
+      dates: dateList.map((label, i) => ({ n: i + 1, label: label })),
+      pricePer: this.fmt(price),
+      showStock: showStock,
+      stockMsg: showStock ? ('تنبيه: المتوفر بالمخزون ' + sv.stock + ' cc بس. تگدر تكمل، والمدير يوصله تنبيه.') : '',
+      addDisabled: addDisabled,
+      addBg: addDisabled ? '#6B7480' : '#17202A',
+      addLabel: addLabel,
+      add: () => {
+        if (addDisabled) { return; }
+        const item = { key: Date.now() + '-' + planList.length, title: title, detail: detail, schedule: schedule, price: price, dates: dateList };
+        this.patch(c.id, { plan: planList.concat([item]), done: false });
+      },
+      plan: planList.map((p) => ({
+        title: p.title, detail: p.detail, schedule: p.schedule,
+        price: this.fmt(p.price),
+        dates: p.dates.join('  ·  '),
+        remove: () => this.patch(c.id, { plan: planList.filter((x) => x.key !== p.key) })
+      })),
+      noPlan: planList.length === 0,
+      rx: st.rx || '',
+      onRx: (e) => this.patch(c.id, { rx: e.target.value })
+    };
+  }
+}
+</script>
+</body>
+</html>

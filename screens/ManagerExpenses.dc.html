@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>شاشة المدير · المصاريف</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+input{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="min-height: 100vh; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6">
+
+  <header style="background: #FFFFFF; border-bottom: 1px solid #D9DEE5">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 0px">
+        <strong style="font-size: 18px; font-weight: 700">المدير: [اسم المدير]</strong>
+        <span style="color: #55606E; font-size: 13px">[اسم العيادة] · بيانات تجريبية للعرض</span>
+      </div>
+      <nav aria-label="أقسام المدير" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <a href="Manager.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الرئيسية</a>
+        <a href="ManagerStaff.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموظفين والرواتب</a>
+        <a href="ManagerSuppliers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموردين والمشتريات</a>
+        <a href="ManagerStock.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المخزون</a>
+        <a href="ManagerOffers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">العروض</a>
+        <a href="ManagerSchedule.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الدوام والعطل</a>
+        <a href="ManagerBookings.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الحجوزات</a>
+        <a href="ManagerExpenses.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #17202A; color: #FFFFFF; border: 2px solid #17202A">المصاريف</a>
+        <a href="ManagerPayMethods.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">طرق الدفع</a>
+      </nav>
+    </div>
+  </header>
+
+  <div style="max-width: 1360px; margin: 0 auto; padding: 20px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+    <section style="flex: 1 1 400px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">تسجيل مصروف</h2>
+        <span style="font-size: 13px; color: #55606E">رصيد الخزنة {{safeText}}</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 13px; font-weight: 600; color: #55606E">النوع</span>
+        <div role="group" aria-label="نوع المصروف" style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{cats}}" as="c" hint-placeholder-count="8">
+            <button type="button" onClick="{{c.pick}}" aria-pressed="{{c.selected}}" style="min-height: 44px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{c.bg}}; color: {{c.fg}}; border: 2px solid {{c.border}}">{{c.label}}</button>
+          </sc-for>
+        </div>
+        <span style="font-size: 12px; color: #55606E">الرواتب بصفحة الموظفين، لا تدخلها هنا حتى ما تنحسب مرتين.</span>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <label style="flex: 1 1 160px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+          <span>المبلغ (د.ع)</span>
+          <input type="text" inputmode="numeric" value="{{f.amount}}" onChange="{{onAmount}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+        </label>
+        <label style="flex: 1 1 160px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+          <span>التاريخ</span>
+          <input type="date" value="{{f.date}}" onChange="{{onDate}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+        </label>
+      </div>
+
+      <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+        <span>ملاحظة (اختياري)</span>
+        <input type="text" value="{{f.notes}}" onChange="{{onNotes}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+      </label>
+
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span style="font-size: 13px; font-weight: 600; color: #55606E">صورة الإثبات (وصل أو فاتورة)</span>
+        <sc-if value="{{proofMissing}}" hint-placeholder-val="{{true}}">
+          <button type="button" onClick="{{attach}}" style="align-self: flex-start; min-height: 48px; padding: 0 18px; background: #FFFFFF; color: #17202A; border: 1px dashed #5B6573; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer">إرفاق صورة</button>
+        </sc-if>
+        <sc-if value="{{proofAttached}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+            <span style="font-size: 13px; font-weight: 600; padding: 8px 12px; border-radius: 8px; background: #E3F1F0; color: #084F4B">[صورة-الإثبات.jpg] · مرفقة</span>
+            <button type="button" onClick="{{detach}}" style="min-height: 44px; padding: 0 14px; background: #FFFFFF; color: #9B1C1C; border: 1px solid #9B1C1C; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer">إزالة الصورة</button>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span style="font-size: 13px; font-weight: 600; color: #55606E">طريقة الدفع</span>
+        <div role="group" aria-label="طريقة الدفع" style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{sources}}" as="so" hint-placeholder-count="2">
+            <button type="button" onClick="{{so.pick}}" aria-pressed="{{so.selected}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{so.bg}}; color: {{so.fg}}; border: 2px solid {{so.border}}">{{so.label}}</button>
+          </sc-for>
+        </div>
+        <sc-if value="{{showBank}}" hint-placeholder-val="{{false}}">
+          <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+            <span>اسم المصرف</span>
+            <input type="text" value="{{f.bank}}" onChange="{{onBank}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+          </label>
+        </sc-if>
+        <span style="font-size: 12px; color: #55606E">{{sourceNote}}</span>
+      </div>
+
+      <sc-if value="{{hasErrors}}" hint-placeholder-val="{{false}}">
+        <div role="alert" style="background: #FBEAEA; color: #7A1212; border: 1px solid #9B1C1C; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+          <sc-for list="{{errors}}" as="er" hint-placeholder-count="1">
+            <span>{{er.text}}</span>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{hasMsg}}" hint-placeholder-val="{{false}}">
+        <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{msg}}</div>
+      </sc-if>
+
+      <button type="button" onClick="{{save}}" disabled="{{saveDisabled}}" style="align-self: flex-start; min-height: 52px; padding: 0 28px; background: {{saveBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer">حفظ المصروف</button>
+      <span style="font-size: 12px; color: #55606E">المصروف ما ينعدل ولا ينحذف عندك بعد الحفظ. التعديل للمالك بس، وينسجل بسجل الحركات. إذا غلطت بلّغه.</span>
+    </section>
+
+    <section style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+
+      <div style="display: flex; flex-wrap: wrap; gap: 8px" role="group" aria-label="الشهر">
+        <sc-for list="{{months}}" as="mo" hint-placeholder-count="3">
+          <button type="button" onClick="{{mo.pick}}" aria-pressed="{{mo.selected}}" style="min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; background: {{mo.bg}}; color: {{mo.fg}}; border: 2px solid {{mo.border}}">{{mo.label}}</button>
+            </sc-for>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <div style="flex: 1 1 220px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 13px; font-weight: 600; color: #55606E">إجمالي المصاريف</span>
+          <span style="font-size: 28px; font-weight: 600; line-height: 1.3; font-variant-numeric: tabular-nums">{{total}}</span>
+          <span style="font-size: 12px; color: #55606E">{{countText}}</span>
+        </div>
+        <div style="flex: 3 1 360px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 13px; font-weight: 600; color: #55606E">حسب النوع</span>
+          <sc-for list="{{byCat}}" as="b" hint-placeholder-count="3">
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span style="flex: 0 0 120px; font-size: 14px; font-weight: 600">{{b.label}}</span>
+              <div style="flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 8px; border-inline-start: 1px solid #D9DEE5">
+                <div style="width: {{b.w}}; height: 16px; background: #0B6E69; border-radius: 4px 0 0 4px"></div>
+                <span style="flex: none; font-size: 13px; font-variant-numeric: tabular-nums">{{b.value}}</span>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{noExpenses}}" hint-placeholder-val="{{false}}">
+            <span style="font-size: 14px; color: #55606E">ما أكو مصاريف بهالشهر.</span>
+          </sc-if>
+        </div>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">سجل المصاريف</h2>
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; border: 1px solid #D9DEE5; border-radius: 10px; padding: 12px 14px">
+            <bdi dir="ltr" style="flex: none; font-size: 13px; color: #55606E; min-width: 78px">{{r.date}}</bdi>
+            <span style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 0px">
+              <span style="font-size: 15px; font-weight: 700">{{r.cat}}</span>
+              <span style="font-size: 13px; color: #3D4652">{{r.notes}}</span>
+            </span>
+            <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{r.chipBg}}; color: {{r.chipFg}}">{{r.chip}}</span>
+            <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: #ECEFF3; color: #3D4652">إثبات مرفق</span>
+            <span style="flex: none; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 110px; text-align: right">{{r.amount}}</span>
+          </div>
+        </sc-for>
+        <sc-if value="{{noExpenses}}" hint-placeholder-val="{{false}}">
+          <span style="font-size: 14px; color: #55606E">ما أكو مصاريف بهالشهر.</span>
+        </sc-if>
+      </div>
+
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1100}}'>
+class Component extends DCLogic {
+  state = { expenses: null, safe: 2505000, form: null, month: '2026-11', msg: '' };
+
+  today() { return '2026-11-14'; }
+  num(n) { return Number(n).toLocaleString('en-US'); }
+  fmt(n) { return this.num(n) + ' د.ع'; }
+  digits(v) { return String(v == null ? '' : v).trim().replace(/[٠-٩]/g, (c) => String(c.charCodeAt(0) - 1632)).replace(/[۰-۹]/g, (c) => String(c.charCodeAt(0) - 1776)); }
+  money(v) { const t = this.digits(v); return /^\d+$/.test(t) && Number.isSafeInteger(Number(t)) ? Number(t) : null; }
+  isDate(v) { return /^\d{4}-\d{2}-\d{2}$/.test(v); }
+  dateText(iso) { const p = String(iso).split('-'); return p.length === 3 ? Number(p[2]) + '/' + Number(p[1]) + '/' + p[0] : ''; }
+  pill(selected) { return { selected: selected, bg: selected ? '#17202A' : '#FFFFFF', fg: selected ? '#FFFFFF' : '#17202A', border: selected ? '#17202A' : '#AEB6C2' }; }
+  monthName(key) { const names = ['كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب', 'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول']; const p = key.split('-'); return names[Number(p[1]) - 1] + ' ' + p[0]; }
+
+  cats() { return ['إيجار', 'كهرباء', 'ماء', 'وقود المولدة', 'صيانة', 'مستلزمات العيادة', 'إعلان ودعاية', 'أخرى']; }
+  seed() {
+    return [
+      { id: 'x1', date: '2026-11-10', cat: 'كهرباء', amount: 120000, notes: 'فاتورة تشرين الأول', source: 'safe', bank: '' },
+      { id: 'x2', date: '2026-11-05', cat: 'إيجار', amount: 1500000, notes: 'إيجار تشرين الثاني', source: 'bank', bank: '[اسم المصرف]' },
+      { id: 'x3', date: '2026-11-03', cat: 'وقود المولدة', amount: 200000, notes: '', source: 'safe', bank: '' },
+      { id: 'x4', date: '2026-10-28', cat: 'صيانة', amount: 85000, notes: 'صيانة جهاز التبريد', source: 'safe', bank: '' },
+      { id: 'x5', date: '2026-10-01', cat: 'إيجار', amount: 1500000, notes: 'إيجار تشرين الأول', source: 'bank', bank: '[اسم المصرف]' }
+    ];
+  }
+  list() { return this.state.expenses || this.seed(); }
+  blank() { return { cat: '', amount: '', date: this.today(), notes: '', proof: false, source: 'safe', bank: '' }; }
+  form() { return this.state.form || this.blank(); }
+  edit(change) { this.setState({ form: Object.assign({}, this.form(), change), msg: '' }); }
+  errors(f) {
+    const out = [];
+    const a = this.money(f.amount);
+    if (!f.cat) { out.push('اختار نوع المصروف.'); }
+    if (a === null || a < 1) { out.push('اكتب مبلغ صحيح بالدينار: رقم صحيح أكبر من صفر بدون فواصل.'); }
+    if (!this.isDate(f.date) || f.date > this.today()) { out.push('التاريخ لازم يكون اليوم أو قبله.'); }
+    if (!f.proof) { out.push('ارفق صورة الإثبات (وصل أو فاتورة).'); }
+    if (f.source === 'bank' && !f.bank.trim()) { out.push('اكتب اسم المصرف.'); }
+    if (f.source === 'safe' && a !== null && a > this.state.safe) { out.push('رصيد الخزنة ' + this.fmt(this.state.safe) + ' ما يكفي. اختار إلكتروني.'); }
+    return out;
+  }
+  save() {
+    const f = this.form();
+    if (this.errors(f).length) { return; }
+    const a = this.money(f.amount);
+    const entry = { id: 'x' + Date.now(), date: f.date, cat: f.cat, amount: a, notes: f.notes.trim(), source: f.source, bank: f.bank.trim() };
+    const month = f.date.slice(0, 7);
+    this.setState({ expenses: [entry].concat(this.list()), safe: f.source === 'safe' ? this.state.safe - a : this.state.safe, form: null, month: month, msg: 'انحفظ مصروف ' + f.cat + ' ' + this.fmt(a) + (f.source === 'safe' ? ' ونزل من الخزنة.' : ' (إلكتروني) وما نزل من الخزنة.') });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const f = this.form();
+    const errs = this.errors(f);
+    const touched = f.cat !== '' || f.amount !== '' || f.notes !== '' || f.proof || f.source !== 'safe' || f.date !== this.today();
+    const all = this.list();
+    const monthKeys = Array.from(new Set(all.map((e) => e.date.slice(0, 7)))).sort().reverse();
+    const months = monthKeys.map((k) => Object.assign({ label: this.monthName(k), pick: () => this.setState({ month: k }) }, this.pill(s.month === k)))
+      .concat([Object.assign({ label: 'الكل', pick: () => this.setState({ month: 'all' }) }, this.pill(s.month === 'all'))]);
+    const shown = all.filter((e) => s.month === 'all' || e.date.slice(0, 7) === s.month).sort((a, b) => a.date < b.date ? 1 : (a.date > b.date ? -1 : 0));
+    const total = shown.reduce((t, e) => t + e.amount, 0);
+    const sums = {};
+    shown.forEach((e) => { sums[e.cat] = (sums[e.cat] || 0) + e.amount; });
+    const cats = Object.keys(sums).sort((a, b) => sums[b] - sums[a]);
+    const max = cats.length ? sums[cats[0]] : 1;
+    const bankSel = f.source === 'bank';
+    return {
+      safeText: this.fmt(s.safe),
+      cats: this.cats().map((c) => Object.assign({ label: c, pick: () => this.edit({ cat: c }) }, this.pill(f.cat === c))),
+      f: { amount: f.amount, date: f.date, notes: f.notes, bank: f.bank },
+      onAmount: (e) => this.edit({ amount: e.target.value }), onDate: (e) => this.edit({ date: e.target.value }), onNotes: (e) => this.edit({ notes: e.target.value }), onBank: (e) => this.edit({ bank: e.target.value }),
+      proofMissing: !f.proof, proofAttached: f.proof, attach: () => this.edit({ proof: true }), detach: () => this.edit({ proof: false }),
+      sources: [Object.assign({ label: 'من الخزنة', pick: () => this.edit({ source: 'safe' }) }, this.pill(f.source === 'safe')), Object.assign({ label: 'إلكتروني', pick: () => this.edit({ source: 'bank' }) }, this.pill(bankSel))],
+      showBank: bankSel, sourceNote: bankSel ? 'الإلكتروني ما ينقص من الخزنة.' : 'ينقص من رصيد الخزنة.',
+      hasErrors: touched && errs.length > 0, errors: errs.map((t) => ({ text: t })),
+      hasMsg: !!s.msg && !touched, msg: s.msg,
+      save: () => this.save(), saveDisabled: errs.length > 0, saveBg: errs.length > 0 ? '#6B7480' : '#0B6E69',
+      months: months, total: this.fmt(total), countText: shown.length + ' مصروف',
+      byCat: cats.map((c) => ({ label: c, w: Math.max(2, Math.round(sums[c] / max * 76)) + '%', value: this.num(sums[c]) })), noExpenses: shown.length === 0,
+      rows: shown.map((e) => ({ date: this.dateText(e.date), cat: e.cat, notes: e.notes || 'بدون ملاحظة', amount: this.num(e.amount), chip: e.source === 'safe' ? 'من الخزنة' : 'إلكتروني · ' + e.bank, chipBg: e.source === 'safe' ? '#ECEFF3' : '#E4EDF8', chipFg: e.source === 'safe' ? '#3D4652' : '#1D4E89' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

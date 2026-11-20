@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>شاشة المدير · الموظفين والرواتب</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+input{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="min-height: 100vh; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6">
+
+  <header style="background: #FFFFFF; border-bottom: 1px solid #D9DEE5">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 0px">
+        <strong style="font-size: 18px; font-weight: 700">المدير: [اسم المدير]</strong>
+        <span style="color: #55606E; font-size: 13px">[اسم العيادة] · بيانات تجريبية للعرض</span>
+      </div>
+      <nav aria-label="أقسام المدير" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <a href="Manager.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الرئيسية</a>
+        <a href="ManagerStaff.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #17202A; color: #FFFFFF; border: 2px solid #17202A">الموظفين والرواتب</a>
+        <a href="ManagerSuppliers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموردين والمشتريات</a>
+        <a href="ManagerStock.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المخزون</a>
+        <a href="ManagerOffers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">العروض</a>
+        <a href="ManagerSchedule.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الدوام والعطل</a>
+        <a href="ManagerBookings.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الحجوزات</a>
+        <a href="ManagerExpenses.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المصاريف</a>
+        <a href="ManagerPayMethods.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">طرق الدفع</a>
+      </nav>
+    </div>
+  </header>
+
+  <div style="max-width: 1360px; margin: 0 auto; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px">
+
+    <div role="group" aria-label="أقسام الصفحة" style="display: flex; flex-wrap: wrap; gap: 8px">
+      <sc-for list="{{tabs}}" as="tb" hint-placeholder-count="2">
+        <button type="button" onClick="{{tb.pick}}" aria-pressed="{{tb.selected}}" style="min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; background: {{tb.bg}}; color: {{tb.fg}}; border: 2px solid {{tb.border}}">{{tb.label}}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{isAccounts}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+        <aside style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+          <button type="button" onClick="{{addAccount}}" style="min-height: 48px; background: #0B6E69; color: #FFFFFF; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer">+ حساب جديد</button>
+          <sc-for list="{{staffList}}" as="s" hint-placeholder-count="5">
+            <button type="button" onClick="{{s.pick}}" aria-pressed="{{s.selected}}" style="width: 100%; text-align: start; display: flex; align-items: center; gap: 12px; padding: 10px 12px; min-height: 64px; background: {{s.bg}}; border: 2px solid {{s.border}}; border-radius: 10px; cursor: pointer; color: #17202A">
+              <span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 15px; font-weight: 700">{{s.name}}</span>
+                <span style="font-size: 13px; color: #55606E">{{s.roleLabel}} · {{s.salaryText}}</span>
+              </span>
+              <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{s.chipBg}}; color: {{s.chipFg}}">{{s.chip}}</span>
+            </button>
+          </sc-for>
+          <p style="margin: 0; font-size: 12px; color: #55606E">المدراء يضيفهم المالك بس، فما أكو خيار «مدير» هنا.</p>
+        </aside>
+
+        <section style="flex: 999 1 520px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 700">{{formTitle}}</h2>
+            <span style="font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{dirtyBg}}; color: {{dirtyFg}}">{{dirtyText}}</span>
+          </div>
+
+          <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+            <span>الاسم</span>
+            <input type="text" value="{{d.name}}" onChange="{{onName}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+          </label>
+
+          <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+            <span>اسم المستخدم للدخول</span>
+            <input type="text" value="{{d.username}}" onChange="{{onUsername}}" disabled="{{usernameLocked}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: {{usernameBg}}; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+          </label>
+
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <span style="font-size: 13px; font-weight: 600; color: #55606E">الدور</span>
+            <div role="group" aria-label="الدور" style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-for list="{{roles}}" as="ro" hint-placeholder-count="3">
+                <button type="button" onClick="{{ro.pick}}" disabled="{{roleLocked}}" aria-pressed="{{ro.selected}}" style="min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; background: {{ro.bg}}; color: {{ro.fg}}; border: 2px solid {{ro.border}}">{{ro.label}}</button>
+              </sc-for>
+            </div>
+            <span style="font-size: 12px; color: #55606E">{{roleNote}}</span>
+          </div>
+
+          <sc-if value="{{salaryEditable}}" hint-placeholder-val="{{true}}">
+            <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+              <span>الراتب الشهري (د.ع)</span>
+              <input type="text" inputmode="numeric" value="{{d.salary}}" onChange="{{onSalary}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+            </label>
+          </sc-if>
+          <sc-if value="{{salaryLocked}}" hint-placeholder-val="{{false}}">
+            <div style="background: #ECEFF3; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px">
+              <span style="font-size: 13px; font-weight: 600; color: #3D4652">راتب الطبيب ونسبته</span>
+              <span style="font-size: 15px; font-weight: 600">{{doctorPayText}}</span>
+              <span style="font-size: 13px; color: #3D4652">المالك وحده يحددهم، فالحقل مقفول عندك.</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{hasErrors}}" hint-placeholder-val="{{false}}">
+            <div role="alert" style="background: #FBEAEA; color: #7A1212; border: 1px solid #9B1C1C; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+              <sc-for list="{{errors}}" as="er" hint-placeholder-count="1">
+                <span>{{er.text}}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{hasMsg}}" hint-placeholder-val="{{false}}">
+            <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{msg}}</div>
+          </sc-if>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 10px">
+            <button type="button" onClick="{{save}}" disabled="{{saveDisabled}}" style="min-height: 48px; padding: 0 22px; background: {{saveBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer">{{saveLabel}}</button>
+            <button type="button" onClick="{{discard}}" disabled="{{discardDisabled}}" style="min-height: 48px; padding: 0 18px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer">إلغاء التعديلات</button>
+          </div>
+
+          <sc-if value="{{isExisting}}" hint-placeholder-val="{{true}}">
+            <div style="border-top: 1px solid #D9DEE5; padding-top: 14px; display: flex; flex-direction: column; gap: 10px">
+              <strong style="font-size: 14px">إجراءات على الحساب</strong>
+              <div style="display: flex; flex-wrap: wrap; gap: 10px">
+                <button type="button" onClick="{{askToggle}}" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: {{toggleFg}}; border: 1px solid {{toggleFg}}; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">{{toggleLabel}}</button>
+                <button type="button" onClick="{{askReset}}" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">إعادة تعيين الرمز السري</button>
+              </div>
+              <sc-if value="{{confirmOpen}}" hint-placeholder-val="{{false}}">
+                <div style="background: #FBEFD9; border: 1px solid #C98A2B; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px">
+                  <span style="font-size: 14px; font-weight: 600; color: #6B3A06">{{confirmText}}</span>
+                  <div style="display: flex; flex-wrap: wrap; gap: 10px">
+                    <button type="button" onClick="{{doConfirm}}" style="min-height: 44px; padding: 0 18px; background: #17202A; color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer">تأكيد</button>
+                    <button type="button" onClick="{{cancelConfirm}}" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">رجوع</button>
+                  </div>
+                </div>
+              </sc-if>
+              <span style="font-size: 12px; color: #55606E">تعطيل الحساب يوقف دخوله بس، وسجل عملياته يبقى. المدير يعيد رمز الموظف، والمالك يعيد رمز المدير.</span>
+            </div>
+          </sc-if>
+        </section>
+
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isPayroll}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-direction: column; gap: 16px">
+
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+          <div role="group" aria-label="الشهر" style="display: flex; flex-wrap: wrap; gap: 8px">
+            <sc-for list="{{months}}" as="mo" hint-placeholder-count="2">
+              <button type="button" onClick="{{mo.pick}}" aria-pressed="{{mo.selected}}" style="min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; background: {{mo.bg}}; color: {{mo.fg}}; border: 2px solid {{mo.border}}">{{mo.label}}</button>
+            </sc-for>
+          </div>
+          <span style="font-size: 13px; color: #55606E">الرواتب تنحسب تلقائياً يوم 1 بالشهر. الحسابات المعطلة ما تدخل.</span>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 12px">
+          <sc-for list="{{summary}}" as="sm" hint-placeholder-count="4">
+            <div style="flex: 1 1 200px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 2px">
+              <span style="font-size: 13px; font-weight: 600; color: #55606E">{{sm.label}}</span>
+              <span style="font-size: 24px; font-weight: 600; line-height: 1.3; font-variant-numeric: tabular-nums">{{sm.value}}</span>
+              <span style="font-size: 12px; color: #55606E">{{sm.note}}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">رواتب {{monthLabel}}</h2>
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
+            <div style="border: 1px solid #D9DEE5; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+                <span style="flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+                  <span style="font-size: 15px; font-weight: 700">{{r.name}}</span>
+                  <span style="font-size: 13px; color: #55606E">{{r.detail}}</span>
+                </span>
+                <span style="flex: none; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums">{{r.total}}</span>
+                <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{r.chipBg}}; color: {{r.chipFg}}">{{r.chip}}</span>
+                <sc-if value="{{r.canPay}}" hint-placeholder-val="{{false}}">
+                  <button type="button" onClick="{{r.openPay}}" style="flex: none; min-height: 44px; padding: 0 16px; background: #0B6E69; color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer">تسجيل التسديد</button>
+                </sc-if>
+              </div>
+              <sc-if value="{{r.open}}" hint-placeholder-val="{{false}}">
+                <div style="background: #F4F5F7; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 10px">
+                  <div role="group" aria-label="طريقة التسديد" style="display: flex; flex-wrap: wrap; gap: 8px">
+                    <sc-for list="{{sources}}" as="so" hint-placeholder-count="2">
+                      <button type="button" onClick="{{so.pick}}" aria-pressed="{{so.selected}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{so.bg}}; color: {{so.fg}}; border: 2px solid {{so.border}}">{{so.label}}</button>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{showBank}}" hint-placeholder-val="{{false}}">
+                    <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                      <span>اسم المصرف</span>
+                      <input type="text" value="{{payBank}}" onChange="{{onBank}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+                    </label>
+                  </sc-if>
+                  <sc-if value="{{payProblem}}" hint-placeholder-val="{{false}}">
+                    <span role="alert" style="font-size: 13px; font-weight: 600; color: #7A1212">{{payProblemText}}</span>
+                  </sc-if>
+                  <div style="display: flex; flex-wrap: wrap; gap: 10px">
+                    <button type="button" onClick="{{r.confirmPay}}" disabled="{{payDisabled}}" style="min-height: 44px; padding: 0 18px; background: {{payBg}}; color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer">تأكيد تسديد {{r.total}}</button>
+                    <button type="button" onClick="{{r.closePay}}" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">رجوع</button>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+          <p style="margin: 4px 0 0; font-size: 12px; color: #55606E">راتب المدير يسدده المالك مو المدير نفسه. التسديد من الخزنة ما ينحسب مصروف ثاني، لأن الراتب محسوب بالتقارير.</p>
+        </section>
+
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1100}}'>
+class Component extends DCLogic {
+  state = {
+    tab: 'accounts', selId: 's1', draft: null, msg: '', confirm: '',
+    staff: null, month: '2026-11', paid: null, payOpen: '', payFlow: { source: 'safe', bank: '' }, safe: 2505000
+  };
+
+  num(n) { return Number(n).toLocaleString('en-US'); }
+  fmt(n) { return this.num(n) + ' د.ع'; }
+  money(value) {
+    const text = String(value == null ? '' : value).trim().replace(/[٠-٩]/g, (c) => String(c.charCodeAt(0) - 1632)).replace(/[۰-۹]/g, (c) => String(c.charCodeAt(0) - 1776));
+    return /^\d+$/.test(text) && Number.isSafeInteger(Number(text)) ? Number(text) : null;
+  }
+  pill(selected) {
+    return { selected: selected, bg: selected ? '#17202A' : '#FFFFFF', fg: selected ? '#FFFFFF' : '#17202A', border: selected ? '#17202A' : '#AEB6C2' };
+  }
+
+  roleLabels() { return { cashier: 'كاشير', nurse: 'ممرض', doctor: 'طبيب', manager: 'مدير' }; }
+  seedStaff() {
+    return [
+      { id: 's1', name: '[اسم الكاشير الأول]', role: 'cashier', username: 'cashier1', salary: 600000, active: true },
+      { id: 's2', name: '[اسم الكاشير الثاني]', role: 'cashier', username: 'cashier2', salary: 600000, active: true },
+      { id: 's3', name: '[اسم الممرض الأول]', role: 'nurse', username: 'nurse1', salary: 750000, active: true },
+      { id: 's4', name: '[اسم الممرضة الثانية]', role: 'nurse', username: 'nurse2', salary: 750000, active: false },
+      { id: 's5', name: 'د. [الطبيب الأول]', role: 'doctor', username: 'doctor1', salary: 3000000, pct: 10, active: true },
+      { id: 's6', name: 'د. [الطبيب الثاني]', role: 'doctor', username: 'doctor2', salary: null, pct: 0, active: true }
+    ];
+  }
+  manager() { return { id: 'mgr', name: '[اسم المدير]', role: 'manager', salary: 1000000, active: true }; }
+  pctAmounts() { return { '2026-11': { s5: 400000 }, '2026-10': { s5: 350000 } }; }
+  seedPaid() {
+    const p = {};
+    ['s1', 's2', 's3', 's5'].forEach((id) => { p['2026-10:' + id] = { source: 'safe', bank: '' }; });
+    return p;
+  }
+  staffList() { return this.state.staff || this.seedStaff(); }
+  paidMap() { return this.state.paid || this.seedPaid(); }
+  blank() { return { id: '', name: '', username: '', role: 'cashier', salary: '', active: true, pct: 0 }; }
+
+  ctx() {
+    const s = this.state;
+    const list = this.staffList();
+    const original = list.find((x) => x.id === s.selId) || null;
+    const draft = s.draft || (original ? Object.assign({}, original, { salary: original.salary == null ? '' : String(original.salary) }) : this.blank());
+    let dirty;
+    if (original) {
+      dirty = draft.name !== original.name || (original.role !== 'doctor' && String(draft.salary) !== String(original.salary == null ? '' : original.salary));
+    } else {
+      dirty = draft.name.trim() !== '' || draft.username.trim() !== '' || String(draft.salary) !== '' || draft.role !== 'cashier';
+    }
+    return { list: list, original: original, draft: draft, dirty: dirty, isNew: !original };
+  }
+  edit(change) {
+    const c = this.ctx();
+    this.setState({ draft: Object.assign({}, c.draft, change), msg: '', confirm: '' });
+  }
+  errors(c) {
+    const d = c.draft;
+    const out = [];
+    if (!d.name.trim()) { out.push('اكتب اسم الموظف.'); }
+    if (c.isNew) {
+      if (!/^[a-z0-9_]{3,20}$/.test(d.username)) { out.push('اسم المستخدم 3 إلى 20 حرف إنكليزي صغير أو رقم أو _.'); }
+      else if (c.list.some((x) => x.username === d.username)) { out.push('اسم المستخدم مستخدم، اختار غيره.'); }
+    }
+    if (d.role !== 'doctor' && this.money(d.salary) === null) { out.push('اكتب راتب صحيح بالدينار: رقم صحيح بدون فواصل أو سالب.'); }
+    return out;
+  }
+  pick(id) { this.setState({ selId: id, draft: null, msg: '', confirm: '' }); }
+  save() {
+    const c = this.ctx();
+    if (!c.dirty || this.errors(c).length) { return; }
+    const d = c.draft;
+    let list;
+    let id = c.original ? c.original.id : 'u' + Date.now();
+    const saved = Object.assign({}, c.original || { id: id, active: true, pct: 0, role: d.role, username: d.username }, { name: d.name.trim() });
+    if (d.role !== 'doctor') { saved.salary = this.money(d.salary); }
+    else if (!c.original) { saved.salary = null; }
+    list = c.original ? c.list.map((x) => x.id === id ? saved : x) : c.list.concat([saved]);
+    const msg = c.original ? 'انحفظت تعديلات «' + saved.name + '».' : 'انضاف الحساب «' + saved.name + '».' + (saved.role === 'doctor' ? ' راتب الطبيب ونسبته بانتظار المالك.' : '');
+    this.setState({ staff: list, selId: id, draft: null, msg: msg, confirm: '' });
+  }
+
+  payrollRows() {
+    const s = this.state;
+    const month = s.month;
+    const paid = this.paidMap();
+    const labels = this.roleLabels();
+    const pcts = (this.pctAmounts()[month]) || {};
+    const people = this.staffList().filter((x) => x.active).concat([this.manager()]);
+    return people.map((p) => {
+      const pct = p.role === 'doctor' ? (pcts[p.id] || 0) : 0;
+      const key = month + ':' + p.id;
+      const noSalary = p.salary == null;
+      const total = (p.salary || 0) + pct;
+      const done = paid[key] || null;
+      const byOwner = p.role === 'manager';
+      let detail = labels[p.role] + ' · الراتب ' + (noSalary ? 'ما انحدد' : this.fmt(p.salary));
+      if (p.role === 'doctor' && !noSalary) { detail += ' + نسبة الكشفيات ' + p.pct + '% = ' + this.fmt(pct); }
+      let chip = 'مستحق'; let bg = '#FBEFD9'; let fg = '#8A4B08';
+      if (done) { chip = done.source === 'safe' ? 'مسدد · من الخزنة' : 'مسدد · إلكتروني · ' + done.bank; bg = '#E3F1F0'; fg = '#084F4B'; }
+      else if (noSalary) { chip = 'الراتب ما انحدد (المالك)'; bg = '#ECEFF3'; fg = '#3D4652'; }
+      else if (byOwner) { chip = 'يسدده المالك'; bg = '#E4EDF8'; fg = '#1D4E89'; }
+      return { id: p.id, key: key, name: p.name, detail: detail, total: noSalary ? '—' : this.fmt(total), amount: total, done: !!done, noSalary: noSalary, byOwner: byOwner, canPay: !done && !noSalary && !byOwner, chip: chip, chipBg: bg, chipFg: fg };
+    });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const tab = s.tab;
+    const c = this.ctx();
+    const d = c.draft;
+    const labels = this.roleLabels();
+    const errs = this.errors(c);
+    const tabs = [
+      Object.assign({ label: 'الحسابات', pick: () => this.setState({ tab: 'accounts' }) }, this.pill(tab === 'accounts')),
+      Object.assign({ label: 'رواتب الشهر', pick: () => this.setState({ tab: 'payroll' }) }, this.pill(tab === 'payroll'))
+    ];
+
+    const staffList = c.list.map((x) => {
+      const selected = x.id === s.selId;
+      let salaryText = x.salary == null ? 'الراتب ما انحدد' : this.fmt(x.salary);
+      return {
+        name: x.name, roleLabel: labels[x.role], salaryText: salaryText, selected: selected,
+        chip: x.active ? 'فعال' : 'معطل', chipBg: x.active ? '#E3F1F0' : '#ECEFF3', chipFg: x.active ? '#084F4B' : '#3D4652',
+        bg: selected ? '#E3F1F0' : '#FFFFFF', border: selected ? '#0B6E69' : '#D9DEE5', pick: () => this.pick(x.id)
+      };
+    });
+
+    const orig = c.original;
+    const isDoctor = d.role === 'doctor';
+    const roles = ['cashier', 'nurse', 'doctor'].map((r) => Object.assign({ label: labels[r], pick: () => this.edit({ role: r }) }, this.pill(d.role === r)));
+    const doctorPayText = !orig || orig.salary == null ? 'الراتب: ما انحدد بعد · النسبة: ما انحددت' : 'الراتب: ' + this.fmt(orig.salary) + ' · نسبة الكشفيات: ' + (orig.pct ? orig.pct + '%' : 'بدون');
+    const showErrs = c.dirty && errs.length > 0;
+    const saveDisabled = !c.dirty || errs.length > 0;
+    const confirm = s.confirm;
+    const toggleOff = orig && orig.active;
+
+    const sources = [
+      Object.assign({ label: 'من الخزنة', pick: () => this.setState({ payFlow: Object.assign({}, s.payFlow, { source: 'safe' }) }) }, this.pill(s.payFlow.source === 'safe')),
+      Object.assign({ label: 'إلكتروني', pick: () => this.setState({ payFlow: Object.assign({}, s.payFlow, { source: 'bank' }) }) }, this.pill(s.payFlow.source === 'bank'))
+    ];
+    const rows = this.payrollRows().map((r) => {
+      const open = s.payOpen === r.id && r.canPay;
+      return Object.assign({}, r, {
+        open: open,
+        openPay: () => this.setState({ payOpen: r.id, payFlow: { source: 'safe', bank: '' } }),
+        closePay: () => this.setState({ payOpen: '' }),
+        confirmPay: () => {
+          const flow = this.state.payFlow;
+          if (flow.source === 'safe' && r.amount > this.state.safe) { return; }
+          if (flow.source === 'bank' && !flow.bank.trim()) { return; }
+          const paid = Object.assign({}, this.paidMap());
+          paid[r.key] = { source: flow.source, bank: flow.bank.trim() };
+          this.setState({ paid: paid, payOpen: '', safe: flow.source === 'safe' ? this.state.safe - r.amount : this.state.safe });
+        }
+      });
+    });
+    const openRow = rows.find((r) => r.open);
+    const flow = s.payFlow;
+    let payProblemText = '';
+    if (openRow) {
+      if (flow.source === 'safe' && openRow.amount > s.safe) { payProblemText = 'رصيد الخزنة ' + this.fmt(s.safe) + ' ما يكفي. اختار إلكتروني أو أضف للخزنة أول.'; }
+      else if (flow.source === 'bank' && !flow.bank.trim()) { payProblemText = 'اكتب اسم المصرف.'; }
+    }
+    const payable = rows.filter((r) => !r.noSalary && !r.byOwner);
+    const due = payable.reduce((t, r) => t + r.amount, 0);
+    const paidSum = payable.filter((r) => r.done).reduce((t, r) => t + r.amount, 0);
+    const monthLabels = { '2026-11': 'تشرين الثاني 2026', '2026-10': 'تشرين الأول 2026' };
+
+    return {
+      tabs: tabs, isAccounts: tab === 'accounts', isPayroll: tab === 'payroll',
+      staffList: staffList, addAccount: () => this.setState({ selId: '', draft: null, msg: '', confirm: '' }),
+      formTitle: orig ? 'تعديل الحساب' : 'حساب جديد',
+      dirtyText: c.dirty ? 'تعديلات غير محفوظة' : 'محفوظ', dirtyBg: c.dirty ? '#FBEFD9' : '#ECEFF3', dirtyFg: c.dirty ? '#8A4B08' : '#3D4652',
+      d: { name: d.name, username: d.username, salary: d.salary },
+      onName: (e) => this.edit({ name: e.target.value }),
+      onUsername: (e) => this.edit({ username: e.target.value.trim().toLowerCase() }),
+      onSalary: (e) => this.edit({ salary: e.target.value }),
+      usernameLocked: !!orig, usernameBg: orig ? '#ECEFF3' : '#FFFFFF',
+      roles: roles, roleLocked: !!orig,
+      roleNote: orig ? 'الدور ما يتغير بعد إنشاء الحساب.' : 'الطبيب راتبه ونسبته يحددهم المالك. الكاشير والممرض راتبهم تحدده انت.',
+      salaryEditable: !isDoctor, salaryLocked: isDoctor, doctorPayText: doctorPayText,
+      hasErrors: showErrs, errors: errs.map((t) => ({ text: t })),
+      hasMsg: !!s.msg, msg: s.msg,
+      save: () => this.save(), saveDisabled: saveDisabled, saveBg: saveDisabled ? '#6B7480' : '#0B6E69', saveLabel: orig ? 'حفظ التعديلات' : 'إضافة الحساب',
+      discard: () => this.setState({ draft: null, msg: '', confirm: '' }), discardDisabled: !c.dirty,
+      isExisting: !!orig,
+      toggleLabel: toggleOff ? 'تعطيل الحساب' : 'تفعيل الحساب', toggleFg: toggleOff ? '#9B1C1C' : '#0B6E69',
+      askToggle: () => this.setState({ confirm: 'toggle' }), askReset: () => this.setState({ confirm: 'reset' }),
+      confirmOpen: !!confirm,
+      confirmText: confirm === 'reset' ? 'إعادة تعيين الرمز السري لـ «' + (orig ? orig.name : '') + '»؟ يحدد الموظف رمز جديد عند أول دخول.' : (toggleOff ? 'تعطيل حساب «' + (orig ? orig.name : '') + '»؟ ما يگدر يدخل، وسجله يبقى.' : 'تفعيل حساب «' + (orig ? orig.name : '') + '»؟'),
+      cancelConfirm: () => this.setState({ confirm: '' }),
+      doConfirm: () => {
+        const cc = this.ctx();
+        if (!cc.original) { return; }
+        if (this.state.confirm === 'toggle') {
+          const list = cc.list.map((x) => x.id === cc.original.id ? Object.assign({}, x, { active: !x.active }) : x);
+          this.setState({ staff: list, draft: null, confirm: '', msg: cc.original.active ? 'انعطل الحساب.' : 'انفعل الحساب.' });
+        } else {
+          this.setState({ confirm: '', msg: 'انعاد تعيين الرمز السري. الموظف يحدد رمز جديد عند أول دخول.' });
+        }
+      },
+      months: Object.keys(monthLabels).map((k) => Object.assign({ label: monthLabels[k], pick: () => this.setState({ month: k, payOpen: '' }) }, this.pill(s.month === k))),
+      monthLabel: monthLabels[s.month],
+      summary: [
+        { label: 'مستحق عليك تسديده', value: this.fmt(due), note: 'بدون راتب المدير والرواتب غير المحددة' },
+        { label: 'المسدد', value: this.fmt(paidSum), note: payable.filter((r) => r.done).length + ' من ' + payable.length },
+        { label: 'الباقي', value: this.fmt(due - paidSum), note: 'بعده ما اندفع' },
+        { label: 'رصيد الخزنة', value: this.fmt(s.safe), note: 'الكاش المتاح للتسديد' }
+      ],
+      rows: rows, sources: sources, showBank: flow.source === 'bank', payBank: flow.bank,
+      onBank: (e) => this.setState({ payFlow: Object.assign({}, this.state.payFlow, { bank: e.target.value }) }),
+      payProblem: !!payProblemText, payProblemText: payProblemText,
+      payDisabled: !openRow || !!payProblemText, payBg: !openRow || payProblemText ? '#6B7480' : '#0B6E69'
+    };
+  }
+}
+</script>
+</body>
+</html>

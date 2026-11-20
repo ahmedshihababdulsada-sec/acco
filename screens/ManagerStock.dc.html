@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>شاشة المدير · المخزون</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+input{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="min-height: 100vh; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6">
+
+  <header style="background: #FFFFFF; border-bottom: 1px solid #D9DEE5">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 0px">
+        <strong style="font-size: 18px; font-weight: 700">المدير: [اسم المدير]</strong>
+        <span style="color: #55606E; font-size: 13px">[اسم العيادة] · بيانات تجريبية للعرض</span>
+      </div>
+      <nav aria-label="أقسام المدير" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <a href="Manager.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الرئيسية</a>
+        <a href="ManagerStaff.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموظفين والرواتب</a>
+        <a href="ManagerSuppliers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموردين والمشتريات</a>
+        <a href="ManagerStock.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #17202A; color: #FFFFFF; border: 2px solid #17202A">المخزون</a>
+        <a href="ManagerOffers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">العروض</a>
+        <a href="ManagerSchedule.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الدوام والعطل</a>
+        <a href="ManagerBookings.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الحجوزات</a>
+        <a href="ManagerExpenses.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المصاريف</a>
+        <a href="ManagerPayMethods.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">طرق الدفع</a>
+      </nav>
+    </div>
+  </header>
+
+  <div style="max-width: 1360px; margin: 0 auto; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px">
+
+    <sc-if value="{{hasAlerts}}" hint-placeholder-val="{{true}}">
+      <section aria-label="تنبيهات المخزون" style="background: #FBEFD9; border: 1px solid #C98A2B; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+        <strong style="font-size: 14px; color: #6B3A06">تنبيهات المخزون ({{alertCount}})</strong>
+        <sc-for list="{{alerts}}" as="al" hint-placeholder-count="3">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px">
+            <span style="flex: 1 1 260px; min-width: 0; font-size: 14px; font-weight: 600">{{al.text}}</span>
+            <sc-if value="{{al.canWaste}}" hint-placeholder-val="{{false}}">
+              <button type="button" onClick="{{al.act}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2">سجلها تالف</button>
+            </sc-if>
+          </div>
+        </sc-for>
+      </section>
+    </sc-if>
+
+    <div role="group" aria-label="أقسام الصفحة" style="display: flex; flex-wrap: wrap; gap: 8px">
+      <sc-for list="{{tabs}}" as="tb" hint-placeholder-count="3">
+        <button type="button" onClick="{{tb.pick}}" aria-pressed="{{tb.selected}}" style="min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; background: {{tb.bg}}; color: {{tb.fg}}; border: 2px solid {{tb.border}}">{{tb.label}}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{isMaterials}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+        <aside style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+          <button type="button" onClick="{{addMaterial}}" style="min-height: 48px; background: #0B6E69; color: #FFFFFF; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer">+ مادة جديدة</button>
+          <sc-for list="{{matList}}" as="m" hint-placeholder-count="4">
+            <button type="button" onClick="{{m.pick}}" aria-pressed="{{m.selected}}" style="width: 100%; text-align: start; display: flex; flex-direction: column; gap: 6px; padding: 12px; background: {{m.bg}}; border: 2px solid {{m.border}}; border-radius: 10px; cursor: pointer; color: #17202A">
+              <span style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+                <span style="font-size: 15px; font-weight: 700">{{m.name}}</span>
+                <span style="font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{m.chipBg}}; color: {{m.chipFg}}">{{m.chip}}</span>
+              </span>
+              <span style="font-size: 13px; color: #3D4652">المتاح {{m.available}} · الموجود {{m.onHand}}</span>
+              <sc-if value="{{m.hasExpired}}" hint-placeholder-val="{{false}}">
+                <span style="font-size: 12px; font-weight: 600; color: #7A1212">فيه دفعة منتهية: {{m.expired}}</span>
+              </sc-if>
+            </button>
+          </sc-for>
+        </aside>
+
+        <section style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+
+          <div style="display: flex; flex-wrap: wrap; gap: 12px">
+            <sc-for list="{{tiles}}" as="t" hint-placeholder-count="4">
+              <div style="flex: 1 1 150px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 0px">
+                <span style="font-size: 13px; font-weight: 600; color: #55606E">{{t.label}}</span>
+                <span style="font-size: 24px; font-weight: 600; line-height: 1.3; font-variant-numeric: tabular-nums">{{t.value}}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 4px">
+            <h2 style="margin: 0 0 6px; font-size: 16px; font-weight: 700">دفعات {{selName}}</h2>
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) 110px 100px 100px; gap: 8px; padding: 6px 0; border-top: 1px solid #17202A; border-bottom: 2px solid #17202A; font-size: 13px; font-weight: 700">
+              <span>الفاتورة</span><span>الصلاحية</span><span style="text-align: right">المتبقي</span><span style="text-align: right">كلفة الوحدة</span>
+            </div>
+            <sc-for list="{{batchRows}}" as="b" hint-placeholder-count="2">
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 110px 100px 100px; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid #B8BEC8; font-size: 14px; font-variant-numeric: tabular-nums">
+                <span style="display: flex; align-items: center; gap: 8px; min-width: 0"><bdi dir="ltr">{{b.ref}}</bdi><span style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 6px; background: {{b.chipBg}}; color: {{b.chipFg}}">{{b.chip}}</span></span>
+                <bdi dir="ltr" style="text-align: start">{{b.expiry}}</bdi>
+                <span style="direction: ltr; text-align: right; font-weight: 600">{{b.qty}}</span>
+                <span style="direction: ltr; text-align: right">{{b.cost}}</span>
+              </div>
+            </sc-for>
+            <sc-if value="{{noBatches}}" hint-placeholder-val="{{false}}">
+              <span style="font-size: 14px; color: #55606E; padding: 6px 0">{{noBatchesText}}</span>
+            </sc-if>
+            <span style="font-size: 12px; color: #55606E; margin-top: 4px">الاستهلاك ياخذ من الأقرب انتهاءً أول. الدفعة المنتهية تنستبعد من المتاح وتنتظر تسجيلها تالف.</span>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px">
+              <h2 style="margin: 0; font-size: 16px; font-weight: 700">{{formTitle}}</h2>
+              <span style="font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{dirtyBg}}; color: {{dirtyFg}}">{{dirtyText}}</span>
+            </div>
+
+            <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+              <span>اسم المادة</span>
+              <input type="text" value="{{d.name}}" onChange="{{onName}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+            </label>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 12px">
+              <label style="flex: 1 1 140px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                <span>وحدة الشراء</span>
+                <input type="text" value="{{d.purchaseUnit}}" onChange="{{onPurchaseUnit}}" disabled="{{unitsLocked}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: {{lockBg}}; color: #17202A; box-sizing: border-box; width: 100%">
+              </label>
+              <label style="flex: 1 1 140px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                <span>وحدة الاستهلاك</span>
+                <input type="text" value="{{d.stockUnit}}" onChange="{{onStockUnit}}" disabled="{{unitsLocked}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: {{lockBg}}; color: #17202A; box-sizing: border-box; width: 100%">
+              </label>
+              <label style="flex: 1 1 140px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                <span>عدد العلب بال{{unitWord}}</span>
+                <input type="text" inputmode="numeric" value="{{d.boxes}}" onChange="{{onBoxes}}" disabled="{{unitsLocked}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: {{lockBg}}; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+              </label>
+              <label style="flex: 1 1 140px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                <span>كم {{stockWord}} بالعلبة</span>
+                <input type="text" inputmode="decimal" value="{{d.perBox}}" onChange="{{onPerBox}}" disabled="{{unitsLocked}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: {{lockBg}}; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+              </label>
+            </div>
+            <span style="font-size: 13px; font-weight: 600; color: #084F4B; background: #E3F1F0; border-radius: 8px; padding: 8px 12px">{{conversionText}}</span>
+            <sc-if value="{{unitsLocked}}" hint-placeholder-val="{{false}}">
+              <span style="font-size: 12px; color: #55606E">الوحدات والتحويل مقفولة لأن المادة بيها حركات سابقة، وتغييرها يخرب الكميات القديمة.</span>
+            </sc-if>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 12px">
+              <label style="flex: 1 1 200px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                <span>سعر شراء ال{{unitWord}} (د.ع)</span>
+                <input type="text" inputmode="numeric" value="{{d.price}}" onChange="{{onPrice}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+              </label>
+              <label style="flex: 1 1 200px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                <span>حد التنبيه ({{stockWord}})</span>
+                <input type="text" inputmode="decimal" value="{{d.threshold}}" onChange="{{onThreshold}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+              </label>
+            </div>
+            <span style="font-size: 12px; color: #55606E">{{costText}} الكلفة النهائية تنحسب وقت التنفيذ من الدفعة اللي انصرفت فعلاً، والسعر هنا تقديري. التنبيه يطلع لما المتاح ينزل عن الحد.</span>
+
+            <sc-if value="{{hasErrors}}" hint-placeholder-val="{{false}}">
+              <div role="alert" style="background: #FBEAEA; color: #7A1212; border: 1px solid #9B1C1C; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+                <sc-for list="{{errors}}" as="er" hint-placeholder-count="1">
+                  <span>{{er.text}}</span>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{hasMsg}}" hint-placeholder-val="{{false}}">
+              <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{msg}}</div>
+            </sc-if>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px">
+              <button type="button" onClick="{{saveMaterial}}" disabled="{{saveDisabled}}" style="min-height: 48px; padding: 0 22px; background: {{saveBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer">{{saveLabel}}</button>
+              <button type="button" onClick="{{discardMaterial}}" disabled="{{discardDisabled}}" style="min-height: 48px; padding: 0 18px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer">إلغاء التعديلات</button>
+            </div>
+          </div>
+
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isWaste}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+        <section style="flex: 1 1 420px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">تسجيل تالف</h2>
+
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <span style="font-size: 13px; font-weight: 600; color: #55606E">الدفعة</span>
+            <div role="group" aria-label="الدفعة" style="display: flex; flex-direction: column; gap: 6px">
+              <sc-for list="{{wasteBatches}}" as="b" hint-placeholder-count="4">
+                <button type="button" onClick="{{b.pick}}" aria-pressed="{{b.selected}}" style="text-align: start; min-height: 48px; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{b.bg}}; color: {{b.fg}}; border: 2px solid {{b.border}}">{{b.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+            <span>الكمية التالفة {{wasteUnit}}</span>
+            <input type="text" inputmode="decimal" value="{{wf.qty}}" onChange="{{onWasteQty}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+          </label>
+
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <span style="font-size: 13px; font-weight: 600; color: #55606E">السبب</span>
+            <div role="group" aria-label="السبب" style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-for list="{{reasons}}" as="r" hint-placeholder-count="5">
+                <button type="button" onClick="{{r.pick}}" aria-pressed="{{r.selected}}" style="min-height: 44px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{r.bg}}; color: {{r.fg}}; border: 2px solid {{r.border}}">{{r.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+            <span>{{noteLabel}}</span>
+            <input type="text" value="{{wf.note}}" onChange="{{onWasteNote}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+          </label>
+
+          <span style="font-size: 14px; font-weight: 600">{{wasteCostText}}</span>
+
+          <sc-if value="{{hasWasteErrors}}" hint-placeholder-val="{{false}}">
+            <div role="alert" style="background: #FBEAEA; color: #7A1212; border: 1px solid #9B1C1C; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+              <sc-for list="{{wasteErrors}}" as="er" hint-placeholder-count="1">
+                <span>{{er.text}}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{hasWasteMsg}}" hint-placeholder-val="{{false}}">
+            <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{wasteMsg}}</div>
+          </sc-if>
+          <button type="button" onClick="{{saveWaste}}" disabled="{{wasteSaveDisabled}}" style="align-self: flex-start; min-height: 52px; padding: 0 28px; background: {{wasteSaveBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer">تسجيل التالف</button>
+          <span style="font-size: 12px; color: #55606E">التالف ينخصم من الربح بيوم تسجيله، وما ينحسب مرتين. الهدر اللي يصير داخل الجلسة يسجل ضمن كلفتها.</span>
+        </section>
+
+        <section style="flex: 999 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+          <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 13px; font-weight: 600; color: #55606E">كلفة التالف هذا الشهر</span>
+            <span style="font-size: 28px; font-weight: 600; line-height: 1.3; font-variant-numeric: tabular-nums">{{wasteTotal}}</span>
+            <span style="font-size: 12px; color: #55606E">{{wasteCount}} حركة</span>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 700">سجل التالف</h2>
+            <sc-for list="{{wasteLog}}" as="w" hint-placeholder-count="3">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; border: 1px solid #D9DEE5; border-radius: 10px; padding: 12px 14px">
+                <bdi dir="ltr" style="flex: none; font-size: 13px; color: #55606E; min-width: 78px">{{w.date}}</bdi>
+                <span style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 0px">
+                  <span style="font-size: 15px; font-weight: 700">{{w.title}}</span>
+                  <span style="font-size: 13px; color: #3D4652">{{w.sub}}</span>
+                </span>
+                <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: #FBEFD9; color: #8A4B08">{{w.reason}}</span>
+                <span style="flex: none; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 100px; text-align: right">{{w.cost}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isCount}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+        <section style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 700">جرد المخزون</h2>
+            <span style="font-size: 13px; color: #55606E">عدّ كل دفعة بالواقع واكتب الكمية. الدفعة اللي تتركها فارغة ما تتغير. الدفعات المنتهية ما تنجرد، تتسجل تالف.</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <sc-for list="{{countRows}}" as="r" hint-placeholder-count="4">
+              <div style="border: 1px solid {{r.border}}; border-radius: 10px; padding: 12px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+                <span style="flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 0px">
+                  <span style="font-size: 15px; font-weight: 700">{{r.title}}</span>
+                  <span style="font-size: 13px; color: #3D4652">{{r.sub}}</span>
+                </span>
+                <label style="flex: none; display: flex; flex-direction: column; gap: 2px; font-size: 12px; font-weight: 600; color: #55606E">
+                  <span>الفعلي</span>
+                  <input type="text" inputmode="decimal" value="{{r.value}}" onChange="{{r.onChange}}" style="min-height: 44px; width: 110px; padding: 0 10px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; direction: ltr; text-align: right">
+                </label>
+                <span style="flex: none; min-width: 120px; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 6px; text-align: center; background: {{r.chipBg}}; color: {{r.chipFg}}">{{r.chip}}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{hasDeficit}}" hint-placeholder-val="{{false}}">
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <strong style="font-size: 14px">مواد مخزونها سالب</strong>
+              <span style="font-size: 12px; color: #55606E">انصرفت بدون ما يكون بالنظام دفعة. اكتب الكمية الموجودة فعلاً وتاريخ صلاحيتها لتنفتح دفعة جديدة بآخر سعر شراء، أو صحّحها بفاتورة شراء.</span>
+              <sc-for list="{{deficitRows}}" as="r" hint-placeholder-count="1">
+                <div style="border: 1px solid #C98A2B; border-radius: 10px; padding: 12px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+                  <span style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 0px">
+                    <span style="font-size: 15px; font-weight: 700">{{r.title}}</span>
+                    <span style="font-size: 13px; color: #3D4652">{{r.sub}}</span>
+                  </span>
+                  <label style="flex: none; display: flex; flex-direction: column; gap: 2px; font-size: 12px; font-weight: 600; color: #55606E">
+                    <span>الفعلي</span>
+                    <input type="text" inputmode="decimal" value="{{r.qty}}" onChange="{{r.onQty}}" style="min-height: 44px; width: 100px; padding: 0 10px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; direction: ltr; text-align: right">
+                  </label>
+                  <label style="flex: none; display: flex; flex-direction: column; gap: 2px; font-size: 12px; font-weight: 600; color: #55606E">
+                    <span>تاريخ الصلاحية</span>
+                    <input type="date" value="{{r.expiry}}" onChange="{{r.onExpiry}}" style="min-height: 44px; padding: 0 10px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box">
+                  </label>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+            <span>{{countNoteLabel}}</span>
+            <input type="text" value="{{cnote}}" onChange="{{onCountNote}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+          </label>
+
+          <sc-if value="{{hasCountSummary}}" hint-placeholder-val="{{false}}">
+            <div style="background: #F4F5F7; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; font-size: 14px; font-weight: 600">
+              <span>{{countSummary}}</span>
+            </div>
+          </sc-if>
+          <sc-if value="{{hasCountErrors}}" hint-placeholder-val="{{false}}">
+            <div role="alert" style="background: #FBEAEA; color: #7A1212; border: 1px solid #9B1C1C; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+              <sc-for list="{{countErrors}}" as="er" hint-placeholder-count="1">
+                <span>{{er.text}}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{hasCountMsg}}" hint-placeholder-val="{{false}}">
+            <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{countMsg}}</div>
+          </sc-if>
+          <button type="button" onClick="{{approveCount}}" disabled="{{countDisabled}}" style="align-self: flex-start; min-height: 52px; padding: 0 28px; background: {{countBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer">اعتماد الجرد</button>
+        </section>
+
+        <aside style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">جرد سابق</h2>
+          <sc-if value="{{noHistory}}" hint-placeholder-val="{{false}}">
+            <span style="font-size: 14px; color: #55606E">ما أكو جرد معتمد بعد.</span>
+          </sc-if>
+          <sc-for list="{{history}}" as="h" hint-placeholder-count="1">
+            <div style="border: 1px solid #D9DEE5; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px">
+              <div style="display: flex; justify-content: space-between; gap: 8px; align-items: baseline">
+                <bdi dir="ltr" style="font-size: 13px; color: #55606E">{{h.date}}</bdi>
+                <span style="font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{h.chipBg}}; color: {{h.chipFg}}">{{h.chip}}</span>
+              </div>
+              <span style="font-size: 14px; font-weight: 600">{{h.lines}}</span>
+              <span style="font-size: 13px; color: #3D4652">{{h.value}} · {{h.note}}</span>
+            </div>
+          </sc-for>
+          <p style="margin: 0; font-size: 12px; color: #55606E">فروقات الجرد تنسجل منفصلة عن التالف، وتظهر للمالك بسجل الحركات.</p>
+        </aside>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1500}}'>
+class Component extends DCLogic {
+  state = {
+    tab: 'materials', sel: 'botox', materials: null, batches: null, deficit: null, md: null, msg: '',
+    wlog: null, wf: { batch: '', qty: '', reason: '', note: '' }, wmsg: '',
+    cnt: {}, dcnt: {}, cnote: '', counts: [], cmsg: ''
+  };
+
+  today() { return '2026-11-14'; }
+  num(n) { return (Math.round(Number(n) * 100) / 100).toLocaleString('en-US'); }
+  fmt(n) { return Number(n).toLocaleString('en-US') + ' د.ع'; }
+  digits(v) { return String(v == null ? '' : v).trim().replace(/[٠-٩]/g, (c) => String(c.charCodeAt(0) - 1632)).replace(/[۰-۹]/g, (c) => String(c.charCodeAt(0) - 1776)).replace(/٫/g, '.'); }
+  whole(v) { const t = this.digits(v); return /^\d+$/.test(t) && Number.isSafeInteger(Number(t)) ? Number(t) : null; }
+  qty(v) { const t = this.digits(v); return /^\d+(\.\d{1,2})?$/.test(t) ? Number(t) : null; }
+  isDate(v) { return /^\d{4}-\d{2}-\d{2}$/.test(v); }
+  dateText(iso) { const p = String(iso).split('-'); return p.length === 3 ? Number(p[2]) + '/' + Number(p[1]) + '/' + p[0] : ''; }
+  monthText(iso) { const p = String(iso).split('-'); return Number(p[1]) + '/' + p[0]; }
+  pill(selected) { return { selected: selected, bg: selected ? '#17202A' : '#FFFFFF', fg: selected ? '#FFFFFF' : '#17202A', border: selected ? '#17202A' : '#AEB6C2' }; }
+  nearLimit() { return '2026-12-14'; }
+
+  seedMaterials() {
+    return [
+      { id: 'botox', name: 'بوتكس', purchaseUnit: 'كرتون', stockUnit: 'cc', boxes: 10, perBox: 1, price: 600000, threshold: 5, locked: true },
+      { id: 'filler', name: 'فلر', purchaseUnit: 'كرتون', stockUnit: 'cc', boxes: 5, perBox: 1, price: 400000, threshold: 3, locked: true },
+      { id: 'gel', name: 'جل ليزر', purchaseUnit: 'كرتون', stockUnit: 'قطعة', boxes: 12, perBox: 1, price: 300000, threshold: 4, locked: true },
+      { id: 'cream', name: 'كريم تخدير', purchaseUnit: 'كرتون', stockUnit: 'قطعة', boxes: 20, perBox: 1, price: 200000, threshold: 5, locked: true }
+    ];
+  }
+  seedBatches() {
+    return [
+      { id: 'b0', mat: 'botox', ref: 'F-1031', expiry: '2026-11-05', qty: 2, cost: 60000 },
+      { id: 'b1', mat: 'botox', ref: 'F-1042', expiry: '2026-12-15', qty: 3, cost: 60000 },
+      { id: 'b2', mat: 'filler', ref: 'F-1051', expiry: '2027-03-31', qty: 5, cost: 80000 },
+      { id: 'b3', mat: 'gel', ref: 'F-1020', expiry: '2026-11-30', qty: 4, cost: 25000 },
+      { id: 'b4', mat: 'gel', ref: 'F-1051', expiry: '2027-06-30', qty: 10, cost: 25000 }
+    ];
+  }
+  reservedMap() { return { botox: 2, gel: 3 }; }
+  seedDeficit() { return { cream: -2 }; }
+  seedWaste() {
+    return [
+      { id: 'w1', date: '2026-11-08', mat: 'فلر', ref: 'F-1051', qty: 0.5, unit: 'cc', reason: 'كسر أو تلف', note: 'وقعت العلبة', cost: 40000 },
+      { id: 'w2', date: '2026-10-20', mat: 'بوتكس', ref: 'F-1031', qty: 1, unit: 'cc', reason: 'فتح وعدم الاستخدام', note: '', cost: 60000 }
+    ];
+  }
+  reasons() { return [{ id: 'expired', label: 'انتهاء الصلاحية' }, { id: 'broken', label: 'كسر أو تلف' }, { id: 'unused', label: 'فتح وعدم الاستخدام' }, { id: 'prep', label: 'خطأ تحضير' }, { id: 'other', label: 'أخرى' }]; }
+  mats() { return this.state.materials || this.seedMaterials(); }
+  bats() { return this.state.batches || this.seedBatches(); }
+  deficitMap() { return this.state.deficit || this.seedDeficit(); }
+  wasteList() { return this.state.wlog || this.seedWaste(); }
+  matOf(id) { return this.mats().find((x) => x.id === id) || null; }
+  isExpired(b) { return b.expiry < this.today(); }
+  unitsPer(m) { return Math.round(m.boxes * m.perBox * 100) / 100; }
+  unitCost(m) { const u = this.unitsPer(m); return u > 0 ? Math.round(m.price / u) : 0; }
+  stats(id) {
+    const live = this.bats().filter((b) => b.mat === id && b.qty > 0);
+    const valid = live.filter((b) => !this.isExpired(b)).reduce((t, b) => t + b.qty, 0);
+    const expired = live.filter((b) => this.isExpired(b)).reduce((t, b) => t + b.qty, 0);
+    const onHand = Math.round((valid + (this.deficitMap()[id] || 0)) * 100) / 100;
+    const reserved = this.reservedMap()[id] || 0;
+    return { valid: valid, expired: expired, onHand: onHand, reserved: reserved, available: Math.round((onHand - reserved) * 100) / 100, near: live.some((b) => !this.isExpired(b) && b.expiry <= this.nearLimit()) };
+  }
+  chipOf(m, st) {
+    if (st.onHand < 0) { return { chip: 'سالب', bg: '#FBEAEA', fg: '#7A1212' }; }
+    if (st.available < m.threshold) { return { chip: 'قليل', bg: '#FBEFD9', fg: '#8A4B08' }; }
+    if (st.near) { return { chip: 'ينتهي قريب', bg: '#FBEFD9', fg: '#8A4B08' }; }
+    return { chip: 'طبيعي', bg: '#ECEFF3', fg: '#3D4652' };
+  }
+
+  blankMat() { return { id: '', name: '', purchaseUnit: 'كرتون', stockUnit: '', boxes: '', perBox: '', price: '', threshold: '', locked: false }; }
+  matCtx() {
+    const s = this.state; const original = this.matOf(s.sel);
+    const asText = (m) => ({ id: m.id, name: m.name, purchaseUnit: m.purchaseUnit, stockUnit: m.stockUnit, boxes: String(m.boxes), perBox: String(m.perBox), price: String(m.price), threshold: String(m.threshold), locked: m.locked });
+    const base = original ? asText(original) : this.blankMat();
+    const draft = s.md || base;
+    return { original: original, base: base, draft: draft, dirty: JSON.stringify(draft) !== JSON.stringify(base) };
+  }
+  editMat(change) { this.setState({ md: Object.assign({}, this.matCtx().draft, change), msg: '' }); }
+  matErrors(c) {
+    const d = c.draft; const out = [];
+    if (!d.name.trim()) { out.push('اكتب اسم المادة.'); }
+    else if (this.mats().some((x) => x.id !== d.id && x.name.trim() === d.name.trim())) { out.push('اسم المادة مستخدم.'); }
+    if (!d.locked) {
+      if (!d.purchaseUnit.trim()) { out.push('اكتب وحدة الشراء (مثلاً كرتون).'); }
+      if (!d.stockUnit.trim()) { out.push('اكتب وحدة الاستهلاك (مثلاً cc أو قطعة).'); }
+      const b = this.whole(d.boxes); if (b === null || b < 1) { out.push('عدد العلب رقم صحيح من 1 وأكثر.'); }
+      const p = this.qty(d.perBox); if (p === null || p <= 0) { out.push('الكمية بالعلبة رقم أكبر من صفر (لحد خانتين عشريتين).'); }
+    }
+    const price = this.whole(d.price); if (price === null || price < 1) { out.push('اكتب سعر الشراء بالدينار: رقم صحيح أكبر من صفر.'); }
+    const th = this.qty(d.threshold); if (th === null) { out.push('اكتب حد التنبيه (رقم، يمكن صفر).'); }
+    return out;
+  }
+  saveMaterial() {
+    const c = this.matCtx();
+    if (!c.dirty || this.matErrors(c).length) { return; }
+    const d = c.draft;
+    const saved = { id: c.original ? c.original.id : 'm' + Date.now(), name: d.name.trim(), purchaseUnit: d.purchaseUnit.trim(), stockUnit: d.stockUnit.trim(), boxes: this.whole(d.boxes), perBox: this.qty(d.perBox), price: this.whole(d.price), threshold: this.qty(d.threshold), locked: c.original ? c.original.locked : false };
+    if (c.original) { saved.purchaseUnit = c.original.purchaseUnit; saved.stockUnit = c.original.stockUnit; saved.boxes = c.original.boxes; saved.perBox = c.original.perBox; }
+    const list = c.original ? this.mats().map((x) => x.id === saved.id ? saved : x) : this.mats().concat([saved]);
+    this.setState({ materials: list, sel: saved.id, md: null, msg: c.original ? 'انحفظت تعديلات «' + saved.name + '».' : 'انضافت المادة «' + saved.name + '». بدون دفعات لحد ما تدخل فاتورة شراء.' });
+  }
+
+  wasteBatchList() {
+    return this.bats().filter((b) => b.qty > 0).sort((a, b) => (this.isExpired(b) ? 1 : 0) - (this.isExpired(a) ? 1 : 0) || (a.expiry < b.expiry ? -1 : 1));
+  }
+  wasteErrors() {
+    const wf = this.state.wf; const out = [];
+    const b = this.bats().find((x) => x.id === wf.batch);
+    if (!b) { out.push('اختار الدفعة.'); return out; }
+    const q = this.qty(wf.qty);
+    if (q === null || q <= 0) { out.push('اكتب كمية أكبر من صفر (لحد خانتين عشريتين).'); }
+    else if (q > b.qty) { out.push('الكمية أكبر من المتبقي بالدفعة (' + this.num(b.qty) + ').'); }
+    else if (!this.isExpired(b)) {
+      const st = this.stats(b.mat); const room = Math.max(0, st.valid - st.reserved);
+      if (q > room) { out.push('القابل للتسجيل ' + this.num(Math.min(room, b.qty)) + ' بس، لأن الباقي محجوز لجلسات مدفوعة. حل الحجز أول.'); }
+    }
+    if (!wf.reason) { out.push('اختار السبب.'); }
+    if (wf.reason === 'other' && !wf.note.trim()) { out.push('السبب «أخرى» يحتاج ملاحظة.'); }
+    return out;
+  }
+  saveWaste() {
+    const wf = this.state.wf;
+    if (this.wasteErrors().length) { return; }
+    const b = this.bats().find((x) => x.id === wf.batch); const m = this.matOf(b.mat); const q = this.qty(wf.qty);
+    const reason = this.reasons().find((r) => r.id === wf.reason).label;
+    const entry = { id: 'w' + Date.now(), date: this.today(), mat: m.name, ref: b.ref, qty: q, unit: m.stockUnit, reason: reason, note: wf.note.trim(), cost: Math.round(q * b.cost) };
+    this.setState({ batches: this.bats().map((x) => x.id === b.id ? Object.assign({}, x, { qty: Math.round((x.qty - q) * 100) / 100 }) : x), wlog: [entry].concat(this.wasteList()), wf: { batch: '', qty: '', reason: '', note: '' }, wmsg: 'انسجل تالف ' + this.num(q) + ' ' + m.stockUnit + ' من ' + m.name + ' بكلفة ' + this.fmt(entry.cost) + '. نقص من الدفعة وانحسب من الربح.' });
+  }
+
+  countRowsData() {
+    return this.bats().filter((b) => b.qty > 0 && !this.isExpired(b)).sort((a, b) => a.mat < b.mat ? -1 : (a.mat > b.mat ? 1 : (a.expiry < b.expiry ? -1 : 1)));
+  }
+  countAnalysis() {
+    const s = this.state; const rows = this.countRowsData(); const errors = []; const changes = []; let counted = 0; let shortage = 0; let surplus = 0;
+    const newValid = {};
+    rows.forEach((b) => { newValid[b.mat] = (newValid[b.mat] || 0) + b.qty; });
+    rows.forEach((b) => {
+      const raw = s.cnt[b.id];
+      if (raw === undefined || String(raw).trim() === '') { return; }
+      const q = this.qty(raw);
+      if (q === null) { errors.push('«' + this.matOf(b.mat).name + ' · ' + b.ref + '»: اكتب رقم صحيح (لحد خانتين عشريتين).'); return; }
+      counted += 1;
+      newValid[b.mat] += q - b.qty;
+      const diff = Math.round((q - b.qty) * 100) / 100;
+      if (diff !== 0) { changes.push({ kind: 'batch', id: b.id, mat: b.mat, from: b.qty, to: q, diff: diff }); if (diff < 0) { shortage += Math.round(-diff * b.cost); } else { surplus += Math.round(diff * b.cost); } }
+    });
+    Object.keys(this.deficitMap()).forEach((id) => {
+      const d = s.dcnt[id] || { qty: '', expiry: '' };
+      if (String(d.qty).trim() === '') { return; }
+      const m = this.matOf(id); const q = this.qty(d.qty);
+      if (q === null) { errors.push('«' + m.name + '»: اكتب رقم صحيح للكمية الفعلية.'); return; }
+      if (q > 0 && (!this.isDate(d.expiry) || d.expiry <= this.today())) { errors.push('«' + m.name + '»: اكتب تاريخ صلاحية بعد اليوم للدفعة الجديدة.'); return; }
+      counted += 1;
+      changes.push({ kind: 'deficit', mat: id, from: this.deficitMap()[id], to: q, diff: q - this.deficitMap()[id], expiry: d.expiry });
+      surplus += Math.round((q - this.deficitMap()[id]) * this.unitCost(m));
+    });
+    Object.keys(newValid).forEach((id) => {
+      const reserved = this.reservedMap()[id] || 0; const st = this.stats(id);
+      if (newValid[id] < reserved && newValid[id] !== st.valid) { errors.push('«' + this.matOf(id).name + '»: الكمية الفعلية ' + this.num(newValid[id]) + ' أقل من المحجوز للجلسات المدفوعة (' + reserved + '). حل الحجز أول.'); }
+    });
+    if (counted === 0) { errors.push('اكتب كمية فعلية لدفعة وحدة على الأقل.'); }
+    if (changes.length > 0 && !s.cnote.trim()) { errors.push('الفرق يحتاج ملاحظة تشرح السبب.'); }
+    return { rows: rows, errors: errors, changes: changes, counted: counted, shortage: shortage, surplus: surplus };
+  }
+  approveCount() {
+    const a = this.countAnalysis();
+    if (a.errors.length) { return; }
+    let batches = this.bats().slice(); let deficit = Object.assign({}, this.deficitMap()); const lines = [];
+    a.changes.forEach((c) => {
+      if (c.kind === 'batch') { batches = batches.map((b) => b.id === c.id ? Object.assign({}, b, { qty: c.to }) : b); lines.push(this.matOf(c.mat).name + ' ' + this.num(c.from) + ' ← ' + this.num(c.to)); }
+      else { const m = this.matOf(c.mat); delete deficit[c.mat]; if (c.to > 0) { batches.push({ id: 'bj' + Date.now() + c.mat, mat: c.mat, ref: 'جرد ' + this.dateText(this.today()), expiry: c.expiry, qty: c.to, cost: this.unitCost(m) }); } lines.push(m.name + ' سالب ← ' + this.num(c.to)); }
+    });
+    const rec = { date: this.today(), counted: a.counted, lines: lines, shortage: a.shortage, surplus: a.surplus, note: this.state.cnote.trim() };
+    this.setState({ batches: batches, deficit: deficit, counts: [rec].concat(this.state.counts), cnt: {}, dcnt: {}, cnote: '', cmsg: 'اعتمد الجرد: ' + a.counted + ' بند، ' + (a.changes.length ? a.changes.length + ' فرق انسجل بسجل الحركات.' : 'كلها مطابقة.') });
+  }
+
+  renderVals() {
+    const s = this.state; const tab = s.tab;
+    const mats = this.mats();
+    const amber = { bg: '#FBEFD9', fg: '#8A4B08' };
+
+    const alerts = [];
+    this.bats().filter((b) => b.qty > 0 && this.isExpired(b)).forEach((b) => {
+      const m = this.matOf(b.mat);
+      alerts.push({ text: 'دفعة منتهية: ' + m.name + ' · فاتورة ' + b.ref + ' · ' + this.num(b.qty) + ' ' + m.stockUnit + ' (انتهت ' + this.dateText(b.expiry) + '). تنستبعد من المتاح.', canWaste: true, act: () => this.setState({ tab: 'waste', wf: { batch: b.id, qty: String(b.qty), reason: 'expired', note: '' }, wmsg: '' }) });
+    });
+    mats.forEach((m) => {
+      const st = this.stats(m.id);
+      if (st.onHand < 0) { alerts.push({ text: m.name + ': المخزون سالب (' + this.num(st.onHand) + ' ' + m.stockUnit + '). صححه بفاتورة شراء أو بجرد.', canWaste: false, act: null }); }
+      else if (st.available < m.threshold) { alerts.push({ text: m.name + ': المتاح ' + this.num(st.available) + ' ' + m.stockUnit + ' والحد ' + this.num(m.threshold) + '.', canWaste: false, act: null }); }
+      if (st.near) { const b = this.bats().filter((x) => x.mat === m.id && x.qty > 0 && !this.isExpired(x) && x.expiry <= this.nearLimit()).sort((a, c) => a.expiry < c.expiry ? -1 : 1)[0]; alerts.push({ text: m.name + ': دفعة تنتهي ' + this.dateText(b.expiry) + ' (' + this.num(b.qty) + ' ' + m.stockUnit + ').', canWaste: false, act: null }); }
+    });
+
+    const matList = mats.map((m) => {
+      const st = this.stats(m.id); const ch = this.chipOf(m, st); const selected = m.id === s.sel;
+      return { name: m.name, available: this.num(st.available) + ' ' + m.stockUnit, onHand: this.num(st.onHand), chip: ch.chip, chipBg: ch.bg, chipFg: ch.fg, hasExpired: st.expired > 0, expired: this.num(st.expired) + ' ' + m.stockUnit, selected: selected, bg: selected ? '#E3F1F0' : '#FFFFFF', border: selected ? '#0B6E69' : '#D9DEE5', pick: () => this.setState({ sel: m.id, md: null, msg: '' }) };
+    });
+
+    const c = this.matCtx(); const d = c.draft; const errs = this.matErrors(c); const orig = c.original;
+    const selStats = orig ? this.stats(orig.id) : { valid: 0, expired: 0, onHand: 0, reserved: 0, available: 0 };
+    const unit = orig ? orig.stockUnit : (d.stockUnit || 'وحدة');
+    const tiles = [{ label: 'الموجود الصالح', value: this.num(selStats.onHand) + ' ' + unit }, { label: 'المحجوز لجلسات مدفوعة', value: this.num(selStats.reserved) + ' ' + unit }, { label: 'المتاح', value: this.num(selStats.available) + ' ' + unit }, { label: 'منتهي (مستبعد)', value: this.num(selStats.expired) + ' ' + unit }];
+    const batchRows = orig ? this.bats().filter((b) => b.mat === orig.id && b.qty > 0).sort((a, b) => a.expiry < b.expiry ? -1 : 1).map((b) => {
+      const ex = this.isExpired(b); const near = !ex && b.expiry <= this.nearLimit();
+      return { ref: b.ref, expiry: this.dateText(b.expiry), qty: this.num(b.qty) + ' ' + orig.stockUnit, cost: this.num(b.cost), chip: ex ? 'منتهية' : (near ? 'تنتهي قريب' : 'صالحة'), chipBg: ex ? '#FBEAEA' : (near ? amber.bg : '#E3F1F0'), chipFg: ex ? '#7A1212' : (near ? amber.fg : '#084F4B') };
+    }) : [];
+    const perUnits = this.unitsPer({ boxes: this.whole(d.boxes) || 0, perBox: this.qty(d.perBox) || 0 });
+    const priceN = this.whole(d.price);
+    const costPer = perUnits > 0 && priceN ? Math.round(priceN / perUnits) : null;
+    const locked = !!d.locked;
+
+    const wasteBatches = this.wasteBatchList().map((b) => {
+      const m = this.matOf(b.mat); const ex = this.isExpired(b); const selected = b.id === s.wf.batch;
+      return { label: m.name + ' · فاتورة ' + b.ref + ' · تنتهي ' + this.dateText(b.expiry) + (ex ? ' (منتهية)' : '') + ' · المتبقي ' + this.num(b.qty) + ' ' + m.stockUnit, selected: selected, bg: selected ? '#17202A' : (ex ? '#FBEAEA' : '#FFFFFF'), fg: selected ? '#FFFFFF' : '#17202A', border: selected ? '#17202A' : (ex ? '#9B1C1C' : '#AEB6C2'), pick: () => this.setState({ wf: Object.assign({}, this.state.wf, { batch: b.id }), wmsg: '' }) };
+    });
+    const wf = s.wf; const wb = this.bats().find((x) => x.id === wf.batch); const wm = wb ? this.matOf(wb.mat) : null;
+    const wErrs = this.wasteErrors(); const wq = this.qty(wf.qty);
+    const wTouched = wf.batch !== '' || wf.qty !== '' || wf.reason !== '' || wf.note !== '';
+    const wasteAll = this.wasteList(); const wasteMonth = wasteAll.filter((w) => w.date.slice(0, 7) === this.today().slice(0, 7));
+
+    const an = this.countAnalysis(); const cnt = s.cnt;
+    const countRows = an.rows.map((b) => {
+      const m = this.matOf(b.mat); const raw = cnt[b.id] === undefined ? '' : cnt[b.id]; const q = String(raw).trim() === '' ? null : this.qty(raw);
+      let chip = 'لم تنعد'; let bg = '#ECEFF3'; let fg = '#3D4652'; let border = '#D9DEE5';
+      if (String(raw).trim() !== '' && q === null) { chip = 'رقم غير صحيح'; bg = '#FBEAEA'; fg = '#7A1212'; border = '#9B1C1C'; }
+      else if (q !== null) { const diff = Math.round((q - b.qty) * 100) / 100; if (diff === 0) { chip = 'مطابق'; bg = '#E3F1F0'; fg = '#084F4B'; } else if (diff < 0) { chip = 'نقص ' + this.num(-diff) + ' ' + m.stockUnit; bg = '#FBEAEA'; fg = '#7A1212'; border = '#C98A2B'; } else { chip = 'زيادة ' + this.num(diff) + ' ' + m.stockUnit; bg = '#E4EDF8'; fg = '#1D4E89'; border = '#C98A2B'; } }
+      return { title: m.name + ' · فاتورة ' + b.ref, sub: 'تنتهي ' + this.dateText(b.expiry) + ' · النظام ' + this.num(b.qty) + ' ' + m.stockUnit, value: raw, chip: chip, chipBg: bg, chipFg: fg, border: border, onChange: (e) => this.setState({ cnt: Object.assign({}, this.state.cnt, { [b.id]: e.target.value }), cmsg: '' }) };
+    });
+    const deficitRows = Object.keys(this.deficitMap()).map((id) => {
+      const m = this.matOf(id); const dd = s.dcnt[id] || { qty: '', expiry: '' };
+      return { title: m.name, sub: 'النظام ' + this.num(this.deficitMap()[id]) + ' ' + m.stockUnit + ' · الكلفة بآخر سعر شراء ' + this.fmt(this.unitCost(m)) + ' للوحدة', qty: dd.qty, expiry: dd.expiry,
+        onQty: (e) => this.setState({ dcnt: Object.assign({}, this.state.dcnt, { [id]: Object.assign({}, this.state.dcnt[id] || { qty: '', expiry: '' }, { qty: e.target.value }) }), cmsg: '' }),
+        onExpiry: (e) => this.setState({ dcnt: Object.assign({}, this.state.dcnt, { [id]: Object.assign({}, this.state.dcnt[id] || { qty: '', expiry: '' }, { expiry: e.target.value }) }), cmsg: '' }) };
+    });
+    const cTouched = Object.keys(cnt).some((k) => String(cnt[k]).trim() !== '') || Object.keys(s.dcnt).some((k) => String(s.dcnt[k].qty).trim() !== '') || s.cnote !== '';
+    const history = s.counts.map((h) => ({ date: this.dateText(h.date), chip: h.lines.length ? 'فيه فروق' : 'مطابق', chipBg: h.lines.length ? '#FBEFD9' : '#E3F1F0', chipFg: h.lines.length ? '#8A4B08' : '#084F4B', lines: h.lines.length ? h.lines.join(' · ') : 'كل البنود مطابقة', value: 'نقص ' + this.fmt(h.shortage) + ' · زيادة ' + this.fmt(h.surplus), note: h.note || 'بدون ملاحظة' }));
+
+    return {
+      hasAlerts: alerts.length > 0, alertCount: alerts.length, alerts: alerts,
+      tabs: [{ id: 'materials', label: 'المواد والدفعات' }, { id: 'waste', label: 'التالف' }, { id: 'count', label: 'الجرد' }].map((t) => Object.assign({ label: t.label, pick: () => this.setState({ tab: t.id }) }, this.pill(tab === t.id))),
+      isMaterials: tab === 'materials', isWaste: tab === 'waste', isCount: tab === 'count',
+      matList: matList, addMaterial: () => this.setState({ sel: '', md: null, msg: '' }),
+      tiles: tiles, selName: orig ? orig.name : 'مادة جديدة', batchRows: batchRows, noBatches: batchRows.length === 0,
+      noBatchesText: orig ? 'ما أكو دفعات صالحة. المخزون ' + (selStats.onHand < 0 ? 'سالب' : 'صفر') + '؛ يتصحح بفاتورة شراء أو جرد.' : 'المادة الجديدة بدون دفعات لحد ما تدخل فاتورة شراء.',
+      formTitle: orig ? 'تعريف المادة' : 'مادة جديدة', dirtyText: c.dirty ? 'تعديلات غير محفوظة' : 'محفوظ', dirtyBg: c.dirty ? '#FBEFD9' : '#ECEFF3', dirtyFg: c.dirty ? '#8A4B08' : '#3D4652',
+      d: { name: d.name, purchaseUnit: d.purchaseUnit, stockUnit: d.stockUnit, boxes: d.boxes, perBox: d.perBox, price: d.price, threshold: d.threshold },
+      onName: (e) => this.editMat({ name: e.target.value }), onPurchaseUnit: (e) => this.editMat({ purchaseUnit: e.target.value }), onStockUnit: (e) => this.editMat({ stockUnit: e.target.value }),
+      onBoxes: (e) => this.editMat({ boxes: e.target.value }), onPerBox: (e) => this.editMat({ perBox: e.target.value }), onPrice: (e) => this.editMat({ price: e.target.value }), onThreshold: (e) => this.editMat({ threshold: e.target.value }),
+      unitsLocked: locked, lockBg: locked ? '#ECEFF3' : '#FFFFFF', unitWord: d.purchaseUnit.trim() || 'وحدة الشراء', stockWord: d.stockUnit.trim() || 'وحدة',
+      conversionText: perUnits > 0 ? 'ال' + (d.purchaseUnit.trim() || 'وحدة الشراء') + ' = ' + this.num(this.whole(d.boxes)) + ' علبة × ' + this.num(this.qty(d.perBox)) + ' ' + (d.stockUnit.trim() || 'وحدة') + ' = ' + this.num(perUnits) + ' ' + (d.stockUnit.trim() || 'وحدة') : 'اكتب عدد العلب والكمية بالعلبة حتى يطلع التحويل.',
+      costText: costPer !== null ? 'كلفة ال' + (d.stockUnit.trim() || 'وحدة') + ' التقديرية ' + this.fmt(costPer) + '.' : '',
+      hasErrors: c.dirty && errs.length > 0, errors: errs.map((t) => ({ text: t })), hasMsg: !!s.msg && !c.dirty, msg: s.msg,
+      saveMaterial: () => this.saveMaterial(), saveDisabled: !c.dirty || errs.length > 0, saveBg: !c.dirty || errs.length > 0 ? '#6B7480' : '#0B6E69', saveLabel: orig ? 'حفظ التعديلات' : 'إضافة المادة',
+      discardMaterial: () => this.setState({ md: null, msg: '' }), discardDisabled: !c.dirty,
+      wasteBatches: wasteBatches, wf: { qty: wf.qty, note: wf.note }, wasteUnit: wm ? '(' + wm.stockUnit + ')' : '',
+      onWasteQty: (e) => this.setState({ wf: Object.assign({}, this.state.wf, { qty: e.target.value }), wmsg: '' }), onWasteNote: (e) => this.setState({ wf: Object.assign({}, this.state.wf, { note: e.target.value }), wmsg: '' }),
+      reasons: this.reasons().map((r) => Object.assign({ label: r.label, pick: () => this.setState({ wf: Object.assign({}, this.state.wf, { reason: r.id }), wmsg: '' }) }, this.pill(wf.reason === r.id))),
+      noteLabel: wf.reason === 'other' ? 'ملاحظة (إلزامية)' : 'ملاحظة (اختياري)',
+      wasteCostText: wb && wq !== null && wq > 0 ? 'كلفة التالف ' + this.fmt(Math.round(wq * wb.cost)) + ' (' + this.fmt(wb.cost) + ' للوحدة من هالدفعة).' : '',
+      hasWasteErrors: wTouched && wErrs.length > 0, wasteErrors: wErrs.map((t) => ({ text: t })), hasWasteMsg: !!s.wmsg && !wTouched, wasteMsg: s.wmsg,
+      saveWaste: () => this.saveWaste(), wasteSaveDisabled: wErrs.length > 0, wasteSaveBg: wErrs.length > 0 ? '#6B7480' : '#0B6E69',
+      wasteTotal: this.fmt(wasteMonth.reduce((t, w) => t + w.cost, 0)), wasteCount: wasteMonth.length,
+      wasteLog: wasteAll.slice().sort((a, b) => a.date < b.date ? 1 : (a.date > b.date ? -1 : 0)).map((w) => ({ date: this.dateText(w.date), title: w.mat + ' · ' + this.num(w.qty) + ' ' + w.unit, sub: 'فاتورة ' + w.ref + (w.note ? ' · ' + w.note : ''), reason: w.reason, cost: this.num(w.cost) })),
+      countRows: countRows, hasDeficit: deficitRows.length > 0, deficitRows: deficitRows, cnote: s.cnote, onCountNote: (e) => this.setState({ cnote: e.target.value, cmsg: '' }),
+      countNoteLabel: an.changes.length > 0 ? 'ملاحظة الجرد (إلزامية لأن أكو فرق)' : 'ملاحظة الجرد (اختياري)',
+      hasCountSummary: an.counted > 0 && an.errors.length === 0 || (an.counted > 0 && an.changes.length > 0), countSummary: an.counted + ' بند معدود · نقص ' + this.fmt(an.shortage) + ' · زيادة ' + this.fmt(an.surplus),
+      hasCountErrors: cTouched && an.errors.length > 0, countErrors: an.errors.map((t) => ({ text: t })), hasCountMsg: !!s.cmsg && !cTouched, countMsg: s.cmsg,
+      approveCount: () => this.approveCount(), countDisabled: an.errors.length > 0, countBg: an.errors.length > 0 ? '#6B7480' : '#0B6E69',
+      noHistory: history.length === 0, history: history
+    };
+  }
+}
+</script>
+</body>
+</html>

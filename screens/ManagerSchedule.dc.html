@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>شاشة المدير · الدوام والعطل</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+input{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="min-height: 100vh; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6">
+
+  <header style="background: #FFFFFF; border-bottom: 1px solid #D9DEE5">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 0px">
+        <strong style="font-size: 18px; font-weight: 700">المدير: [اسم المدير]</strong>
+        <span style="color: #55606E; font-size: 13px">[اسم العيادة] · بيانات تجريبية للعرض</span>
+      </div>
+      <nav aria-label="أقسام المدير" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <a href="Manager.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الرئيسية</a>
+        <a href="ManagerStaff.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموظفين والرواتب</a>
+        <a href="ManagerSuppliers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموردين والمشتريات</a>
+        <a href="ManagerStock.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المخزون</a>
+        <a href="ManagerOffers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">العروض</a>
+        <a href="ManagerSchedule.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #17202A; color: #FFFFFF; border: 2px solid #17202A">الدوام والعطل</a>
+        <a href="ManagerBookings.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الحجوزات</a>
+        <a href="ManagerExpenses.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المصاريف</a>
+        <a href="ManagerPayMethods.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">طرق الدفع</a>
+      </nav>
+    </div>
+  </header>
+
+  <div style="max-width: 1360px; margin: 0 auto; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px">
+
+    <div role="group" aria-label="أقسام الصفحة" style="display: flex; flex-wrap: wrap; gap: 8px">
+      <sc-for list="{{tabs}}" as="tb" hint-placeholder-count="3">
+        <button type="button" onClick="{{tb.pick}}" aria-pressed="{{tb.selected}}" style="min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; background: {{tb.bg}}; color: {{tb.fg}}; border: 2px solid {{tb.border}}">{{tb.label}}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{isClinic}}" hint-placeholder-val="{{true}}">
+      <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px; max-width: 760px">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">دوام العيادة</h2>
+          <span style="font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{clinicDirtyBg}}; color: {{clinicDirtyFg}}">{{clinicDirtyText}}</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 13px; font-weight: 600; color: #55606E">أيام الدوام</span>
+          <div role="group" aria-label="أيام الدوام" style="display: flex; flex-wrap: wrap; gap: 8px">
+            <sc-for list="{{clinicDays}}" as="dy" hint-placeholder-count="7">
+              <button type="button" onClick="{{dy.toggle}}" aria-pressed="{{dy.selected}}" style="min-height: 44px; min-width: 88px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{dy.bg}}; color: {{dy.fg}}; border: 2px solid {{dy.border}}">{{dy.label}}</button>
+            </sc-for>
+          </div>
+          <span style="font-size: 12px; color: #55606E">الجلسات تنحجز على أيام دوام العيادة، مو على دوام الطبيب، لأن الممرض هو اللي ينفذها.</span>
+        </div>
+        <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E; max-width: 260px">
+          <span>الحد الأقصى للحجوزات باليوم (للعيادة كلها)</span>
+          <input type="text" inputmode="numeric" value="{{clinicLimit}}" onChange="{{onLimit}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+        </label>
+        <span style="font-size: 12px; color: #55606E">الكشفية والجلسة تحسبن نفس الشي، والزيارة الوحدة تاخذ مكان واحد.</span>
+        <sc-if value="{{hasClinicWarnings}}" hint-placeholder-val="{{false}}">
+          <div style="background: #FBEFD9; color: #6B3A06; border: 1px solid #C98A2B; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+            <sc-for list="{{clinicWarnings}}" as="w" hint-placeholder-count="1">
+              <span>{{w.text}}</span>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{hasClinicErrors}}" hint-placeholder-val="{{false}}">
+          <div role="alert" style="background: #FBEAEA; color: #7A1212; border: 1px solid #9B1C1C; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+            <sc-for list="{{clinicErrors}}" as="er" hint-placeholder-count="1">
+              <span>{{er.text}}</span>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{hasMsg}}" hint-placeholder-val="{{false}}">
+          <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{msg}}</div>
+        </sc-if>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px">
+          <button type="button" onClick="{{saveClinic}}" disabled="{{clinicSaveDisabled}}" style="min-height: 48px; padding: 0 22px; background: {{clinicSaveBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer">حفظ</button>
+          <button type="button" onClick="{{discardClinic}}" disabled="{{clinicDiscardDisabled}}" style="min-height: 48px; padding: 0 18px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer">إلغاء التعديلات</button>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isDoctors}}" hint-placeholder-val="{{false}}">
+      <section style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px; max-width: 760px">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">دوام الأطباء</h2>
+          <span style="font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{docDirtyBg}}; color: {{docDirtyFg}}">{{docDirtyText}}</span>
+        </div>
+        <div role="group" aria-label="الطبيب" style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{doctors}}" as="dc" hint-placeholder-count="2">
+            <button type="button" onClick="{{dc.pick}}" aria-pressed="{{dc.selected}}" style="min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; background: {{dc.bg}}; color: {{dc.fg}}; border: 2px solid {{dc.border}}">{{dc.label}}</button>
+          </sc-for>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <sc-for list="{{docRows}}" as="r" hint-placeholder-count="7">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; border: 1px solid #D9DEE5; border-radius: 10px; padding: 10px 12px">
+              <button type="button" onClick="{{r.toggle}}" aria-pressed="{{r.on}}" style="flex: none; min-height: 44px; min-width: 96px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{r.bg}}; color: {{r.fg}}; border: 2px solid {{r.border}}">{{r.label}}</button>
+              <sc-if value="{{r.on}}" hint-placeholder-val="{{false}}">
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #55606E">
+                  <span>من</span>
+                  <input type="time" value="{{r.from}}" onChange="{{r.onFrom}}" style="min-height: 44px; padding: 0 10px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box">
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #55606E">
+                  <span>إلى</span>
+                  <input type="time" value="{{r.to}}" onChange="{{r.onTo}}" style="min-height: 44px; padding: 0 10px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box">
+                </label>
+              </sc-if>
+              <sc-if value="{{r.hasNote}}" hint-placeholder-val="{{false}}">
+                <span style="font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{r.noteBg}}; color: {{r.noteFg}}">{{r.note}}</span>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{hasDocWarnings}}" hint-placeholder-val="{{false}}">
+          <div style="background: #FBEFD9; color: #6B3A06; border: 1px solid #C98A2B; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+            <sc-for list="{{docWarnings}}" as="w" hint-placeholder-count="1">
+              <span>{{w.text}}</span>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{hasDocErrors}}" hint-placeholder-val="{{false}}">
+          <div role="alert" style="background: #FBEAEA; color: #7A1212; border: 1px solid #9B1C1C; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+            <sc-for list="{{docErrors}}" as="er" hint-placeholder-count="1">
+              <span>{{er.text}}</span>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{hasMsg}}" hint-placeholder-val="{{false}}">
+          <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{msg}}</div>
+        </sc-if>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px">
+          <button type="button" onClick="{{saveDoc}}" disabled="{{docSaveDisabled}}" style="min-height: 48px; padding: 0 22px; background: {{docSaveBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer">حفظ دوام الطبيب</button>
+          <button type="button" onClick="{{discardDoc}}" disabled="{{docDiscardDisabled}}" style="min-height: 48px; padding: 0 18px; background: #FFFFFF; color: #17202A; border: 1px solid #AEB6C2; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer">إلغاء التعديلات</button>
+        </div>
+        <span style="font-size: 12px; color: #55606E">دوام الطبيب يحدد أيام الكشفيات والمراجعات بس.</span>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isHolidays}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+        <aside style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">العطل والغياب</h2>
+          <sc-for list="{{holidayList}}" as="h" hint-placeholder-count="2">
+            <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+                <strong style="font-size: 15px; font-weight: 700">{{h.title}}</strong>
+                <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{h.chipBg}}; color: {{h.chipFg}}">{{h.chip}}</span>
+              </div>
+              <span style="font-size: 13px; color: #3D4652">من <bdi dir="ltr">{{h.from}}</bdi> إلى <bdi dir="ltr">{{h.to}}</bdi> · {{h.reason}}</span>
+              <span style="font-size: 13px; color: #3D4652">{{h.impact}}</span>
+              <sc-if value="{{h.canCancel}}" hint-placeholder-val="{{false}}">
+                <button type="button" onClick="{{h.cancel}}" style="align-self: flex-start; min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #9B1C1C; border: 1px solid #9B1C1C; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">إلغاء</button>
+              </sc-if>
+            </div>
+          </sc-for>
+          <p style="margin: 0; font-size: 12px; color: #55606E">الحجوزات اللي انتقلت قبل الإلغاء ما ترجع تلقائياً.</p>
+        </aside>
+
+        <section style="flex: 999 1 520px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">إضافة عطلة أو غياب</h2>
+          <div role="group" aria-label="النوع" style="display: flex; flex-wrap: wrap; gap: 8px">
+            <sc-for list="{{kinds}}" as="k" hint-placeholder-count="2">
+              <button type="button" onClick="{{k.pick}}" aria-pressed="{{k.selected}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{k.bg}}; color: {{k.fg}}; border: 2px solid {{k.border}}">{{k.label}}</button>
+            </sc-for>
+          </div>
+          <sc-if value="{{showDoctorPick}}" hint-placeholder-val="{{false}}">
+            <div role="group" aria-label="الطبيب" style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-for list="{{absDoctors}}" as="dc" hint-placeholder-count="2">
+                <button type="button" onClick="{{dc.pick}}" aria-pressed="{{dc.selected}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{dc.bg}}; color: {{dc.fg}}; border: 2px solid {{dc.border}}">{{dc.label}}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px">
+            <label style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+              <span>من تاريخ</span>
+              <input type="date" value="{{f.from}}" onChange="{{onFrom}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+            </label>
+            <label style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+              <span>إلى تاريخ</span>
+              <input type="date" value="{{f.to}}" onChange="{{onTo}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+            </label>
+          </div>
+          <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+            <span>السبب</span>
+            <input type="text" value="{{f.reason}}" onChange="{{onReason}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+          </label>
+
+          <sc-if value="{{showImpact}}" hint-placeholder-val="{{false}}">
+            <div style="background: #F4F5F7; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 4px">
+              <strong style="font-size: 14px">الأثر على الحجوزات (أرقام تجريبية)</strong>
+              <span style="font-size: 14px">{{impactText}}</span>
+              <span style="font-size: 13px; color: #3D4652">{{impactRule}}</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{hasHolErrors}}" hint-placeholder-val="{{false}}">
+            <div role="alert" style="background: #FBEAEA; color: #7A1212; border: 1px solid #9B1C1C; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+              <sc-for list="{{holErrors}}" as="er" hint-placeholder-count="1">
+                <span>{{er.text}}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{hasMsg}}" hint-placeholder-val="{{false}}">
+            <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{msg}}</div>
+          </sc-if>
+          <button type="button" onClick="{{saveHoliday}}" disabled="{{holSaveDisabled}}" style="align-self: flex-start; min-height: 52px; padding: 0 28px; background: {{holSaveBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer">حفظ</button>
+        </section>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1100}}'>
+class Component extends DCLogic {
+  state = { tab: 'clinic', msg: '', clinic: null, clinicDraft: null, docs: null, docSel: 'd1', docDraft: null, holidays: null, form: null };
+
+  today() { return '2026-11-14'; }
+  num(n) { return Number(n).toLocaleString('en-US'); }
+  digits(v) { return String(v == null ? '' : v).trim().replace(/[٠-٩]/g, (c) => String(c.charCodeAt(0) - 1632)).replace(/[۰-۹]/g, (c) => String(c.charCodeAt(0) - 1776)); }
+  whole(v) { const t = this.digits(v); return /^\d+$/.test(t) ? Number(t) : null; }
+  isDate(v) { return /^\d{4}-\d{2}-\d{2}$/.test(v); }
+  dateText(iso) { const p = String(iso).split('-'); return p.length === 3 ? Number(p[2]) + '/' + Number(p[1]) + '/' + p[0] : ''; }
+  pill(selected) { return { selected: selected, bg: selected ? '#17202A' : '#FFFFFF', fg: selected ? '#FFFFFF' : '#17202A', border: selected ? '#17202A' : '#AEB6C2' }; }
+
+  dayDefs() { return [{ id: 'sat', label: 'السبت' }, { id: 'sun', label: 'الأحد' }, { id: 'mon', label: 'الاثنين' }, { id: 'tue', label: 'الثلاثاء' }, { id: 'wed', label: 'الأربعاء' }, { id: 'thu', label: 'الخميس' }, { id: 'fri', label: 'الجمعة' }]; }
+  dayId(iso) { return ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][new Date(iso + 'T00:00:00Z').getUTCDay()]; }
+  doctorDefs() { return [{ id: 'd1', label: 'د. [الطبيب الأول]' }, { id: 'd2', label: 'د. [الطبيب الثاني]' }]; }
+  seedClinic() { return { days: { sat: true, sun: true, mon: true, tue: true, wed: true, thu: true, fri: false }, limit: '30' }; }
+  seedDocs() {
+    const mk = (on, from, to) => ({ on: on, from: from, to: to });
+    return {
+      d1: { sat: mk(true, '10:00', '16:00'), sun: mk(true, '10:00', '16:00'), mon: mk(true, '10:00', '16:00'), tue: mk(true, '10:00', '16:00'), wed: mk(true, '10:00', '16:00'), thu: mk(false, '10:00', '16:00'), fri: mk(false, '10:00', '16:00') },
+      d2: { sat: mk(false, '14:00', '20:00'), sun: mk(true, '14:00', '20:00'), mon: mk(false, '14:00', '20:00'), tue: mk(true, '14:00', '20:00'), wed: mk(false, '14:00', '20:00'), thu: mk(true, '14:00', '20:00'), fri: mk(false, '14:00', '20:00') }
+    };
+  }
+  seedHolidays() {
+    return [
+      { id: 'h1', kind: 'clinic', doctor: '', from: '2027-01-01', to: '2027-01-01', reason: 'رأس السنة' },
+      { id: 'h2', kind: 'doctor', doctor: 'd1', from: '2026-11-20', to: '2026-11-22', reason: 'سفر' }
+    ];
+  }
+  clinic() { return this.state.clinic || this.seedClinic(); }
+  docs() { return this.state.docs || this.seedDocs(); }
+  holidays() { return this.state.holidays || this.seedHolidays(); }
+  blankForm() { return { kind: 'clinic', doctor: 'd1', from: '', to: '', reason: '' }; }
+  form() { return this.state.form || this.blankForm(); }
+
+  bookingsOn(iso, doctor) {
+    const day = Number(iso.slice(8, 10));
+    const consult = (day * 3) % 7 + 1;
+    const sessions = (day * 5) % 11 + 2;
+    const d1 = Math.ceil(consult * 0.6);
+    return { consult: doctor === 'd1' ? d1 : (doctor === 'd2' ? consult - d1 : consult), sessions: sessions };
+  }
+  eachDay(from, to) {
+    const out = [];
+    let t = new Date(from + 'T00:00:00Z').getTime();
+    const end = new Date(to + 'T00:00:00Z').getTime();
+    while (t <= end && out.length < 400) { out.push(new Date(t).toISOString().slice(0, 10)); t += 86400000; }
+    return out;
+  }
+  impact(kind, doctor, from, to) {
+    if (!this.isDate(from) || !this.isDate(to) || to < from) { return { consult: 0, sessions: 0, days: 0 }; }
+    const clinic = this.clinic();
+    const docSched = this.docs()[doctor];
+    let consult = 0; let sessions = 0; let days = 0;
+    this.eachDay(from, to).forEach((iso) => {
+      const id = this.dayId(iso);
+      if (!clinic.days[id]) { return; }
+      if (kind === 'clinic') { const b = this.bookingsOn(iso, ''); consult += b.consult; sessions += b.sessions; days += 1; }
+      else if (docSched && docSched[id].on) { consult += this.bookingsOn(iso, doctor).consult; days += 1; }
+    });
+    return { consult: consult, sessions: kind === 'clinic' ? sessions : 0, days: days };
+  }
+  impactText(kind, im) {
+    if (im.consult + im.sessions === 0) { return 'ما أكو حجوزات متأثرة.'; }
+    if (kind === 'clinic') { return im.consult + im.sessions + ' حجز (' + im.consult + ' كشفية و' + im.sessions + ' جلسة) ينتقل لأقرب يوم دوام.'; }
+    return im.consult + ' كشفية أو مراجعة تنتقل لأقرب يوم دوام. الجلسات ما تتأثر.';
+  }
+
+  clinicCtx() {
+    const saved = this.clinic();
+    const draft = this.state.clinicDraft || saved;
+    return { saved: saved, draft: draft, dirty: JSON.stringify(draft) !== JSON.stringify(saved) };
+  }
+  clinicErrors(d) {
+    const out = [];
+    if (!this.dayDefs().some((x) => d.days[x.id])) { out.push('لازم يوم دوام واحد على الأقل.'); }
+    const l = this.whole(d.limit);
+    if (l === null || l < 1 || l > 500) { out.push('الحد اليومي رقم صحيح من 1 إلى 500.'); }
+    return out;
+  }
+  clinicWarnings(c) {
+    const out = [];
+    const l = this.whole(c.draft.limit);
+    const peak = 24;
+    if (l !== null && l >= 1 && l < peak) { out.push('أعلى يوم قادم بيه ' + peak + ' حجز. الحجوزات الموجودة تبقى، بس ما تنقبل حجوزات جديدة لهالأيام.'); }
+    this.dayDefs().forEach((x) => {
+      if (c.saved.days[x.id] && !c.draft.days[x.id]) {
+        this.doctorDefs().forEach((dc) => { if (this.docs()[dc.id][x.id].on) { out.push(dc.label + ' عنده دوام يوم ' + x.label + '، وبعد التعطيل ما راح ينحجز عنده.'); } });
+      }
+    });
+    return out;
+  }
+
+  docCtx() {
+    const saved = this.docs()[this.state.docSel];
+    const draft = this.state.docDraft || saved;
+    return { saved: saved, draft: draft, dirty: JSON.stringify(draft) !== JSON.stringify(saved) };
+  }
+  setDay(id, change) {
+    const c = this.docCtx();
+    const next = Object.assign({}, c.draft); next[id] = Object.assign({}, next[id], change);
+    this.setState({ docDraft: next, msg: '' });
+  }
+  docErrors(d) {
+    const out = [];
+    this.dayDefs().forEach((x) => { if (d[x.id].on && !(d[x.id].to > d[x.id].from)) { out.push(x.label + ': وقت النهاية لازم يكون بعد البداية.'); } });
+    return out;
+  }
+
+  holErrors(f) {
+    const out = [];
+    if (f.kind === 'doctor' && !f.doctor) { out.push('اختار الطبيب.'); }
+    if (!this.isDate(f.from) || f.from < this.today()) { out.push('تاريخ البداية لازم يكون اليوم أو بعده.'); }
+    if (!this.isDate(f.to) || (this.isDate(f.from) && f.to < f.from)) { out.push('تاريخ النهاية لازم يكون بعد البداية أو يساويها.'); }
+    if (this.isDate(f.from) && this.isDate(f.to) && f.to >= f.from) {
+      if (this.eachDay(f.from, f.to).length > 60) { out.push('الفترة أطول من 60 يوم. قسمها لعدة فترات.'); }
+      const clash = this.holidays().find((h) => h.kind === f.kind && (f.kind === 'clinic' || h.doctor === f.doctor) && h.from <= f.to && f.from <= h.to);
+      if (clash) { out.push('أكو ' + (clash.kind === 'clinic' ? 'عطلة' : 'غياب') + ' بنفس الفترة: من ' + this.dateText(clash.from) + ' إلى ' + this.dateText(clash.to) + '.'); }
+    }
+    if (!f.reason.trim()) { out.push('اكتب السبب.'); }
+    return out;
+  }
+  editForm(change) { this.setState({ form: Object.assign({}, this.form(), change), msg: '' }); }
+
+  renderVals() {
+    const s = this.state;
+    const tab = s.tab;
+    const dirtyChip = (d) => d ? { t: 'تعديلات غير محفوظة', bg: '#FBEFD9', fg: '#8A4B08' } : { t: 'محفوظ', bg: '#ECEFF3', fg: '#3D4652' };
+
+    const cc = this.clinicCtx();
+    const cErr = this.clinicErrors(cc.draft);
+    const cWarn = this.clinicWarnings(cc);
+    const cChip = dirtyChip(cc.dirty);
+    const clinicDays = this.dayDefs().map((x) => {
+      const on = !!cc.draft.days[x.id];
+      return { label: x.label, selected: on, bg: on ? '#0B6E69' : '#FFFFFF', fg: on ? '#FFFFFF' : '#17202A', border: on ? '#0B6E69' : '#AEB6C2', toggle: () => { const c = this.clinicCtx(); this.setState({ clinicDraft: Object.assign({}, c.draft, { days: Object.assign({}, c.draft.days, { [x.id]: !c.draft.days[x.id] }) }), msg: '' }); } };
+    });
+
+    const dc = this.docCtx();
+    const dErr = this.docErrors(dc.draft);
+    const dChip = dirtyChip(dc.dirty);
+    const clinicSaved = cc.saved;
+    const docRows = this.dayDefs().map((x) => {
+      const row = dc.draft[x.id];
+      const closed = !clinicSaved.days[x.id];
+      let note = ''; let noteBg = '#ECEFF3'; let noteFg = '#3D4652';
+      if (row.on && closed) { note = 'العيادة مسكرة هذا اليوم'; noteBg = '#FBEFD9'; noteFg = '#8A4B08'; }
+      else if (!row.on) { note = 'ما يداوم'; }
+      return {
+        label: x.label, on: row.on, from: row.from, to: row.to, bg: row.on ? '#0B6E69' : '#FFFFFF', fg: row.on ? '#FFFFFF' : '#17202A', border: row.on ? '#0B6E69' : '#AEB6C2',
+        hasNote: !!note, note: note, noteBg: noteBg, noteFg: noteFg,
+        toggle: () => this.setDay(x.id, { on: !this.docCtx().draft[x.id].on }), onFrom: (e) => this.setDay(x.id, { from: e.target.value }), onTo: (e) => this.setDay(x.id, { to: e.target.value })
+      };
+    });
+    const docWarn = [];
+    if (!this.dayDefs().some((x) => dc.draft[x.id].on)) { docWarn.push('الطبيب بدون أي يوم دوام، فما يظهر للحجز بالتطبيق.'); }
+
+    const f = this.form();
+    const hErr = this.holErrors(f);
+    const touched = f.from !== '' || f.to !== '' || f.reason !== '';
+    const fromOk = this.isDate(f.from) && this.isDate(f.to) && f.to >= f.from;
+    const im = fromOk ? this.impact(f.kind, f.doctor, f.from, f.to) : null;
+    const kindLabel = f.kind === 'clinic' ? 'عطلة العيادة' : 'غياب طبيب';
+    const holidayList = this.holidays().map((h) => {
+      const doc = this.doctorDefs().find((x) => x.id === h.doctor);
+      const imp = h.impact || this.impact(h.kind, h.doctor, h.from, h.to);
+      return {
+        title: h.kind === 'clinic' ? 'عطلة العيادة' : 'غياب ' + (doc ? doc.label : ''), chip: h.kind === 'clinic' ? 'العيادة' : 'طبيب', chipBg: h.kind === 'clinic' ? '#E4EDF8' : '#FBEFD9', chipFg: h.kind === 'clinic' ? '#1D4E89' : '#8A4B08',
+        from: this.dateText(h.from), to: this.dateText(h.to), reason: h.reason, impact: this.impactText(h.kind, imp),
+        canCancel: h.from > this.today(), cancel: () => this.setState({ holidays: this.holidays().filter((x) => x.id !== h.id), msg: 'انلغت ' + (h.kind === 'clinic' ? 'العطلة.' : 'الغياب.') })
+      };
+    });
+
+    const tabs = [{ id: 'clinic', label: 'دوام العيادة' }, { id: 'doctors', label: 'دوام الأطباء' }, { id: 'holidays', label: 'العطل والغياب' }].map((t) => Object.assign({ label: t.label, pick: () => this.setState({ tab: t.id, msg: '' }) }, this.pill(tab === t.id)));
+
+    return {
+      tabs: tabs, isClinic: tab === 'clinic', isDoctors: tab === 'doctors', isHolidays: tab === 'holidays', hasMsg: !!s.msg, msg: s.msg,
+      clinicDays: clinicDays, clinicLimit: cc.draft.limit,
+      onLimit: (e) => { const c = this.clinicCtx(); this.setState({ clinicDraft: Object.assign({}, c.draft, { limit: e.target.value }), msg: '' }); },
+      clinicDirtyText: cChip.t, clinicDirtyBg: cChip.bg, clinicDirtyFg: cChip.fg,
+      hasClinicWarnings: cc.dirty && cWarn.length > 0, clinicWarnings: cWarn.map((t) => ({ text: t })),
+      hasClinicErrors: cc.dirty && cErr.length > 0, clinicErrors: cErr.map((t) => ({ text: t })),
+      clinicSaveDisabled: !cc.dirty || cErr.length > 0, clinicSaveBg: !cc.dirty || cErr.length > 0 ? '#6B7480' : '#0B6E69', clinicDiscardDisabled: !cc.dirty,
+      saveClinic: () => { const c = this.clinicCtx(); if (!c.dirty || this.clinicErrors(c.draft).length) { return; } this.setState({ clinic: Object.assign({}, c.draft, { limit: String(this.whole(c.draft.limit)) }), clinicDraft: null, msg: 'انحفظ دوام العيادة والحد اليومي ' + this.whole(c.draft.limit) + ' حجز.' }); },
+      discardClinic: () => this.setState({ clinicDraft: null, msg: '' }),
+      doctors: this.doctorDefs().map((x) => Object.assign({ label: x.label, pick: () => this.setState({ docSel: x.id, docDraft: null, msg: '' }) }, this.pill(s.docSel === x.id))),
+      docRows: docRows, docDirtyText: dChip.t, docDirtyBg: dChip.bg, docDirtyFg: dChip.fg,
+      hasDocWarnings: docWarn.length > 0, docWarnings: docWarn.map((t) => ({ text: t })), hasDocErrors: dc.dirty && dErr.length > 0, docErrors: dErr.map((t) => ({ text: t })),
+      docSaveDisabled: !dc.dirty || dErr.length > 0, docSaveBg: !dc.dirty || dErr.length > 0 ? '#6B7480' : '#0B6E69', docDiscardDisabled: !dc.dirty,
+      saveDoc: () => { const c = this.docCtx(); if (!c.dirty || this.docErrors(c.draft).length) { return; } const all = Object.assign({}, this.docs()); all[this.state.docSel] = c.draft; this.setState({ docs: all, docDraft: null, msg: 'انحفظ دوام الطبيب.' }); },
+      discardDoc: () => this.setState({ docDraft: null, msg: '' }),
+      holidayList: holidayList,
+      kinds: [{ id: 'clinic', label: 'عطلة العيادة' }, { id: 'doctor', label: 'غياب طبيب' }].map((k) => Object.assign({ label: k.label, pick: () => this.editForm({ kind: k.id }) }, this.pill(f.kind === k.id))),
+      showDoctorPick: f.kind === 'doctor', absDoctors: this.doctorDefs().map((x) => Object.assign({ label: x.label, pick: () => this.editForm({ doctor: x.id }) }, this.pill(f.doctor === x.id))),
+      f: { from: f.from, to: f.to, reason: f.reason },
+      onFrom: (e) => this.editForm({ from: e.target.value }), onTo: (e) => this.editForm({ to: e.target.value }), onReason: (e) => this.editForm({ reason: e.target.value }),
+      showImpact: !!im, impactText: im ? this.impactText(f.kind, im) : '',
+      impactRule: f.kind === 'clinic' ? 'الحجوزات تنتقل تلقائياً لأقرب يوم دوام وبيه مكان، ويوصل إشعار للزبون ويگدر يغير اليوم. الزبون اللي ما عنده تطبيق يطلع للكاشير بقائمة حتى يتصل بيه.' : 'غياب الطبيب يأثر على الكشفيات والمراجعات بس. الجلسات تبقى لأن الممرض ينفذها.',
+      hasHolErrors: touched && hErr.length > 0, holErrors: hErr.map((t) => ({ text: t })),
+      holSaveDisabled: hErr.length > 0, holSaveBg: hErr.length > 0 ? '#6B7480' : '#0B6E69',
+      saveHoliday: () => {
+        const cur = this.form();
+        if (this.holErrors(cur).length) { return; }
+        const imp = this.impact(cur.kind, cur.doctor, cur.from, cur.to);
+        const entry = { id: 'h' + Date.now(), kind: cur.kind, doctor: cur.kind === 'doctor' ? cur.doctor : '', from: cur.from, to: cur.to, reason: cur.reason.trim(), impact: imp };
+        this.setState({ holidays: this.holidays().concat([entry]).sort((a, b) => a.from < b.from ? -1 : 1), form: null, msg: 'انحفظت ' + (cur.kind === 'clinic' ? 'العطلة. ' : 'فترة الغياب. ') + this.impactText(cur.kind, imp) });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

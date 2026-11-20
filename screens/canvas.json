@@ -1,0 +1,221 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-11-12T12:00:00Z"
+  },
+  "title": "شاشات نظام العيادة",
+  "launch": {
+    "view": "canvas"
+  },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1360,
+      "h": 1040,
+      "title": "شاشة الكاشير",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "Doctor.dc.html": {
+      "x": 1440,
+      "y": 0,
+      "w": 1360,
+      "h": 1560,
+      "title": "شاشة الطبيب",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "Nurse.dc.html": {
+      "x": 0,
+      "y": 1680,
+      "w": 1360,
+      "h": 1100,
+      "title": "شاشة الممرض",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "Manager.dc.html": {
+      "x": 1440,
+      "y": 1680,
+      "w": 1360,
+      "h": 1500,
+      "title": "شاشة المدير",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "Owner.dc.html": {
+      "x": 0,
+      "y": 3300,
+      "w": 1360,
+      "h": 2300,
+      "title": "شاشة المالك",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "Customer.dc.html": {
+      "x": 1440,
+      "y": 3300,
+      "w": 390,
+      "h": 844,
+      "title": "تطبيق الزبون",
+      "is_interactive": true
+    },
+    "Receipt.dc.html": {
+      "x": 0,
+      "y": 5900,
+      "w": 559,
+      "h": 794,
+      "title": "وصل A5 · جلسات"
+    },
+    "ReceiptConsult.dc.html": {
+      "x": 639,
+      "y": 5900,
+      "w": 559,
+      "h": 794,
+      "title": "وصل A5 · كشفية"
+    },
+    "ReceiptLong1.dc.html": {
+      "x": 1278,
+      "y": 5900,
+      "w": 559,
+      "h": 794,
+      "title": "وصل A5 طويل · صفحة 1"
+    },
+    "ReceiptLong2.dc.html": {
+      "x": 1917,
+      "y": 5900,
+      "w": 559,
+      "h": 794,
+      "title": "وصل A5 طويل · صفحة 2"
+    },
+    "ManagerStaff.dc.html": {
+      "x": 0,
+      "y": 7080,
+      "w": 1360,
+      "h": 1300,
+      "title": "المدير · الموظفين والرواتب",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "ManagerSuppliers.dc.html": {
+      "x": 1440,
+      "y": 7080,
+      "w": 1360,
+      "h": 1500,
+      "title": "المدير · الموردين والمشتريات",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "ManagerOffers.dc.html": {
+      "x": 0,
+      "y": 8700,
+      "w": 1360,
+      "h": 1100,
+      "title": "المدير · العروض",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "ManagerSchedule.dc.html": {
+      "x": 1440,
+      "y": 8700,
+      "w": 1360,
+      "h": 1100,
+      "title": "المدير · الدوام والعطل",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "ManagerExpenses.dc.html": {
+      "x": 0,
+      "y": 9920,
+      "w": 1360,
+      "h": 1200,
+      "title": "المدير · المصاريف",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "ManagerStock.dc.html": {
+      "x": 1440,
+      "y": 9920,
+      "w": 1360,
+      "h": 1500,
+      "title": "المدير · المخزون",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "ManagerBookings.dc.html": {
+      "x": 0,
+      "y": 11540,
+      "w": 1360,
+      "h": 1500,
+      "title": "المدير · الحجوزات",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "ManagerSupplierAdd.dc.html": {
+      "x": 1440,
+      "y": 11540,
+      "w": 1360,
+      "h": 1000,
+      "title": "المدير · مورد جديد",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "ManagerPayMethods.dc.html": {
+      "x": 1440,
+      "y": 12660,
+      "w": 1360,
+      "h": 900,
+      "title": "المدير · طرق الدفع",
+      "expand": "fill",
+      "is_interactive": true
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Doctor.dc.html",
+    "Nurse.dc.html",
+    "Manager.dc.html",
+    "Owner.dc.html",
+    "Customer.dc.html",
+    "Receipt.dc.html",
+    "ReceiptConsult.dc.html",
+    "ReceiptLong1.dc.html",
+    "ReceiptLong2.dc.html",
+    "ManagerStaff.dc.html",
+    "ManagerSuppliers.dc.html",
+    "ManagerOffers.dc.html",
+    "ManagerSchedule.dc.html",
+    "ManagerExpenses.dc.html",
+    "ManagerStock.dc.html",
+    "ManagerBookings.dc.html",
+    "ManagerSupplierAdd.dc.html",
+    "ManagerPayMethods.dc.html"
+  ],
+  "notes": {
+    "heading": {
+      "x": 0,
+      "y": -300,
+      "text": "المرحلة 0: شاشات العيادة",
+      "kind": "title1",
+      "maxW": 2800
+    },
+    "receipts": {
+      "x": 0,
+      "y": 5640,
+      "text": "الوصل A5",
+      "kind": "title1",
+      "maxW": 2476
+    },
+    "managerPages": {
+      "x": 0,
+      "y": 6780,
+      "text": "صفحات المدير",
+      "kind": "title1",
+      "maxW": 2800
+    }
+  },
+  "designSystems": []
+}

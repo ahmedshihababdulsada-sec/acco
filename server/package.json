@@ -1,0 +1,43 @@
+{
+  "name": "clinic-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "خادم نظام إدارة مركز التجميل (NestJS + PostgreSQL)",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/main.js",
+    "start:dev": "tsc -p tsconfig.build.json --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "jest --runInBand",
+    "setup:clinic": "node dist/cli/setup.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "11.2.10",
+    "@nestjs/core": "11.2.10",
+    "@nestjs/jwt": "11.0.2",
+    "@nestjs/platform-express": "11.2.10",
+    "@nestjs/throttler": "6.7.1",
+    "@node-rs/argon2": "2.2.2",
+    "class-transformer": "0.5.1",
+    "class-validator": "0.15.1",
+    "helmet": "8.3.0",
+    "pg": "8.23.1",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "11.2.10",
+    "@types/express": "5.0.6",
+    "@types/jest": "30.0.0",
+    "@types/node": "24.10.1",
+    "@types/pg": "8.15.6",
+    "@types/supertest": "6.0.3",
+    "jest": "30.5.2",
+    "supertest": "7.3.2",
+    "ts-jest": "29.4.15",
+    "typescript": "5.9.3"
+  }
+}

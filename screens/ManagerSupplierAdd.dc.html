@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>شاشة المدير · مورد جديد</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+input{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="min-height: 100vh; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6">
+
+  <header style="background: #FFFFFF; border-bottom: 1px solid #D9DEE5">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 0px">
+        <strong style="font-size: 18px; font-weight: 700">المدير: [اسم المدير]</strong>
+        <span style="color: #55606E; font-size: 13px">[اسم العيادة] · بيانات تجريبية للعرض</span>
+      </div>
+      <nav aria-label="أقسام المدير" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <a href="Manager.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الرئيسية</a>
+        <a href="ManagerStaff.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموظفين والرواتب</a>
+        <a href="ManagerSuppliers.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #17202A; color: #FFFFFF; border: 2px solid #17202A">الموردين والمشتريات</a>
+        <a href="ManagerStock.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المخزون</a>
+        <a href="ManagerOffers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">العروض</a>
+        <a href="ManagerSchedule.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الدوام والعطل</a>
+        <a href="ManagerBookings.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الحجوزات</a>
+        <a href="ManagerExpenses.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المصاريف</a>
+        <a href="ManagerPayMethods.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">طرق الدفع</a>
+      </nav>
+    </div>
+  </header>
+
+  <div style="max-width: 1360px; margin: 0 auto; padding: 20px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+    <section style="flex: 1 1 400px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">{{formTitle}}</h2>
+        <a href="ManagerSuppliers.dc.html" style="font-size: 13px; font-weight: 600">الرجوع لصفحة الموردين</a>
+      </div>
+
+      <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+        <span>اسم المورد</span>
+        <input id="sup-name" type="text" value="{{f.name}}" onChange="{{onName}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+      </label>
+
+      <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+        <span>رقم التلفون (اختياري)</span>
+        <input id="sup-phone" type="text" inputmode="tel" value="{{f.phone}}" onChange="{{onPhone}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+      </label>
+
+      <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+        <span>ملاحظات (اختياري)</span>
+        <input id="sup-notes" type="text" value="{{f.notes}}" onChange="{{onNotes}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+      </label>
+
+      <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+        <span>اللي علينا له قبل ما يبدي النظام (د.ع)</span>
+        <input id="sup-opening" type="text" inputmode="numeric" value="{{f.opening}}" onChange="{{onOpening}}" disabled="{{openingLocked}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: {{openingBg}}; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+        <span style="font-size: 12px; font-weight: 400">{{openingNote}}</span>
+      </label>
+
+      <sc-if value="{{hasErrors}}" hint-placeholder-val="{{false}}">
+        <div role="alert" style="background: #FBEAEA; color: #7A1212; border: 1px solid #9B1C1C; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+          <sc-for list="{{errors}}" as="er" hint-placeholder-count="1">
+            <span>{{er.text}}</span>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{hasWarns}}" hint-placeholder-val="{{false}}">
+        <div role="status" style="background: #FFF4DB; color: #6B4A00; border: 1px solid #A8730A; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+          <sc-for list="{{warns}}" as="w" hint-placeholder-count="1">
+            <span>{{w.text}}</span>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{hasMsg}}" hint-placeholder-val="{{false}}">
+        <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{msg}}</div>
+      </sc-if>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <button type="button" onClick="{{save}}" disabled="{{saveDisabled}}" style="min-height: 52px; padding: 0 28px; background: {{saveBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer">{{saveLabel}}</button>
+        <sc-if value="{{editing}}" hint-placeholder-val="{{false}}">
+          <button type="button" onClick="{{cancelEdit}}" style="min-height: 52px; padding: 0 22px; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer">إلغاء التعديل</button>
+        </sc-if>
+      </div>
+      <span style="font-size: 12px; color: #55606E">المورد ما ينحذف أبداً، يتعطل بس. الفواتير والتسديدات تبقى محفوظة. الإضافة والتعديل والتعطيل تنسجل بسجل الحركات.</span>
+    </section>
+
+    <section style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <div style="flex: 1 1 200px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 13px; font-weight: 600; color: #55606E">الموردين الفعالين</span>
+          <span style="font-size: 28px; font-weight: 600; line-height: 1.3; font-variant-numeric: tabular-nums">{{activeCount}}</span>
+          <span style="font-size: 12px; color: #55606E">{{inactiveText}}</span>
+        </div>
+        <div style="flex: 1 1 200px; min-width: 0; background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 13px; font-weight: 600; color: #55606E">باقي علينا للكل</span>
+          <span style="font-size: 28px; font-weight: 600; line-height: 1.3; font-variant-numeric: tabular-nums">{{totalOwed}}</span>
+          <span style="font-size: 12px; color: #55606E">الافتتاحي + الفواتير − المرتجعات − التسديدات</span>
+        </div>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">كل الموردين</h2>
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; border: 1px solid #D9DEE5; border-radius: 10px; padding: 12px 14px; background: {{r.bg}}">
+            <span style="flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 0px">
+              <span style="font-size: 15px; font-weight: 700">{{r.name}}</span>
+              <span style="font-size: 13px; color: #3D4652"><bdi dir="ltr">{{r.phone}}</bdi> · {{r.notes}}</span>
+              <span style="font-size: 12px; color: #55606E">{{r.movesText}}</span>
+            </span>
+            <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{r.chipBg}}; color: {{r.chipFg}}">{{r.chip}}</span>
+            <span style="flex: none; display: flex; flex-direction: column; gap: 0px; min-width: 110px; text-align: right">
+              <span style="font-size: 12px; color: #55606E">باقي علينا</span>
+              <span style="font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums">{{r.owed}}</span>
+            </span>
+            <button type="button" onClick="{{r.edit}}" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">تعديل</button>
+            <button type="button" onClick="{{r.toggle}}" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: {{r.toggleFg}}; border: 2px solid {{r.toggleFg}}; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">{{r.toggleLabel}}</button>
+            <sc-if value="{{r.confirming}}" hint-placeholder-val="{{false}}">
+              <div role="alert" style="flex: 1 1 100%; background: #FFF4DB; color: #6B4A00; border: 1px solid #A8730A; border-radius: 10px; padding: 12px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; font-weight: 600">
+                <span style="flex: 1 1 300px">{{r.confirmText}}</span>
+                <button type="button" onClick="{{r.confirm}}" style="min-height: 44px; padding: 0 16px; background: #9B1C1C; color: #FFFFFF; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer">تأكيد التعطيل</button>
+                <button type="button" onClick="{{r.cancelConfirm}}" style="min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">رجوع</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1000}}'>
+class Component extends DCLogic {
+  state = { suppliers: null, form: null, editId: '', confirmId: '', msg: '' };
+
+  num(n) { return Number(n).toLocaleString('en-US'); }
+  fmt(n) { return this.num(n) + ' د.ع'; }
+  digits(v) { return String(v == null ? '' : v).trim().replace(/[٠-٩]/g, (c) => String(c.charCodeAt(0) - 1632)).replace(/[۰-۹]/g, (c) => String(c.charCodeAt(0) - 1776)); }
+  money(v) { const t = this.digits(v); return /^\d+$/.test(t) && Number.isSafeInteger(Number(t)) ? Number(t) : null; }
+  clean(v) { return String(v == null ? '' : v).replace(/\s+/g, ' ').trim(); }
+  phoneKey(v) { const t = this.digits(v).replace(/[\s\-()]/g, ''); return t.replace(/^\+?964/, '0'); }
+  phoneOk(v) { return /^\+?\d{7,15}$/.test(this.digits(v).replace(/[\s\-()]/g, '')); }
+
+  seed() {
+    return [
+      { id: 'p1', name: '[اسم المورد الأول]', phone: '07701234567', notes: 'بوتكس وفلر', opening: 0, owed: 1000000, moves: 5, active: true, isNew: false },
+      { id: 'p2', name: '[اسم المورد الثاني]', phone: '07801234567', notes: 'مواد تنظيف ومستهلكات', opening: 150000, owed: 150000, moves: 1, active: true, isNew: false },
+      { id: 'p3', name: '[اسم المورد القديم]', phone: '', notes: 'توقفنا عن التعامل معه', opening: 0, owed: 0, moves: 3, active: false, isNew: false }
+    ];
+  }
+  list() { return this.state.suppliers || this.seed(); }
+  blank() { return { name: '', phone: '', notes: '', opening: '0' }; }
+  form() { return this.state.form || this.blank(); }
+  editing() { return this.state.editId ? this.list().find((s) => s.id === this.state.editId) : null; }
+  edit(change) { this.setState({ form: Object.assign({}, this.form(), change), msg: '' }); }
+
+  errors(f) {
+    const out = [];
+    const name = this.clean(f.name);
+    const cur = this.editing();
+    if (!name) { out.push('اكتب اسم المورد.'); }
+    else {
+      const dup = this.list().find((s) => s.id !== (cur ? cur.id : '') && this.clean(s.name).toLowerCase() === name.toLowerCase());
+      if (dup) { out.push(dup.active ? 'يوجد مورد بنفس الاسم.' : 'يوجد مورد معطل بنفس الاسم. فعّله بدل ما تضيف مورد جديد.'); }
+    }
+    if (this.clean(f.phone) && !this.phoneOk(f.phone)) { out.push('رقم التلفون لازم يكون أرقام بس (من 7 إلى 15 رقم).'); }
+    const locked = cur && cur.moves > 0;
+    if (!locked) {
+      const o = this.money(f.opening === '' ? '0' : f.opening);
+      if (o === null) { out.push('اكتب المبلغ الافتتاحي رقم صحيح بالدينار، صفر أو أكثر، بدون فواصل.'); }
+    }
+    return out;
+  }
+  warns(f) {
+    const out = [];
+    const cur = this.editing();
+    if (this.clean(f.phone) && this.phoneOk(f.phone)) {
+      const k = this.phoneKey(f.phone);
+      const dup = this.list().find((s) => s.id !== (cur ? cur.id : '') && s.phone && this.phoneKey(s.phone) === k);
+      if (dup) { out.push('نفس الرقم مسجل عند المورد ' + dup.name + '. تگدر تحفظ إذا هو نفسه.'); }
+    }
+    return out;
+  }
+  save() {
+    const f = this.form();
+    if (this.errors(f).length) { return; }
+    const cur = this.editing();
+    const name = this.clean(f.name);
+    const phone = this.clean(f.phone);
+    const notes = this.clean(f.notes);
+    if (cur) {
+      const locked = cur.moves > 0;
+      const opening = locked ? cur.opening : this.money(f.opening === '' ? '0' : f.opening);
+      const owed = cur.owed - cur.opening + opening;
+      const next = this.list().map((s) => s.id === cur.id ? Object.assign({}, s, { name: name, phone: phone, notes: notes, opening: opening, owed: owed }) : s);
+      this.setState({ suppliers: next, form: null, editId: '', confirmId: '', msg: 'انحفظ تعديل المورد ' + name + '. الاسم القديم يبقى بالفواتير والتسديدات القديمة كما هو.' });
+      return;
+    }
+    const opening = this.money(f.opening === '' ? '0' : f.opening);
+    const entry = { id: 's' + Date.now(), name: name, phone: phone, notes: notes, opening: opening, owed: opening, moves: 0, active: true, isNew: true };
+    this.setState({ suppliers: [entry].concat(this.list()), form: null, confirmId: '', msg: 'انضاف المورد ' + name + (opening > 0 ? ' وعليه افتتاحي ' + this.fmt(opening) + '.' : '.') + ' يظهر بصفحة الموردين لتسجيل فواتيره.' });
+  }
+  startEdit(s) { this.setState({ editId: s.id, confirmId: '', msg: '', form: { name: s.name, phone: s.phone, notes: s.notes, opening: String(s.opening) } }); }
+  toggle(s) {
+    if (s.active) { this.setState({ confirmId: s.id, msg: '' }); return; }
+    this.setState({ suppliers: this.list().map((x) => x.id === s.id ? Object.assign({}, x, { active: true }) : x), confirmId: '', msg: 'انفعّل المورد ' + s.name + '. يرجع يظهر باختيار المورد بالفواتير الجديدة.' });
+  }
+  confirmOff(s) {
+    this.setState({ suppliers: this.list().map((x) => x.id === s.id ? Object.assign({}, x, { active: false }) : x), confirmId: '', msg: 'انعطل المورد ' + s.name + '. ما تنسجل عليه فواتير جديدة، وتسديد اللي علينا يبقى ممكن.' });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const f = this.form();
+    const cur = this.editing();
+    const errs = this.errors(f);
+    const warns = this.warns(f);
+    const touched = this.clean(f.name) !== '' || this.clean(f.phone) !== '' || this.clean(f.notes) !== '' || (f.opening !== '0' && f.opening !== '') || !!cur;
+    const all = this.list();
+    const locked = !!(cur && cur.moves > 0);
+    return {
+      formTitle: cur ? 'تعديل المورد' : 'مورد جديد',
+      f: { name: f.name, phone: f.phone, notes: f.notes, opening: f.opening },
+      onName: (e) => this.edit({ name: e.target.value }), onPhone: (e) => this.edit({ phone: e.target.value }), onNotes: (e) => this.edit({ notes: e.target.value }), onOpening: (e) => this.edit({ opening: e.target.value }),
+      openingLocked: locked, openingBg: locked ? '#ECEFF3' : '#FFFFFF',
+      openingNote: locked ? 'مقفول: المورد بيه ' + cur.moves + ' حركة (فواتير أو تسديدات). التصحيح يصير بفاتورة أو تسديد، مو بتغيير الافتتاحي.' : 'اللي كان علينا له قبل البدء بالنظام. صفر إذا ماكو. يتقفل لما تنسجل أول حركة عليه.',
+      hasErrors: touched && errs.length > 0, errors: errs.map((t) => ({ text: t })),
+      hasWarns: touched && warns.length > 0, warns: warns.map((t) => ({ text: t })),
+      hasMsg: !!s.msg && !touched, msg: s.msg,
+      save: () => this.save(), saveDisabled: errs.length > 0, saveBg: errs.length > 0 ? '#6B7480' : '#0B6E69', saveLabel: cur ? 'حفظ التعديل' : 'إضافة المورد',
+      editing: !!cur, cancelEdit: () => this.setState({ editId: '', form: null, msg: '' }),
+      activeCount: String(all.filter((x) => x.active).length), inactiveText: all.filter((x) => !x.active).length + ' معطل',
+      totalOwed: this.fmt(all.reduce((t, x) => t + x.owed, 0)),
+      rows: all.map((x) => ({
+        name: x.name, phone: x.phone || 'بدون رقم', notes: x.notes || 'بدون ملاحظات', movesText: x.moves ? x.moves + ' حركة (افتتاحي ' + this.num(x.opening) + ' د.ع)' : 'ما أكو حركات بعد',
+        chip: x.isNew ? 'جديد' : (x.active ? 'فعال' : 'معطل'), chipBg: x.active ? '#E3F1F0' : '#ECEFF3', chipFg: x.active ? '#084F4B' : '#3D4652',
+        bg: x.active ? '#FFFFFF' : '#F4F5F7', owed: this.fmt(x.owed),
+        edit: () => this.startEdit(x), toggle: () => this.toggle(x), toggleLabel: x.active ? 'تعطيل' : 'تفعيل', toggleFg: x.active ? '#9B1C1C' : '#0B6E69',
+        confirming: s.confirmId === x.id, confirmText: x.owed > 0 ? 'باقي علينا ' + this.fmt(x.owed) + ' لهالمورد. التعطيل يمنع فواتير جديدة بس، والتسديد يبقى ممكن.' : 'التعطيل يمنع فواتير جديدة. تگدر تفعله بأي وقت.',
+        confirm: () => this.confirmOff(x), cancelConfirm: () => this.setState({ confirmId: '' })
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

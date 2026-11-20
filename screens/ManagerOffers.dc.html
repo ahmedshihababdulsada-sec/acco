@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>شاشة المدير · العروض</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B6E69}a:hover{color:#084F4B}
+button{font-family:inherit}
+input{font-family:inherit}
+</style>
+</helmet>
+<div dir="rtl" style="min-height: 100vh; background: #F4F5F7; color: #17202A; font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 15px; line-height: 1.6">
+
+  <header style="background: #FFFFFF; border-bottom: 1px solid #D9DEE5">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 0px">
+        <strong style="font-size: 18px; font-weight: 700">المدير: [اسم المدير]</strong>
+        <span style="color: #55606E; font-size: 13px">[اسم العيادة] · بيانات تجريبية للعرض</span>
+      </div>
+      <nav aria-label="أقسام المدير" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <a href="Manager.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الرئيسية</a>
+        <a href="ManagerStaff.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموظفين والرواتب</a>
+        <a href="ManagerSuppliers.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الموردين والمشتريات</a>
+        <a href="ManagerStock.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المخزون</a>
+        <a href="ManagerOffers.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #17202A; color: #FFFFFF; border: 2px solid #17202A">العروض</a>
+        <a href="ManagerSchedule.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الدوام والعطل</a>
+        <a href="ManagerBookings.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">الحجوزات</a>
+        <a href="ManagerExpenses.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">المصاريف</a>
+        <a href="ManagerPayMethods.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 15px; font-weight: 600; text-decoration: none; background: #FFFFFF; color: #17202A; border: 2px solid #AEB6C2">طرق الدفع</a>
+      </nav>
+    </div>
+  </header>
+
+  <div style="max-width: 1360px; margin: 0 auto; padding: 20px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+    <aside style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+      <h2 style="margin: 0; font-size: 16px; font-weight: 700">العروض</h2>
+      <sc-for list="{{offerList}}" as="o" hint-placeholder-count="3">
+        <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+            <strong style="font-size: 16px; font-weight: 700">{{o.title}}</strong>
+            <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: {{o.chipBg}}; color: {{o.chipFg}}">{{o.chip}}</span>
+          </div>
+          <span style="font-size: 13px; color: #3D4652">من <bdi dir="ltr">{{o.from}}</bdi> إلى <bdi dir="ltr">{{o.to}}</bdi></span>
+          <span style="font-size: 13px; color: #3D4652">{{o.notifyText}}</span>
+          <sc-if value="{{o.canEnd}}" hint-placeholder-val="{{false}}">
+            <button type="button" onClick="{{o.end}}" style="align-self: flex-start; min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #9B1C1C; border: 1px solid #9B1C1C; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">إنهاء العرض</button>
+          </sc-if>
+        </div>
+      </sc-for>
+    </aside>
+
+    <section style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+
+      <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">عرض جديد</h2>
+
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 13px; font-weight: 600; color: #55606E">الخدمة</span>
+          <div role="group" aria-label="الخدمة" style="display: flex; flex-wrap: wrap; gap: 8px">
+            <sc-for list="{{services}}" as="sv" hint-placeholder-count="5">
+              <button type="button" onClick="{{sv.pick}}" aria-pressed="{{sv.selected}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{sv.bg}}; color: {{sv.fg}}; border: 2px solid {{sv.border}}">{{sv.label}}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 12px">
+          <label style="flex: 1 1 140px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+            <span>نسبة الخصم %</span>
+            <input type="text" inputmode="numeric" value="{{d.pct}}" onChange="{{onPct}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%; direction: ltr; text-align: right">
+          </label>
+          <label style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+            <span>من تاريخ</span>
+            <input type="date" value="{{d.start}}" onChange="{{onStart}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+          </label>
+          <label style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+            <span>إلى تاريخ</span>
+            <input type="date" value="{{d.end}}" onChange="{{onEnd}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+          </label>
+        </div>
+
+        <div style="border-top: 1px solid #D9DEE5; padding-top: 14px; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px">
+            <strong style="font-size: 14px">إشعار للزبائن بالتطبيق</strong>
+            <button type="button" onClick="{{toggleNotify}}" aria-pressed="{{d.notify}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{notifyBg}}; color: {{notifyFg}}; border: 2px solid {{notifyBorder}}">{{notifyLabel}}</button>
+          </div>
+          <sc-if value="{{d.notify}}" hint-placeholder-val="{{false}}">
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div role="group" aria-label="الفئة" style="display: flex; flex-wrap: wrap; gap: 8px">
+                <sc-for list="{{audiences}}" as="au" hint-placeholder-count="2">
+                  <button type="button" onClick="{{au.pick}}" aria-pressed="{{au.selected}}" style="min-height: 44px; padding: 0 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: {{au.bg}}; color: {{au.fg}}; border: 2px solid {{au.border}}">{{au.label}}</button>
+                </sc-for>
+              </div>
+              <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: #55606E">
+                <span>نص الإشعار ({{textCount}} من 120)</span>
+                <input type="text" value="{{d.text}}" onChange="{{onText}}" style="min-height: 44px; padding: 0 12px; border: 1px solid #AEB6C2; border-radius: 8px; font-size: 15px; background: #FFFFFF; color: #17202A; box-sizing: border-box; width: 100%">
+              </label>
+              <span style="font-size: 13px; color: #3D4652">{{recipientText}}</span>
+              <span style="font-size: 12px; color: #55606E">الإشعار يظهر على شاشة القفل، فالأفضل بدون اسم علاج. الزبون اللي طفى إشعارات العروض ما يوصله، وتذكير المواعيد يبقى شغال.</span>
+              <sc-if value="{{textWarning}}" hint-placeholder-val="{{false}}">
+                <span role="alert" style="font-size: 13px; font-weight: 600; color: #8A4B08; background: #FBEFD9; border-radius: 8px; padding: 8px 12px">النص يذكر اسم الخدمة، وممكن ينكشف على شاشة القفل. تأكد إنك تريد هيچ.</span>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+
+        <sc-if value="{{hasErrors}}" hint-placeholder-val="{{false}}">
+          <div role="alert" style="background: #FBEAEA; color: #7A1212; border: 1px solid #9B1C1C; border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600">
+            <sc-for list="{{errors}}" as="er" hint-placeholder-count="1">
+              <span>{{er.text}}</span>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{hasMsg}}" hint-placeholder-val="{{false}}">
+          <div role="status" style="background: #E3F1F0; color: #084F4B; border: 1px solid #0B6E69; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600">{{msg}}</div>
+        </sc-if>
+
+        <button type="button" onClick="{{save}}" disabled="{{saveDisabled}}" style="align-self: flex-start; min-height: 52px; padding: 0 28px; background: {{saveBg}}; color: #FFFFFF; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer">{{saveLabel}}</button>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #D9DEE5; border-radius: 12px; padding: 20px; display: flex; flex-wrap: wrap; gap: 20px">
+        <div style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+          <strong style="font-size: 14px">شكله عند الكاشير</strong>
+          <div style="border: 1px solid #D9DEE5; border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 12px">
+            <span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+              <span style="font-size: 15px; font-weight: 600">{{pv.title}}</span>
+              <span style="font-size: 13px; color: #55606E">{{pv.sub}}</span>
+            </span>
+            <span style="flex: none; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: #FBEFD9; color: #8A4B08">{{pv.badge}}</span>
+            <span style="flex: none; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums">{{pv.price}}</span>
+          </div>
+          <span style="font-size: 12px; color: #55606E">العرض ينطبق تلقائياً على أي جلسة تندفع ضمن مدته، لأن السعر هو سعر يوم الدفع.</span>
+        </div>
+        <div style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+          <strong style="font-size: 14px">شكله بتطبيق الزبون</strong>
+          <div style="border: 1px solid #D9DEE5; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 4px">
+            <span style="align-self: flex-start; background: #FBEFD9; color: #8A4B08; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600">عرض حالي</span>
+            <span style="font-size: 18px; font-weight: 700">{{pv.appTitle}}</span>
+            <span style="font-size: 13px; color: #55606E">{{pv.appDates}}</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1300}}'>
+class Component extends DCLogic {
+  state = { offers: null, draft: null, msg: '' };
+
+  today() { return '2026-11-14'; }
+  num(n) { return Number(n).toLocaleString('en-US'); }
+  fmt(n) { return this.num(n) + ' د.ع'; }
+  digits(v) { return String(v == null ? '' : v).trim().replace(/[٠-٩]/g, (c) => String(c.charCodeAt(0) - 1632)).replace(/[۰-۹]/g, (c) => String(c.charCodeAt(0) - 1776)); }
+  whole(v) { const t = this.digits(v); return /^\d+$/.test(t) ? Number(t) : null; }
+  isDate(v) { return /^\d{4}-\d{2}-\d{2}$/.test(v); }
+  dateText(iso) { const p = String(iso).split('-'); return p.length === 3 ? Number(p[2]) + '/' + Number(p[1]) + '/' + p[0] : ''; }
+  pill(selected) { return { selected: selected, bg: selected ? '#17202A' : '#FFFFFF', fg: selected ? '#FFFFFF' : '#17202A', border: selected ? '#17202A' : '#AEB6C2' }; }
+
+  services() {
+    return [
+      { id: 'laser', label: 'ليزر', buyers: 41, example: 40000 },
+      { id: 'botox', label: 'بوتكس', buyers: 28, example: 75000 },
+      { id: 'filler', label: 'فلر', buyers: 12, example: 200000 },
+      { id: 'skin', label: 'تنظيف بشرة', buyers: 19, example: 30000 },
+      { id: 'consult', label: 'الكشفية', buyers: 180, example: 25000 }
+    ];
+  }
+  allCustomers() { return 240; }
+  defaultText() { return 'عرض جديد من [اسم العيادة]. افتح التطبيق لتشوف التفاصيل.'; }
+  seedOffers() {
+    return [
+      { id: 'o1', service: 'laser', pct: 20, start: '2026-11-01', end: '2026-11-30', ended: false, notify: { audience: 'all', count: 240, sent: true } },
+      { id: 'o2', service: 'skin', pct: 10, start: '2026-12-01', end: '2026-12-15', ended: false, notify: { audience: 'service', count: 19, sent: false } },
+      { id: 'o3', service: 'botox', pct: 15, start: '2026-09-01', end: '2026-09-30', ended: false, notify: null }
+    ];
+  }
+  offerList() { return this.state.offers || this.seedOffers(); }
+  blank() { return { service: '', pct: '', start: this.today(), end: '', notify: false, audience: 'all', text: this.defaultText() }; }
+  draft() { return this.state.draft || this.blank(); }
+  edit(change) { this.setState({ draft: Object.assign({}, this.draft(), change), msg: '' }); }
+  statusOf(o) {
+    if (o.ended || o.end < this.today()) { return 'ended'; }
+    if (o.start > this.today()) { return 'upcoming'; }
+    return 'running';
+  }
+  svc(id) { return this.services().find((x) => x.id === id) || null; }
+  recipients(d) {
+    if (d.audience === 'all') { return this.allCustomers(); }
+    const s = this.svc(d.service);
+    return s ? s.buyers : 0;
+  }
+  errors(d) {
+    const out = [];
+    const list = this.offerList();
+    const pct = this.whole(d.pct);
+    if (!d.service) { out.push('اختار الخدمة.'); }
+    if (pct === null || pct < 1 || pct > 100) { out.push('نسبة الخصم رقم صحيح من 1 إلى 100.'); }
+    if (!this.isDate(d.start) || d.start < this.today()) { out.push('تاريخ البداية لازم يكون اليوم أو بعده.'); }
+    if (!this.isDate(d.end) || (this.isDate(d.start) && d.end < d.start)) { out.push('تاريخ النهاية لازم يكون بعد البداية أو يساويها.'); }
+    if (d.service && this.isDate(d.start) && this.isDate(d.end) && d.end >= d.start) {
+      const clash = list.find((o) => o.service === d.service && this.statusOf(o) !== 'ended' && o.start <= d.end && d.start <= o.end);
+      if (clash) { out.push('أكو عرض ثاني على نفس الخدمة بنفس الفترة: ' + clash.pct + '% من ' + this.dateText(clash.start) + ' إلى ' + this.dateText(clash.end) + '. أنهيه أول أو غير التواريخ.'); }
+    }
+    if (d.notify && !d.text.trim()) { out.push('اكتب نص الإشعار.'); }
+    if (d.notify && d.text.length > 120) { out.push('نص الإشعار أطول من 120 حرف.'); }
+    return out;
+  }
+  dirty(d) { const b = this.blank(); return d.service !== '' || d.pct !== '' || d.end !== '' || d.notify; }
+
+  save() {
+    const d = this.draft();
+    if (this.errors(d).length) { return; }
+    const count = d.notify ? this.recipients(d) : 0;
+    const offer = { id: 'o' + Date.now(), service: d.service, pct: this.whole(d.pct), start: d.start, end: d.end, ended: false, notify: d.notify ? { audience: d.audience, count: count, sent: d.start <= this.today() } : null };
+    let msg = 'انحفظ العرض.';
+    if (d.notify) { msg = d.start <= this.today() ? 'انحفظ العرض وانرسل الإشعار الآن لحوالي ' + this.num(count) + ' زبون.' : 'انحفظ العرض. ينرسل الإشعار يوم ' + this.dateText(d.start) + ' لحوالي ' + this.num(count) + ' زبون.'; }
+    else { msg = 'انحفظ العرض بدون إشعار.'; }
+    this.setState({ offers: [offer].concat(this.offerList()), draft: null, msg: msg });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const d = this.draft();
+    const errs = this.errors(d);
+    const dirty = this.dirty(d);
+    const status = { running: { chip: 'جاري', bg: '#E3F1F0', fg: '#084F4B' }, upcoming: { chip: 'قادم', bg: '#E4EDF8', fg: '#1D4E89' }, ended: { chip: 'منتهي', bg: '#ECEFF3', fg: '#3D4652' } };
+
+    const offerList = this.offerList().map((o) => {
+      const st = status[this.statusOf(o)];
+      const sv = this.svc(o.service);
+      let notifyText = 'بدون إشعار';
+      if (o.notify) {
+        const who = o.notify.audience === 'all' ? 'كل الزبائن' : 'زبائن ' + sv.label + ' السابقين';
+        notifyText = (o.notify.sent ? 'انرسل إشعار لـ ' : 'ينرسل إشعار يوم البداية لـ ') + this.num(o.notify.count) + ' (' + who + ')';
+      }
+      return {
+        title: o.pct + '% على ' + sv.label, chip: st.chip, chipBg: st.bg, chipFg: st.fg, from: this.dateText(o.start), to: this.dateText(o.end), notifyText: notifyText,
+        canEnd: this.statusOf(o) !== 'ended',
+        end: () => this.setState({ offers: this.offerList().map((x) => x.id === o.id ? Object.assign({}, x, { ended: true }) : x), msg: 'انتهى العرض.' })
+      };
+    });
+
+    const sv = this.svc(d.service);
+    const pct = this.whole(d.pct);
+    const pctOk = pct !== null && pct >= 1 && pct <= 100;
+    const example = sv ? sv.example : 0;
+    const after = pctOk && sv ? Math.round(example * (100 - pct) / 100) : example;
+    const audiences = [
+      Object.assign({ label: 'كل الزبائن بالتطبيق', pick: () => this.edit({ audience: 'all' }) }, this.pill(d.audience === 'all')),
+      Object.assign({ label: sv ? 'اللي سووا ' + sv.label + ' قبل' : 'اللي سووا الخدمة قبل', pick: () => this.edit({ audience: 'service' }) }, this.pill(d.audience === 'service'))
+    ];
+    const recipients = this.recipients(d);
+    const canSave = errs.length === 0;
+    return {
+      offerList: offerList,
+      services: this.services().map((x) => Object.assign({ label: x.label, pick: () => this.edit({ service: x.id }) }, this.pill(d.service === x.id))),
+      d: { pct: d.pct, start: d.start, end: d.end, notify: d.notify, text: d.text },
+      onPct: (e) => this.edit({ pct: e.target.value }), onStart: (e) => this.edit({ start: e.target.value }), onEnd: (e) => this.edit({ end: e.target.value }), onText: (e) => this.edit({ text: e.target.value }),
+      toggleNotify: () => this.edit({ notify: !d.notify }),
+      notifyLabel: d.notify ? 'الإشعار شغال' : 'بدون إشعار', notifyBg: d.notify ? '#0B6E69' : '#FFFFFF', notifyFg: d.notify ? '#FFFFFF' : '#17202A', notifyBorder: d.notify ? '#0B6E69' : '#AEB6C2',
+      audiences: audiences, textCount: d.text.length,
+      recipientText: sv || d.audience === 'all' ? 'حوالي ' + this.num(recipients) + ' زبون عنده التطبيق راح يوصله الإشعار.' : 'اختار الخدمة حتى يطلع عدد المستلمين.',
+      textWarning: !!(d.notify && sv && d.text.indexOf(sv.label) >= 0),
+      hasErrors: dirty && errs.length > 0, errors: errs.map((t) => ({ text: t })),
+      hasMsg: !!s.msg && !dirty, msg: s.msg,
+      save: () => this.save(), saveDisabled: !canSave, saveBg: canSave ? '#0B6E69' : '#6B7480', saveLabel: 'حفظ العرض',
+      pv: {
+        title: sv ? sv.label + ' · سعر الجلسة ' + this.fmt(example) : 'اختار خدمة', sub: pctOk ? 'بعد العرض ' + this.fmt(after) : 'اكتب نسبة الخصم',
+        badge: pctOk ? 'عرض ' + pct + '%' : 'عرض', price: this.fmt(after),
+        appTitle: sv && pctOk ? 'خصم ' + pct + '% على ' + sv.label : 'خصم على الخدمة', appDates: d.end && this.isDate(d.end) ? 'من ' + this.dateText(d.start) + ' إلى ' + this.dateText(d.end) : 'حدد تاريخ النهاية'
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

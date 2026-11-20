@@ -1,0 +1,7 @@
+[Unit]
+Description=رفع الصور الجديدة كل ساعة
+[Timer]
+OnCalendar=hourly
+Persistent=true
+[Install]
+WantedBy=timers.target
